@@ -15,9 +15,8 @@ const useForm = () => {
     });
   }
   function changeState(state: string, newValue: string): void {
-    setForm({
-      ...form,
-      [state]: newValue,
+    setForm((prev) => {
+      return { ...prev, [state]: newValue };
     });
   }
 

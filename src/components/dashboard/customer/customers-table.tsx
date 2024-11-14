@@ -17,6 +17,8 @@ import { Pencil, Trash } from '@phosphor-icons/react';
 
 import { type Employee } from '@/types/types';
 
+import EmployeeData from './employee-data';
+
 function noop(): void {
   // do nothing
 }
@@ -26,6 +28,8 @@ interface CustomersTableProps {
   page?: number;
   rows?: Employee[];
   rowsPerPage?: number;
+  handleDelete: (id: number) => void;
+  editEmployee: (id: number) => void;
 }
 
 export function CustomersTable({
@@ -33,6 +37,8 @@ export function CustomersTable({
   rows = [],
   page = 0,
   rowsPerPage = 0,
+  handleDelete,
+  editEmployee,
 }: CustomersTableProps): React.JSX.Element {
   return (
     <Card>
@@ -48,26 +54,7 @@ export function CustomersTable({
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              return (
-                <TableRow hover key={row.id}>
-                  <TableCell>
-                    <Typography variant="subtitle2">{row.nome}</Typography>
-                  </TableCell>
-                  <TableCell>{row.rol}</TableCell>
-                  <TableCell>{row.pin}</TableCell>
-
-                  <TableCell>
-                    <Stack direction="row" gap={2}>
-                      <Button variant="contained" color="error">
-                        <Trash color="white" size={20} />
-                      </Button>
-                      <Button variant="contained">
-                        <Pencil size={20} />
-                      </Button>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              );
+              return <EmployeeData row={row} editEmployee={editEmployee} handleDelete={handleDelete} />;
             })}
           </TableBody>
         </Table>
