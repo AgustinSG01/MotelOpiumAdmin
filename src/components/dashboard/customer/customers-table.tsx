@@ -1,10 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+import { Button } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
-import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
@@ -14,28 +13,18 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import dayjs from 'dayjs';
+import { Pencil, Trash } from '@phosphor-icons/react';
 
-import { useSelection } from '@/hooks/use-selection';
+import { type Employee } from '@/types/types';
 
 function noop(): void {
   // do nothing
 }
 
-export interface Customer {
-  id: string;
-  avatar: string;
-  name: string;
-  email: string;
-  address: { city: string; state: string; country: string; street: string };
-  phone: string;
-  createdAt: Date;
-}
-
 interface CustomersTableProps {
   count?: number;
   page?: number;
-  rows?: Customer[];
+  rows?: Employee[];
   rowsPerPage?: number;
 }
 
@@ -45,71 +34,38 @@ export function CustomersTable({
   page = 0,
   rowsPerPage = 0,
 }: CustomersTableProps): React.JSX.Element {
-  const rowIds = React.useMemo(() => {
-    return rows.map((customer) => customer.id);
-  }, [rows]);
-
-  const { selectAll, deselectAll, selectOne, deselectOne, selected } = useSelection(rowIds);
-
-  const selectedSome = (selected?.size ?? 0) > 0 && (selected?.size ?? 0) < rows.length;
-  const selectedAll = rows.length > 0 && selected?.size === rows.length;
-
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
         <Table sx={{ minWidth: '800px' }}>
           <TableHead>
             <TableRow>
-              <TableCell padding="checkbox">
-                <Checkbox
-                  checked={selectedAll}
-                  indeterminate={selectedSome}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      selectAll();
-                    } else {
-                      deselectAll();
-                    }
-                  }}
-                />
-              </TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Phone</TableCell>
-              <TableCell>Signed Up</TableCell>
+              <TableCell>Nome</TableCell>
+              <TableCell>Rol</TableCell>
+              <TableCell>Pin</TableCell>
+              <TableCell>Ações</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              const isSelected = selected?.has(row.id);
-
               return (
-                <TableRow hover key={row.id} selected={isSelected}>
-                  <TableCell padding="checkbox">
-                    <Checkbox
-                      checked={isSelected}
-                      onChange={(event) => {
-                        if (event.target.checked) {
-                          selectOne(row.id);
-                        } else {
-                          deselectOne(row.id);
-                        }
-                      }}
-                    />
-                  </TableCell>
+                <TableRow hover key={row.id}>
                   <TableCell>
-                    <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
-                      <Avatar src={row.avatar} />
-                      <Typography variant="subtitle2">{row.name}</Typography>
+                    <Typography variant="subtitle2">{row.nome}</Typography>
+                  </TableCell>
+                  <TableCell>{row.rol}</TableCell>
+                  <TableCell>{row.pin}</TableCell>
+
+                  <TableCell>
+                    <Stack direction="row" gap={2}>
+                      <Button variant="contained" color="error">
+                        <Trash color="white" size={20} />
+                      </Button>
+                      <Button variant="contained">
+                        <Pencil size={20} />
+                      </Button>
                     </Stack>
                   </TableCell>
-                  <TableCell>{row.email}</TableCell>
-                  <TableCell>
-                    {row.address.city}, {row.address.state}, {row.address.country}
-                  </TableCell>
-                  <TableCell>{row.phone}</TableCell>
-                  <TableCell>{dayjs(row.createdAt).format('MMM D, YYYY')}</TableCell>
                 </TableRow>
               );
             })}
