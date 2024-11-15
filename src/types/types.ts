@@ -19,6 +19,14 @@ export interface Suit {
   nome: string;
   limpezas?: Limpeza[];
 }
+
+export interface SuitInfo {
+  id: number;
+  nome: string;
+  cleansQuantity: number;
+  lastClean?: Date;
+}
+
 export interface Controle {
   id: number;
   limpeza?: Limpeza;

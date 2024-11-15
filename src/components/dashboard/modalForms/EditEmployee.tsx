@@ -14,6 +14,7 @@ interface NewEmployeeProps {
   handleClose: () => void;
   open: boolean;
   employee: Employee | null;
+  refresh: () => void;
 }
 
 const style = {
@@ -28,7 +29,7 @@ const style = {
   p: 4,
 };
 
-function EditEmployee({ handleClose, open, employee }: NewEmployeeProps): React.JSX.Element {
+function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps): React.JSX.Element {
   const { nome, pin, rol, updateForm, resetForm } = useForm();
 
   const [alert, setAlert] = useState({
@@ -81,14 +82,15 @@ function EditEmployee({ handleClose, open, employee }: NewEmployeeProps): React.
         rol,
       };
       try {
-        const newEmployee = await instance.put(`/empregado/${employee?.id}`, data);
-        if (newEmployee) {
+        const updatedEmployee = await instance.put(`/empregado/${employee?.id}`, data);
+        if (updatedEmployee) {
           handleClose();
           setAlert({
             show: true,
-            message: 'Funcionário criado com sucesso',
+            message: 'Funcionário atualizado',
             type: 'success',
           });
+          refresh();
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {

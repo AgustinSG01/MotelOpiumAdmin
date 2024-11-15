@@ -54,7 +54,7 @@ export function CustomersTable({
           </TableHead>
           <TableBody>
             {rows.map((row) => {
-              return <EmployeeData row={row} editEmployee={editEmployee} handleDelete={handleDelete} />;
+              return <EmployeeData key={row.id} row={row} editEmployee={editEmployee} handleDelete={handleDelete} />;
             })}
           </TableBody>
         </Table>

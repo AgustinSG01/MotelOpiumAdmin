@@ -6,44 +6,44 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { type Employee } from '@/types/types';
-import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
-import { CustomersTable } from '@/components/dashboard/customer/customers-table';
-import EditEmployee from '@/components/dashboard/modalForms/EditEmployee';
-import NewEmployee from '@/components/dashboard/modalForms/NewEmployee';
+import { Suit, SuitInfo, type Employee } from '@/types/types';
+import { CustomersFilters } from '@/components/dashboard/employees/customers-filters';
+import EditSuit from '@/components/dashboard/modalForms/EditSuit';
+import NewSuit from '@/components/dashboard/modalForms/NewSuit';
+import { SuitsTable } from '@/components/dashboard/suits/suits-table';
 
 import axios from '../../../axios-config';
 
 export default function Page(): React.JSX.Element {
-  const [employees, setEmployees] = React.useState<Employee[]>([]);
+  const [suits, setSuits] = React.useState<SuitInfo[]>([]);
   const [showModal, setShowModal] = React.useState({
     new: false,
     edit: false,
   });
-  const [employee, setEmployee] = React.useState<null | Employee>(null);
+  const [suit, setSuit] = React.useState<null | Suit>(null);
   const page = 0;
   const rowsPerPage = 5;
 
   React.useEffect(() => {
-    void getEmployees();
+    void getSuits();
   }, []);
 
-  async function getEmployees(): Promise<void> {
+  async function getSuits(): Promise<void> {
     try {
-      const response = await axios.get('/empregado');
-      const data: Employee[] = response.data as Employee[];
-      setEmployees(data);
+      const response = await axios.get('/suit/info');
+      const data: SuitInfo[] = response.data as SuitInfo[];
+      setSuits(data);
     } catch (error) {
       return undefined;
     }
   }
 
-  async function getEmployee(id: number): Promise<void> {
+  async function getSuit(id: number): Promise<void> {
     try {
-      const response = await axios.get(`/empregado/${id}`);
-      const data = response.data as Employee;
+      const response = await axios.get(`/suit/one/${id}`);
+      const data = response.data as Suit;
       if (data) {
-        setEmployee(data);
+        setSuit(data);
         setShowModal({ edit: true, new: false });
       }
     } catch (error) {
@@ -51,35 +51,37 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function deleteEmployee(id: number): Promise<void> {
+  async function deleteSuit(id: number): Promise<void> {
     try {
-      await axios.delete(`/empregado/${id}`);
+      await axios.delete(`/suit/${id}`);
     } catch (error) {
       // TODO: Agregar mensaje de que no se pudo eliminar
     } finally {
-      void getEmployees();
+      void getSuits();
     }
   }
 
   return (
     <>
-      <EditEmployee
-        employee={employee}
+      <EditSuit
+        suit={suit}
         open={showModal.edit}
         handleClose={() => {
           setShowModal({ edit: false, new: false });
         }}
+        refresh={getSuits}
       />
-      <NewEmployee
+      <NewSuit
         open={showModal.new}
         handleClose={() => {
           setShowModal({ new: false, edit: false });
         }}
+        refresh={getSuits}
       />
       <Stack spacing={3}>
         <Stack direction="row" spacing={3}>
           <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-            <Typography variant="h4">Empregados</Typography>
+            <Typography variant="h4">Suits</Typography>
           </Stack>
           <div>
             <Button
@@ -89,18 +91,18 @@ export default function Page(): React.JSX.Element {
                 setShowModal({ new: true, edit: false });
               }}
             >
-              Add
+              Adicionar
             </Button>
           </div>
         </Stack>
         <CustomersFilters />
-        <CustomersTable
-          handleDelete={deleteEmployee}
-          count={employees.length}
+        <SuitsTable
+          handleDelete={deleteSuit}
+          count={suits.length}
           page={page}
-          rows={employees}
+          rows={suits}
           rowsPerPage={rowsPerPage}
-          editEmployee={getEmployee}
+          editSuit={getSuit}
         />
       </Stack>
     </>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, MenuItem, Modal, TextField } from '@mui/material';
+import { Box, Modal, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import axios from 'axios';
 
@@ -8,7 +8,7 @@ import useForm from '../../../hooks/use-form';
 import AlertMessage from '../Alert';
 import ModalButton from '../ModalButton';
 
-interface NewEmployeeProps {
+interface NewSuitProps {
   handleClose: () => void;
   refresh: () => void;
   open: boolean;
@@ -26,8 +26,8 @@ const style = {
   p: 4,
 };
 
-function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JSX.Element {
-  const { nome, pin, rol, updateForm, resetForm } = useForm();
+function NewSuit({ handleClose, open, refresh }: NewSuitProps): React.JSX.Element {
+  const { nome, updateForm, resetForm } = useForm();
 
   const [alert, setAlert] = useState({
     show: false,
@@ -44,22 +44,6 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
       });
       return false;
     }
-    if (!pin) {
-      setAlert({
-        show: true,
-        message: 'Preencha o campo de pin',
-        type: 'error',
-      });
-      return false;
-    }
-    if (!rol) {
-      setAlert({
-        show: true,
-        message: 'Preencha o campo de rol',
-        type: 'error',
-      });
-      return false;
-    }
     return true;
   }
 
@@ -67,19 +51,17 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
     if (validate()) {
       const data = {
         nome,
-        pin,
-        rol,
       };
       try {
-        const newEmployee = await instance.post('/empregado', data);
-        if (newEmployee) {
+        const newSuit = await instance.post('/suit', data);
+        if (newSuit) {
           handleClose();
           setAlert({
             show: true,
-            message: 'Funcionário criado com sucesso',
+            message: 'Suit criado com sucesso',
             type: 'success',
           });
-          refresh()
+          refresh();
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -122,7 +104,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
           }}
         >
           <h2 id="child-modal-title" style={{ textAlign: 'center' }}>
-            Insira os detalhes do novo funcionário
+            Insira os detalhes do novo suit
           </h2>
           <Stack
             gap={5}
@@ -136,7 +118,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
             mx="auto"
           >
             <TextField
-              id="nome-empregado"
+              id="nome-suit"
               label="Nome"
               variant="outlined"
               value={nome}
@@ -154,56 +136,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
               }}
               sx={{ backgroundColor: 'white' }}
             />
-            <TextField
-              id="pin-empregado"
-              label="Pin"
-              variant="outlined"
-              value={pin}
-              type="number"
-              onChange={(e) => {
-                updateForm('pin', e.target.value);
-              }}
-              InputProps={{
-                sx: { fontSize: { sm: '1.4rem', lg: '1.4rem' } },
-              }}
-              InputLabelProps={{
-                sx: {
-                  fontSize: { sm: '1.4rem', lg: '1.4rem' },
-                  textAlign: 'center',
-                },
-              }}
-              sx={{ backgroundColor: 'white' }}
-            />
-            <TextField
-              select
-              id="rol-empregado"
-              value={rol}
-              label="Rol"
-              onChange={(e) => {
-                updateForm('rol', e.target.value);
-              }}
-              fullWidth
-              InputProps={{
-                sx: { fontSize: { sm: '1.4rem', lg: '1.4rem' } },
-              }} // font size of input text
-              InputLabelProps={{
-                sx: {
-                  fontSize: { sm: '1.4rem', lg: '1.4rem' },
-                  textAlign: 'center',
-                },
-              }} // font size of input label
-              sx={{ backgroundColor: 'white' }}
-            >
-              <MenuItem value="GERENTE" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Gerente
-              </MenuItem>
-              <MenuItem value="CONTROL" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Control
-              </MenuItem>
-              <MenuItem value="LIMPEZA" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Limpeza
-              </MenuItem>
-            </TextField>
+
             <Stack direction="row" justifyContent="space-between">
               <ModalButton
                 handleClick={() => {
@@ -221,4 +154,4 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
   );
 }
 
-export default NewEmployee;
+export default NewSuit;
