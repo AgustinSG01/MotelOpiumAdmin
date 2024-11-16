@@ -40,7 +40,7 @@ export default function Page(): React.JSX.Element {
 
   async function getEmployee(id: number): Promise<void> {
     try {
-      const response = await axios.get(`/empregado/${id}`);
+      const response = await axios.get(`/empregado/one/${id}`);
       const data = response.data as Employee;
       if (data) {
         setEmployee(data);
