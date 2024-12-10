@@ -30,7 +30,7 @@ export default function Page(): React.JSX.Element {
 
   async function getEmployees(): Promise<void> {
     try {
-      const response = await axios.get('/empregado');
+      const response = await axios.get('/empregado/all');
       const data: Employee[] = response.data as Employee[];
       setEmployees(data);
     } catch (error) {
@@ -38,9 +38,9 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function getEmployee(id: number): Promise<void> {
+  async function getEmployee(id: number, rol: string): Promise<void> {
     try {
-      const response = await axios.get(`/empregado/one/${id}`);
+      const response = await axios.get(`/empregado/all/${id}?rol=${rol}`);
       const data = response.data as Employee;
       if (data) {
         setEmployee(data);
@@ -51,9 +51,9 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function deleteEmployee(id: number): Promise<void> {
+  async function deleteEmployee(id: number, rol: string): Promise<void> {
     try {
-      await axios.delete(`/empregado/${id}`);
+      await axios.delete(`/empregado/${rol}/${id}`);
     } catch (error) {
       // TODO: Agregar mensaje de que no se pudo eliminar
     } finally {

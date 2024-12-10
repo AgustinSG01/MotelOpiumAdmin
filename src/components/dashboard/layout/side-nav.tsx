@@ -3,12 +3,11 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import useStore from '@/store/store';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowSquareUpRight';
 import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
@@ -108,7 +107,7 @@ interface NavItemProps extends Omit<NavItemConfig, 'items'> {
 function NavItem({ disabled, external, href, icon, matcher, pathname, title }: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
-
+  const { notifications } = useStore();
   return (
     <li>
       <Box
@@ -140,7 +139,15 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
           ...(active && { bgcolor: 'var(--NavItem-active-background)', color: 'var(--NavItem-active-color)' }),
         }}
       >
-        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'center', flex: '0 0 auto' }}>
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            justifyContent: 'center',
+            flex: '0 0 auto',
+            position: 'relative',
+          }}
+        >
           {Icon ? (
             <Icon
               fill={active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'}
@@ -148,6 +155,10 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
               weight={active ? 'fill' : undefined}
             />
           ) : null}
+          {/* TODO: crear un estado global para almacenar las notificaciones y mostrarlas */}
+          {title === 'Notificações' && notifications > 0 && (
+            <NotificationQuantity quantity={notifications} active={active} />
+          )}
         </Box>
         <Box sx={{ flex: '1 1 auto' }}>
           <Typography
@@ -159,5 +170,35 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
         </Box>
       </Box>
     </li>
+  );
+}
+
+interface NotificationProps {
+  quantity: number;
+  active: boolean;
+}
+
+function NotificationQuantity({ quantity, active }: NotificationProps): React.JSX.Element {
+  return (
+    <span
+      style={{
+        boxSizing: 'content-box',
+        position: 'absolute',
+        top: -1,
+        right: -1,
+        backgroundColor: 'red',
+        color: 'white',
+        padding: quantity < 10 ? 1 : 1.5,
+        borderRadius: '50%',
+        width: 10,
+        height: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: `${active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'} 1px solid`,
+      }}
+    >
+      <p style={{ fontSize: '0.6rem' }}>{quantity}</p>
+    </span>
   );
 }

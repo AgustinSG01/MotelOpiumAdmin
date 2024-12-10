@@ -7,5 +7,5 @@ export const navItems = [
   { key: 'suits', title: 'Suits', href: paths.dashboard.suits, icon: 'dresser' },
   { key: 'settings', title: 'Settings', href: paths.dashboard.settings, icon: 'gear-six' },
   { key: 'account', title: 'Account', href: paths.dashboard.account, icon: 'user' },
-  { key: 'error', title: 'Error', href: paths.errors.notFound, icon: 'x-square' },
+  { key: 'notifications', title: 'Notificações', href: paths.errors.notFound, icon: 'bell' },
 ] satisfies NavItemConfig[];

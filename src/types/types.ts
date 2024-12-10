@@ -33,3 +33,9 @@ export interface Controle {
   aspects?: string[];
   data: Date;
 }
+
+export interface Notification {
+  id: number;
+  controle: Controle;
+  seen: boolean;
+}

@@ -3,15 +3,15 @@ import { Button, TableCell, TableRow, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { Pencil, Trash } from '@phosphor-icons/react';
 
-import { Employee } from '@/types/types';
+import { type Employee } from '@/types/types';
 
-interface Props {
+interface EmployeeProps {
   row: Employee;
-  handleDelete: (id: number) => void;
-  editEmployee: (id: number) => void;
+  handleDelete: (id: number, rol: string) => void;
+  editEmployee: (id: number, rol: string) => void;
 }
 
-function EmployeeData({ row, handleDelete, editEmployee }: Props) {
+function EmployeeData({ row, handleDelete, editEmployee }: EmployeeProps) {
   const [showPin, setShowPin] = React.useState(false);
 
   function codifiedPin(): string {
@@ -44,7 +44,7 @@ function EmployeeData({ row, handleDelete, editEmployee }: Props) {
             variant="contained"
             color="error"
             onClick={() => {
-              handleDelete(row.id);
+              handleDelete(row.id, row.rol);
             }}
           >
             <Trash color="white" size={20} />
@@ -52,7 +52,7 @@ function EmployeeData({ row, handleDelete, editEmployee }: Props) {
           <Button
             variant="contained"
             onClick={() => {
-              editEmployee(row.id);
+              editEmployee(row.id, row.rol);
             }}
           >
             <Pencil size={20} />

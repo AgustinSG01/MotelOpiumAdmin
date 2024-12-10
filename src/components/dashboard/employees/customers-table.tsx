@@ -28,8 +28,8 @@ interface CustomersTableProps {
   page?: number;
   rows?: Employee[];
   rowsPerPage?: number;
-  handleDelete: (id: number) => void;
-  editEmployee: (id: number) => void;
+  handleDelete: (id: number, rol: string) => void;
+  editEmployee: (id: number, rol: string) => void;
 }
 
 export function CustomersTable({

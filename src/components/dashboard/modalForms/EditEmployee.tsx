@@ -29,8 +29,14 @@ const style = {
   p: 4,
 };
 
+const paths = {
+  "GERENTE": 'gerente/modify',
+  "CONTROL": 'control',
+  "LIMPEZA": 'limpeza',
+};
+
 function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps): React.JSX.Element {
-  const { nome, pin, rol, updateForm, resetForm } = useForm();
+  const { nome, pin, updateForm, resetForm } = useForm();
 
   const [alert, setAlert] = useState({
     show: false,
@@ -63,14 +69,7 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
       });
       return false;
     }
-    if (!rol) {
-      setAlert({
-        show: true,
-        message: 'Preencha o campo de rol',
-        type: 'error',
-      });
-      return false;
-    }
+
     return true;
   }
 
@@ -79,29 +78,30 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
       const data = {
         nome,
         pin,
-        rol,
       };
-      try {
-        const updatedEmployee = await instance.put(`/empregado/${employee?.id}`, data);
-        if (updatedEmployee) {
-          handleClose();
-          setAlert({
-            show: true,
-            message: 'Funcionário atualizado',
-            type: 'success',
-          });
-          refresh();
+      if (employee) {
+        try {
+          const updatedEmployee = await instance.put(`/empregado/${paths[employee.rol]}/${employee.id}`, data);
+          if (updatedEmployee) {
+            handleClose();
+            setAlert({
+              show: true,
+              message: 'Funcionário atualizado',
+              type: 'success',
+            });
+            refresh();
+          }
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            setAlert({
+              show: true,
+              message: (error?.response?.data as { message: string })?.message || 'Ocorreu um erro',
+              type: 'error',
+            });
+          }
+        } finally {
+          resetForm();
         }
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          setAlert({
-            show: true,
-            message: (error?.response?.data as { message: string })?.message || 'Ocorreu um erro',
-            type: 'error',
-          });
-        }
-      } finally {
-        resetForm();
       }
     }
   }
@@ -133,7 +133,7 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
           }}
         >
           <h2 id="child-modal-title" style={{ textAlign: 'center' }}>
-            Insira os detalhes do novo funcionário
+            Modificar os dados desejados do funcionário
           </h2>
           <Stack
             gap={5}
@@ -185,36 +185,7 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
               }}
               sx={{ backgroundColor: 'white' }}
             />
-            <TextField
-              select
-              id="rol-empregado"
-              value={rol}
-              label="Rol"
-              onChange={(e) => {
-                updateForm('rol', e.target.value);
-              }}
-              fullWidth
-              InputProps={{
-                sx: { fontSize: { sm: '1.4rem', lg: '1.4rem' } },
-              }} // font size of input text
-              InputLabelProps={{
-                sx: {
-                  fontSize: { sm: '1.4rem', lg: '1.4rem' },
-                  textAlign: 'center',
-                },
-              }} // font size of input label
-              sx={{ backgroundColor: 'white' }}
-            >
-              <MenuItem value="GERENTE" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Gerente
-              </MenuItem>
-              <MenuItem value="CONTROL" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Control
-              </MenuItem>
-              <MenuItem value="LIMPEZA" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Limpeza
-              </MenuItem>
-            </TextField>
+
             <Stack direction="row" justifyContent="space-between">
               <ModalButton
                 handleClick={() => {
