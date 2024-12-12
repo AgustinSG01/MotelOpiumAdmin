@@ -1,10 +1,8 @@
-import { Dresser } from '@phosphor-icons/react';
+import { Broom, Dresser } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react/dist/lib/types';
 import { Bell } from '@phosphor-icons/react/dist/ssr/Bell';
 import { ChartPie as ChartPieIcon } from '@phosphor-icons/react/dist/ssr/ChartPie';
 import { GearSix as GearSixIcon } from '@phosphor-icons/react/dist/ssr/GearSix';
-import { PlugsConnected as PlugsConnectedIcon } from '@phosphor-icons/react/dist/ssr/PlugsConnected';
-import { User as UserIcon } from '@phosphor-icons/react/dist/ssr/User';
 import { Users as UsersIcon } from '@phosphor-icons/react/dist/ssr/Users';
 
 export const navIcons = {
@@ -12,6 +10,6 @@ export const navIcons = {
   'gear-six': GearSixIcon,
   dresser: Dresser,
   bell: Bell,
-  user: UserIcon,
+  broom: Broom,
   users: UsersIcon,
 } as Record<string, Icon>;

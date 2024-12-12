@@ -12,7 +12,12 @@ export interface Limpeza {
   empregado?: Employee;
   gerente?: Employee;
   suit: Suit;
-  // controles: Controle[]
+  controles?: Controle;
+  comeco: Date;
+  fim?: Date;
+  faxina: boolean;
+  data?: Date;
+  score?: number;
 }
 export interface Suit {
   id: number;
@@ -30,8 +35,15 @@ export interface SuitInfo {
 export interface Controle {
   id: number;
   limpeza?: Limpeza;
-  aspects?: string[];
+  aspectos?: Aspect[];
   data: Date;
+}
+
+export interface Aspect {
+  id: number;
+  controleType: string;
+  score: number;
+  comment?: string;
 }
 
 export interface Notification {
