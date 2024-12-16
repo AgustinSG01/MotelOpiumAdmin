@@ -3,6 +3,8 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import axios from '@/axios-config';
+import { getGerenteInService } from '@/utils/getGerenteInService';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -13,6 +15,7 @@ import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/re
 import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
+import { Employee } from '@/types/types';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
@@ -28,6 +31,27 @@ export interface MobileNavProps {
 
 export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element {
   const pathname = usePathname();
+
+  const [actualGerente, setActualGerente] = React.useState<Employee | null>();
+
+  async function getGerente() {
+    try {
+      const response = await getGerenteInService();
+      setActualGerente(response as Employee);
+    } catch (error) {
+      console.log(error);
+      setActualGerente(null);
+    }
+  }
+
+  React.useEffect(() => {
+    getGerente();
+    const interval = setInterval(() => {
+      getGerente();
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Drawer
@@ -74,11 +98,17 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-              Workspace
+              Gerente atual
             </Typography>
-            <Typography color="inherit" variant="subtitle1">
-              Devias
-            </Typography>
+            {actualGerente?.nome ? (
+              <Typography color="inherit" variant="subtitle1">
+                {actualGerente.nome}
+              </Typography>
+            ) : (
+              <Typography color="inherit" variant="subtitle1">
+                Nenhum gerente de serviço
+              </Typography>
+            )}
           </Box>
           <CaretUpDownIcon />
         </Box>

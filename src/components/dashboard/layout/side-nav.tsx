@@ -19,23 +19,27 @@ import { Logo } from '@/components/core/logo';
 
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
+import { getGerenteInService } from '@/utils/getGerenteInService';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
 
   const [actualGerente, setActualGerente] = React.useState<Employee | null>();
 
+  async function getGerente() {
+    try {
+      const response = await getGerenteInService();
+      setActualGerente(response as Employee);
+    } catch (error) {
+      console.log(error);
+      setActualGerente(null);
+    }
+  }
+
   React.useEffect(() => {
+    getGerente();
     const interval = setInterval(() => {
-      axios
-        .get('/empregado/gerente/inservice')
-        .then((response) => {
-          setActualGerente(response.data as Employee);
-        })
-        .catch((error) => {
-          console.log(error);
-          setActualGerente(null);
-        });
+      getGerente();
     }, 60000);
 
     return () => clearInterval(interval);
