@@ -3,6 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import axios from '@/axios-config';
 import useStore from '@/store/store';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -11,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
+import { Employee } from '@/types/types';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
@@ -20,6 +22,24 @@ import { navIcons } from './nav-icons';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
+
+  const [actualGerente, setActualGerente] = React.useState<Employee | null>();
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      axios
+        .get('/empregado/gerente/inservice')
+        .then((response) => {
+          setActualGerente(response.data as Employee);
+        })
+        .catch((error) => {
+          console.log(error);
+          setActualGerente(null);
+        });
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box
@@ -66,13 +86,18 @@ export function SideNav(): React.JSX.Element {
         >
           <Box sx={{ flex: '1 1 auto' }}>
             <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-              Workspace
+              Gerente atual
             </Typography>
-            <Typography color="inherit" variant="subtitle1">
-              Devias
-            </Typography>
+            {actualGerente?.nome ? (
+              <Typography color="inherit" variant="subtitle1">
+                {actualGerente.nome}
+              </Typography>
+            ) : (
+              <Typography color="inherit" variant="subtitle1">
+                Nenhum gerente de serviço
+              </Typography>
+            )}
           </Box>
-          <CaretUpDownIcon />
         </Box>
       </Stack>
       <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
@@ -108,6 +133,7 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
   const { notifications } = useStore();
+
   return (
     <li>
       <Box

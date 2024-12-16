@@ -10,6 +10,7 @@ interface LimpezaState {
   faxina: string | boolean;
   initialDate: string | Dayjs;
   finalDate: string | Dayjs;
+  state: string;
 
   // Actions
   setOrderBy: (order: string) => void;
@@ -19,6 +20,8 @@ interface LimpezaState {
   setFaxina: (faxina: boolean) => void;
   setInitialDate: (initialDate: string | Dayjs) => void;
   setFinalDate: (finalDate: string | Dayjs) => void;
+  resetFilters: () => void;
+  setState: (state: string) => void;
 }
 
 export const useLimpezaFilters = create<LimpezaState>((set) => ({
@@ -29,6 +32,7 @@ export const useLimpezaFilters = create<LimpezaState>((set) => ({
   faxina: 'all',
   initialDate: 'all',
   finalDate: 'all',
+  state: 'all',
 
   setOrderBy: (order: string): void => {
     set(() => ({ orderBy: order }));
@@ -50,5 +54,20 @@ export const useLimpezaFilters = create<LimpezaState>((set) => ({
   },
   setFinalDate: (finalDate: string | Dayjs): void => {
     set(() => ({ finalDate }));
+  },
+  setState: (state: string): void => {
+    set(() => ({ state }));
+  },
+  resetFilters: (): void => {
+    set(() => ({
+      orderBy: 'data;desc',
+      suit: 'all',
+      empregado: 'all',
+      gerente: 'all',
+      faxina: 'all',
+      initialDate: 'all',
+      finalDate: 'all',
+      state: 'all',
+    }));
   },
 }));

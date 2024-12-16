@@ -1,20 +1,20 @@
 import * as React from 'react';
 import axios from '@/axios-config';
 import { useLimpezaFilters } from '@/store/filters';
-import { DateRangePicker } from '@mui/lab';
 import { Button, MenuItem, TextField } from '@mui/material';
 import Card from '@mui/material/Card';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { type Dayjs } from 'dayjs';
+import { type Dayjs } from 'dayjs';
 
 import { type Employee, type Suit } from '@/types/types';
 
 interface FiltersProps {
   applyFilters: () => void;
+  withoutFilters: () => void;
 }
 
-export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Element {
+export function LimpezasFilters({ applyFilters, withoutFilters }: FiltersProps): React.JSX.Element {
   const {
     orderBy,
     setOrderBy,
@@ -24,17 +24,18 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
     setEmpregado,
     gerente: gerenteFiltered,
     setGerente,
-    initialDate,
     setInitialDate,
-    finalDate,
     setFinalDate,
+    resetFilters,
+    setState,
+    state,
   } = useLimpezaFilters();
 
   const [empregados, setEmpregados] = React.useState<Employee[] | null>();
   const [gerentes, setGerentes] = React.useState<Employee[] | null>([]);
   const [suits, setSuits] = React.useState<Suit[] | null>([]);
-  const [initialDateDisplay, setInitialDateDisplay] = React.useState<Dayjs | null>(dayjs());
-  const [finalDateDisplay, setFinalDateDisplay] = React.useState<Dayjs | null>(dayjs());
+  const [initialDateDisplay, setInitialDateDisplay] = React.useState<Dayjs | null>(null);
+  const [finalDateDisplay, setFinalDateDisplay] = React.useState<Dayjs | null>(null);
 
   React.useEffect(() => {
     void getEmpregados();
@@ -93,6 +94,7 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
         {/* SUIT */}
         <TextField
           defaultValue={suitFiltered}
+          value={suitFiltered}
           label="Suit"
           fullWidth
           onChange={(e) => {
@@ -111,6 +113,7 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
         {/* EMPREGADO */}
         <TextField
           defaultValue={empregadoFiltered}
+          value={empregadoFiltered}
           label="Funcionário"
           fullWidth
           onChange={(e) => {
@@ -130,6 +133,7 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
         {/* GERENTE */}
         <TextField
           defaultValue={gerenteFiltered}
+          value={gerenteFiltered}
           label="Gerente"
           fullWidth
           onChange={(e) => {
@@ -149,7 +153,7 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
         {/* FECHA */}
         {/* TODO: Terminar esto */}
         <DatePicker
-          label="Data de início"
+          label="Data início"
           value={initialDateDisplay}
           onChange={(newValue) => {
             if (newValue) {
@@ -157,11 +161,11 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
               setInitialDateDisplay(newValue);
             }
           }}
-          sx={{ minWidth: '200px' }}
+          sx={{ width: '100%' }}
         />
 
         <DatePicker
-          label="Data de início"
+          label="Data final"
           value={finalDateDisplay}
           onChange={(newValue) => {
             if (newValue) {
@@ -169,32 +173,43 @@ export function LimpezasFilters({ applyFilters }: FiltersProps): React.JSX.Eleme
               setFinalDateDisplay(newValue);
             }
           }}
-          sx={{ minWidth: '200px' }}
+          sx={{ width: '100%' }}
         />
 
         {/* ESTADO */}
         {/* TODO: Este filtro solo cambiará la url principal */}
-        {/* <TextField
-          defaultValue={orderBy}
-          label="Ordernar por"
+        <TextField
+          defaultValue={state}
+          value={state}
+          label="Estado"
           fullWidth
           onChange={(e) => {
-            setOrderBy(e.target.value);
+            setState(e.target.value);
           }}
           select
           sx={{ maxWidth: '300px' }}
         >
-          <MenuItem value="data;asc">Data crescente</MenuItem>
-          <MenuItem value="data;desc">Data decrescente</MenuItem>
-          <MenuItem value="score;asc">Pontuação crescente</MenuItem>
-          <MenuItem value="score;desc">Pontuação decrescente</MenuItem>
-        </TextField> */}
+          <MenuItem value="all">Todos</MenuItem>
+          <MenuItem value="inprocess">Em andamento</MenuItem>
+          <MenuItem value="completed">Finalizado</MenuItem>
+        </TextField>
         <Button
           onClick={() => {
             applyFilters();
           }}
         >
           Aplicar
+        </Button>
+        <Button
+          onClick={() => {
+            resetFilters(); // Resetea los estados globales
+            setInitialDateDisplay(null);
+            setFinalDateDisplay(null);
+
+            withoutFilters();
+          }}
+        >
+          Reiniciar
         </Button>
       </Stack>
     </Card>

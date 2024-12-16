@@ -33,7 +33,7 @@ export default function Page(): React.JSX.Element {
     try {
       setLoading(true);
       const response = await axios.get(
-        `/limpeza/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${initialDate}&dateEnd=${finalDate}`
+        `/faxina/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${initialDate}&dateEnd=${finalDate}`
       );
       const data: Limpeza[] = response.data as Limpeza[];
       setLimpezas(data);
@@ -82,9 +82,8 @@ export default function Page(): React.JSX.Element {
     <Stack spacing={3}>
       <Stack direction="row" spacing={3}>
         <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Limpezas</Typography>
+          <Typography variant="h4">Faxinas</Typography>
         </Stack>
-       
       </Stack>
       <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} />
       <LimpezasTable

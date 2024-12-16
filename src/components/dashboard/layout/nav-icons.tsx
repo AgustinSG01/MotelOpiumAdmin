@@ -1,4 +1,4 @@
-import { Broom, Dresser } from '@phosphor-icons/react';
+import { Broom, Dresser, SprayBottle } from '@phosphor-icons/react';
 import type { Icon } from '@phosphor-icons/react/dist/lib/types';
 import { Bell } from '@phosphor-icons/react/dist/ssr/Bell';
 import { ChartPie as ChartPieIcon } from '@phosphor-icons/react/dist/ssr/ChartPie';
@@ -12,4 +12,5 @@ export const navIcons = {
   bell: Bell,
   broom: Broom,
   users: UsersIcon,
+  spray: SprayBottle,
 } as Record<string, Icon>;
