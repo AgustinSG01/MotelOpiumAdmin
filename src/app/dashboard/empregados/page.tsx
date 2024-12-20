@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { type Employee } from '@/types/types';
-import { CustomersFilters } from '@/components/dashboard/employees/customers-filters';
 import { CustomersTable } from '@/components/dashboard/employees/customers-table';
 import EditEmployee from '@/components/dashboard/modalForms/EditEmployee';
 import NewEmployee from '@/components/dashboard/modalForms/NewEmployee';

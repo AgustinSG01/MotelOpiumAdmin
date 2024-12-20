@@ -6,8 +6,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { Suit, SuitInfo, type Employee } from '@/types/types';
-import { CustomersFilters } from '@/components/dashboard/employees/customers-filters';
+import { Suit, SuitInfo } from '@/types/types';
 import EditSuit from '@/components/dashboard/modalForms/EditSuit';
 import NewSuit from '@/components/dashboard/modalForms/NewSuit';
 import { SuitsTable } from '@/components/dashboard/suits/suits-table';

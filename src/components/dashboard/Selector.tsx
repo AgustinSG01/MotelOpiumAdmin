@@ -1,20 +1,21 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
 import { MenuItem, TextField } from '@mui/material';
 
-interface Props {
+import { type Employee, type Suit } from '@/types/types';
+
+interface PropsSel {
   value: string | number;
   updateForm: (stateName: string, value: string | number) => void;
   stateName: string;
   error: boolean;
   loading: boolean;
-  items: string[] | number[];
+  items: Employee[] | Suit[];
   noItemsText: string;
   label: string;
   labelId: string;
 }
 
-function Selector({ value, updateForm, stateName, error, loading, items, noItemsText, label, labelId }: Props) {
+function Selector({ value, updateForm, stateName, error, loading, items, noItemsText, label, labelId }: PropsSel) {
   return (
     <TextField
       select

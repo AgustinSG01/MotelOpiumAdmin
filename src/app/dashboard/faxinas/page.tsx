@@ -32,7 +32,7 @@ export default function Page(): React.JSX.Element {
     try {
       setLoading(true);
       const response = await axios.get(
-        `/faxina/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${initialDate}&dateEnd=${finalDate}`
+        `/faxina/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${String(initialDate)}&dateEnd=${String(finalDate)}`
       );
       const data: Limpeza[] = response.data as Limpeza[];
       setLimpezas(data);
@@ -63,7 +63,7 @@ export default function Page(): React.JSX.Element {
         setShowModal({ control: true });
       }
     } catch (error) {
-      console.log(error);
+      return;
     }
   }
 

@@ -2,12 +2,10 @@
 
 import * as React from 'react';
 import { useLimpezaFilters } from '@/store/filters';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { Controle, type Limpeza } from '@/types/types';
+import { type Controle, type Limpeza } from '@/types/types';
 import ControlInfo from '@/components/dashboard/limpezas/control-info';
 import { LimpezasFilters } from '@/components/dashboard/limpezas/limpezas-filters';
 import { LimpezasTable } from '@/components/dashboard/limpezas/limpezas-table';
@@ -34,7 +32,7 @@ export default function Page(): React.JSX.Element {
     try {
       setLoading(true);
       const response = await axios.get(
-        `/limpeza/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${initialDate}&dateEnd=${finalDate}`
+        `/limpeza/${state}?orderType=${filters[0]}&order=${filters[1]}&empregado=${empregado}&gerente=${gerente}&suit=${suit}&dateStart=${String(initialDate)}&dateEnd=${String(finalDate)}`
       );
       const data: Limpeza[] = response.data as Limpeza[];
       setLimpezas(data);
@@ -53,7 +51,7 @@ export default function Page(): React.JSX.Element {
         setShowModal({ control: true });
       }
     } catch (error) {
-      console.log(error);
+      return;
     }
   }
 
