@@ -3,23 +3,21 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import axios from '@/axios-config';
 import useStore from '@/store/store';
+import { getGerenteInService } from '@/utils/get-gerente-in-service';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
-import { Employee } from '@/types/types';
+import { type Employee } from '@/types/types';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
 
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
-import { getGerenteInService } from '@/utils/getGerenteInService';
 
 export function SideNav(): React.JSX.Element {
   const pathname = usePathname();
@@ -29,20 +27,21 @@ export function SideNav(): React.JSX.Element {
   async function getGerente() {
     try {
       const response = await getGerenteInService();
-      setActualGerente(response as Employee);
+      setActualGerente(response);
     } catch (error) {
-      console.log(error);
       setActualGerente(null);
     }
   }
 
   React.useEffect(() => {
-    getGerente();
+    void getGerente();
     const interval = setInterval(() => {
-      getGerente();
+      void getGerente();
     }, 60000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (

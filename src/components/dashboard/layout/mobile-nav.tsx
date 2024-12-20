@@ -3,8 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import axios from '@/axios-config';
-import { getGerenteInService } from '@/utils/getGerenteInService';
+import { getGerenteInService } from '@/utils/get-gerente-in-service';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -15,7 +14,7 @@ import { ArrowSquareUpRight as ArrowSquareUpRightIcon } from '@phosphor-icons/re
 import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 
 import type { NavItemConfig } from '@/types/nav';
-import { Employee } from '@/types/types';
+import { type Employee } from '@/types/types';
 import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { Logo } from '@/components/core/logo';
@@ -37,20 +36,22 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
   async function getGerente() {
     try {
       const response = await getGerenteInService();
-      setActualGerente(response as Employee);
+      setActualGerente(response);
     } catch (error) {
-      console.log(error);
       setActualGerente(null);
+      return;
     }
   }
 
   React.useEffect(() => {
-    getGerente();
+    void getGerente();
     const interval = setInterval(() => {
-      getGerente();
+      void getGerente();
     }, 60000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
 
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, MenuItem, Modal, TextField } from '@mui/material';
+import { Box, Modal, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import axios from 'axios';
 
@@ -81,7 +81,7 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
       };
       if (employee) {
         try {
-          const updatedEmployee = await instance.put(`/empregado/${paths[employee.rol]}/${employee.id}`, data);
+          const updatedEmployee = await instance.put(`/empregado/${paths[employee.rol as keyof typeof paths]}/${employee.id}`, data);
           if (updatedEmployee) {
             handleClose();
             setAlert({

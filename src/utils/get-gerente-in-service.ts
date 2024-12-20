@@ -8,8 +8,7 @@ export async function getGerenteInService(): Promise<Employee | null> {
         .then((response) => {
             return response.data as Employee;
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
             return null;
         });
 }
