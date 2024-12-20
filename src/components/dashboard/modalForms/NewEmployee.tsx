@@ -68,10 +68,9 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
       const data = {
         nome,
         pin,
-        rol,
       };
       try {
-        const newEmployee = await instance.post('/empregado', data);
+        const newEmployee = await instance.post(`/empregado/${rol}`, data);
         if (newEmployee) {
           handleClose();
           setAlert({
@@ -79,7 +78,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
             message: 'Funcionário criado com sucesso',
             type: 'success',
           });
-          refresh()
+          refresh();
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -194,13 +193,13 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
               }} // font size of input label
               sx={{ backgroundColor: 'white' }}
             >
-              <MenuItem value="GERENTE" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
+              <MenuItem value="gerente" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
                 Gerente
               </MenuItem>
-              <MenuItem value="CONTROL" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
+              <MenuItem value="control" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
                 Control
               </MenuItem>
-              <MenuItem value="LIMPEZA" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
+              <MenuItem value="limpeza" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
                 Limpeza
               </MenuItem>
             </TextField>

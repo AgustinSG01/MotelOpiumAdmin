@@ -95,7 +95,7 @@ export default function Page(): React.JSX.Element {
             </Button>
           </div>
         </Stack>
-        <CustomersFilters />
+        {/* <CustomersFilters /> */}
         <SuitsTable
           handleDelete={deleteSuit}
           count={suits.length}

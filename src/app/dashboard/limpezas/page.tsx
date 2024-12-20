@@ -7,7 +7,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
-import { type Limpeza } from '@/types/types';
+import { Controle, type Limpeza } from '@/types/types';
+import ControlInfo from '@/components/dashboard/limpezas/control-info';
 import { LimpezasFilters } from '@/components/dashboard/limpezas/limpezas-filters';
 import { LimpezasTable } from '@/components/dashboard/limpezas/limpezas-table';
 
@@ -18,9 +19,9 @@ export default function Page(): React.JSX.Element {
 
   const [limpezas, setLimpezas] = React.useState<Limpeza[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [control, setControl] = React.useState<Controle>();
   const [showModal, setShowModal] = React.useState({
-    new: false,
-    edit: false,
+    control: false,
   });
 
   React.useEffect(() => {
@@ -43,6 +44,19 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getControle(id: number): Promise<void> {
+    try {
+      const response = await axios.get(`/controle/${id}`);
+      const data = response.data as Controle;
+      if (data) {
+        setControl(data);
+        setShowModal({ control: true });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function withoutFilters(): Promise<void> {
     try {
       setLoading(true);
@@ -55,47 +69,24 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  // async function getEmployee(id: number, rol: string): Promise<void> {
-  //   try {
-  //     const response = await axios.get(`/empregado/all/${id}?rol=${rol}`);
-  //     const data = response.data as Employee;
-  //     if (data) {
-  //       setLimpezas(data);
-  //       setShowModal({ edit: true, new: false });
-  //     }
-  //   } catch (error) {
-  //     // TODO: Alert de que hubo un error
-  //   }
-  // }
-
-  async function deleteEmployee(id: number, rol: string): Promise<void> {
-    try {
-      await axios.delete(`/empregado/${rol}/${id}`);
-    } catch (error) {
-      // TODO: Agregar mensaje de que no se pudo eliminar
-    } finally {
-      void getLimpezas();
-    }
-  }
-
   return (
-    <Stack spacing={3}>
-      <Stack direction="row" spacing={3}>
-        <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Limpezas</Typography>
-        </Stack>
-       
-      </Stack>
-      <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} />
-      <LimpezasTable
-        handleDelete={deleteEmployee}
-        count={limpezas.length}
-        rows={limpezas}
-        loading={loading}
-        editEmployee={() => {
-          console.log('edit');
+    <>
+      <ControlInfo
+        controle={control}
+        open={showModal.control}
+        handleClose={() => {
+          setShowModal({ control: false });
         }}
       />
-    </Stack>
+      <Stack spacing={3}>
+        <Stack direction="row" spacing={3}>
+          <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
+            <Typography variant="h4">Limpezas</Typography>
+          </Stack>
+        </Stack>
+        <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} />
+        <LimpezasTable getControle={getControle} count={limpezas.length} rows={limpezas} loading={loading} />
+      </Stack>
+    </>
   );
 }

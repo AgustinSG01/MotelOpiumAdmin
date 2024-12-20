@@ -1,18 +1,17 @@
 import React from 'react';
 import { Button, Chip, TableCell, TableRow, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Pencil, Trash } from '@phosphor-icons/react';
+import { Eye } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 
 import { type Limpeza } from '@/types/types';
 
 interface LimpezaProps {
   row: Limpeza;
-  handleDelete: (id: number, rol: string) => void;
-  editEmployee: (id: number, rol: string) => void;
+  getControle: (id: number) => void;
 }
 
-function LimpezaData({ row, handleDelete, editEmployee }: LimpezaProps) {
+function LimpezaData({ row, getControle }: LimpezaProps) {
   function getHour(hour: Date | undefined): string {
     if (!hour) return '-';
     const hourDayjs = dayjs(hour);
@@ -45,24 +44,17 @@ function LimpezaData({ row, handleDelete, editEmployee }: LimpezaProps) {
       </TableCell>
 
       {/* ACCIONES */}
-      <TableCell>
+      <TableCell sx={{ textAlign: 'center' }}>
         <Stack direction="row" gap={2}>
           <Button
             variant="contained"
-            color="error"
+            color="primary"
             onClick={() => {
-              //   handleDelete(row.id, row.rol);
+              getControle(row.id);
             }}
+            disabled={!row.controles?.aspectos?.length}
           >
-            <Trash color="white" size={20} />
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              //   editEmployee(row.id, row.rol);
-            }}
-          >
-            <Pencil size={20} />
+            <Eye color="white" size={20} />
           </Button>
         </Stack>
       </TableCell>

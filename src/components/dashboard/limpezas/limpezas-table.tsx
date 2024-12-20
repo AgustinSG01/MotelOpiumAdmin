@@ -19,18 +19,12 @@ import LimpezaData from './limpeza-data';
 interface LimpezasTableProps {
   count?: number;
   rows?: Limpeza[];
-  handleDelete: (id: number, rol: string) => void;
-  editEmployee: (id: number, rol: string) => void;
+  getControle: (id: number) => void;
+
   loading: boolean;
 }
 
-export function LimpezasTable({
-  count = 0,
-  rows = [],
-  handleDelete,
-  editEmployee,
-  loading,
-}: LimpezasTableProps): React.JSX.Element {
+export function LimpezasTable({ count = 0, rows = [], getControle, loading }: LimpezasTableProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
 
@@ -68,7 +62,7 @@ export function LimpezasTable({
               <TableRowsLoader rowsNum={rowsPerPage} columnsNum={9} />
             ) : (
               display.map((row) => {
-                return <LimpezaData key={row.id} row={row} editEmployee={editEmployee} handleDelete={handleDelete} />;
+                return <LimpezaData key={row.id} row={row} getControle={getControle} />;
               })
             )}
           </TableBody>
