@@ -73,9 +73,9 @@ export function SideNav(): React.JSX.Element {
       }}
     >
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
+        {/* <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
           <Logo color="light" height={32} width={122} />
-        </Box>
+        </Box> */}
         <Box
           sx={{
             alignItems: 'center',
@@ -185,9 +185,9 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
             />
           ) : null}
           {/* TODO: crear un estado global para almacenar las notificaciones y mostrarlas */}
-          {title === 'Notificações' && notifications > 0 && (
+          {/* {title === 'Notificações' && notifications > 0 && (
             <NotificationQuantity quantity={notifications} active={active} />
-          )}
+          )} */}
         </Box>
         <Box sx={{ flex: '1 1 auto' }}>
           <Typography
