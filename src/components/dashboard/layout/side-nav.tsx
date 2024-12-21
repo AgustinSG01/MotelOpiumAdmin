@@ -3,7 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
-import useStore from '@/store/store';
+// import useStore from '@/store/store';
 import { getGerenteInService } from '@/utils/get-gerente-in-service';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
@@ -12,9 +12,9 @@ import Typography from '@mui/material/Typography';
 
 import type { NavItemConfig } from '@/types/nav';
 import { type Employee } from '@/types/types';
-import { paths } from '@/paths';
+// import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
-import { Logo } from '@/components/core/logo';
+// import { Logo } from '@/components/core/logo';
 
 import { navItems } from './config';
 import { navIcons } from './nav-icons';
@@ -135,7 +135,7 @@ interface NavItemProps extends Omit<NavItemConfig, 'items'> {
 function NavItem({ disabled, external, href, icon, matcher, pathname, title }: NavItemProps): React.JSX.Element {
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
-  const { notifications } = useStore();
+  // const { notifications } = useStore();
 
   return (
     <li>
@@ -202,32 +202,32 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
   );
 }
 
-interface NotificationProps {
-  quantity: number;
-  active: boolean;
-}
+// interface NotificationProps {
+//   quantity: number;
+//   active: boolean;
+// }
 
-function NotificationQuantity({ quantity, active }: NotificationProps): React.JSX.Element {
-  return (
-    <span
-      style={{
-        boxSizing: 'content-box',
-        position: 'absolute',
-        top: -1,
-        right: -1,
-        backgroundColor: 'red',
-        color: 'white',
-        padding: quantity < 10 ? 1 : 1.5,
-        borderRadius: '50%',
-        width: 10,
-        height: 10,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        border: `${active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'} 1px solid`,
-      }}
-    >
-      <p style={{ fontSize: '0.6rem' }}>{quantity}</p>
-    </span>
-  );
-}
+// function NotificationQuantity({ quantity, active }: NotificationProps): React.JSX.Element {
+//   return (
+//     <span
+//       style={{
+//         boxSizing: 'content-box',
+//         position: 'absolute',
+//         top: -1,
+//         right: -1,
+//         backgroundColor: 'red',
+//         color: 'white',
+//         padding: quantity < 10 ? 1 : 1.5,
+//         borderRadius: '50%',
+//         width: 10,
+//         height: 10,
+//         display: 'flex',
+//         justifyContent: 'center',
+//         alignItems: 'center',
+//         border: `${active ? 'var(--NavItem-icon-active-color)' : 'var(--NavItem-icon-color)'} 1px solid`,
+//       }}
+//     >
+//       <p style={{ fontSize: '0.6rem' }}>{quantity}</p>
+//     </span>
+//   );
+// }
