@@ -3,7 +3,7 @@ import { paths } from '@/paths';
 
 export const navItems = [
   { key: 'overview', title: 'Overview', href: paths.dashboard.overview, icon: 'chart-pie' },
-  { key: 'empregados', title: 'Empregados', href: paths.dashboard.employees, icon: 'users' },
+  { key: 'empregados', title: 'Funcionários', href: paths.dashboard.employees, icon: 'users' },
   { key: 'suits', title: 'Suits', href: paths.dashboard.suits, icon: 'dresser' },
   // { key: 'settings', title: 'Settings', href: paths.dashboard.settings, icon: 'gear-six' },
   { key: 'limpezas', title: 'Limpezas', href: paths.dashboard.account, icon: 'broom' },

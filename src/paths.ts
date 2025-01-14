@@ -5,7 +5,7 @@ export const paths = {
     overview: '/dashboard',
     account: '/dashboard/limpezas',
     faxina: '/dashboard/faxinas',
-    employees: '/dashboard/empregados',
+    employees: '/dashboard/funcionarios',
     suits: '/dashboard/suits',
     settings: '/dashboard/settings',
   },

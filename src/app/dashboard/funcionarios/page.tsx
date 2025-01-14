@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
 
 import { type Employee } from '@/types/types';
-import { CustomersTable } from '@/components/dashboard/employees/customers-table';
+import { CustomersTable } from '@/components/dashboard/empregados/customers-table';
 import EditEmployee from '@/components/dashboard/modalForms/EditEmployee';
 import NewEmployee from '@/components/dashboard/modalForms/NewEmployee';
 
@@ -80,7 +80,7 @@ export default function Page(): React.JSX.Element {
       <Stack spacing={3}>
         <Stack direction="row" spacing={3}>
           <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-            <Typography variant="h4">Empregados</Typography>
+            <Typography variant="h4">Funcionários</Typography>
           </Stack>
           <div>
             <Button
