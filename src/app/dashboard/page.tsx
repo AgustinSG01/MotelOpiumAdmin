@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
 
-import { Employee } from '@/types/types';
+import { type Employee } from '@/types/types';
 import { config } from '@/config';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
 import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
@@ -11,7 +11,7 @@ import { LatestProducts } from '@/components/dashboard/overview/latest-products'
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { Sales } from '@/components/dashboard/overview/sales';
 // import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
-import { TotalProfit } from '@/components/dashboard/overview/total-profit';
+import { EmployeeMonth } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
 
 import axios from '../../axios-config';
@@ -28,6 +28,9 @@ export default async function Page(): Promise<React.JSX.Element> {
   const responseEmployee = await axios.get('/statics/empregado-more-limpezas-actual-month');
   const employeeMonth: Employee = responseEmployee?.data as Employee;
 
+  const responseYearCleans = await axios.get('/statics/total-limpezas-every-month');
+  const yearCleans: { data: number[]; year: string } = responseYearCleans?.data as { data: number[]; year: string };
+
   return (
     <Grid container spacing={3}>
       <Grid lg={3} sm={6} xs={12}>
@@ -36,17 +39,14 @@ export default async function Page(): Promise<React.JSX.Element> {
       <Grid lg={3} sm={6} xs={12}>
         <ControlsMonth sx={{ height: '100%' }} value={controlsMonth} />
       </Grid>
-      {/* <Grid lg={3} sm={6} xs={12}>
-        <TasksProgress sx={{ height: '100%' }} value={75.5} />
-      </Grid> */}
       <Grid lg={6} sm={12} xs={24}>
-        <TotalProfit sx={{ height: '100%' }} value={employeeMonth.nome} />
+        <EmployeeMonth sx={{ height: '100%' }} value={employeeMonth.nome} />
       </Grid>
       <Grid lg={8} xs={12}>
         <Sales
           chartSeries={[
-            { name: 'This year', data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20] },
-            { name: 'Last year', data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13] },
+            { name: yearCleans.year, data: yearCleans.data },
+            // { name: 'Last year', data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13] },
           ]}
           sx={{ height: '100%' }}
         />

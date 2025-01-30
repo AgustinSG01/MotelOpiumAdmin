@@ -12,7 +12,7 @@ export interface TotalProfitProps {
   value: string;
 }
 
-export function TotalProfit({ value, sx }: TotalProfitProps): React.JSX.Element {
+export function EmployeeMonth({ value, sx }: TotalProfitProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
