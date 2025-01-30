@@ -9,7 +9,7 @@ import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
 import { LatestProducts } from '@/components/dashboard/overview/latest-products';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { Sales } from '@/components/dashboard/overview/sales';
-import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
+// import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
 import { TotalProfit } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
 
@@ -18,30 +18,6 @@ import axios from '../../axios-config';
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export default async function Page(): Promise<React.JSX.Element> {
-  // const {controlsMonth, employeeMonth, limpezasMonth, setControlsMonth, setEmployeeMonth, setLimpezasMonth} = useStatics();
-
-  // async function getStatics(): Promise<void> {
-  //   try {
-  //     await getLimpezaMonth();
-  //   } catch (error) {
-  //     return;
-  //   }
-  // }
-  // async function getLimpezaMonth(): Promise<void> {
-  //   try {
-  //     const response = await axios.get('/statics/total-limpezas-actual-month');
-  //     const data: number = response?.data as number;
-  //     setLimpezaMonth(data);
-  //   } catch (error) {
-  //     return;
-  //   }
-  // }
-
-  // React.useEffect(() => {
-  //   getStatics().catch(() => {
-  //     return;
-  //   });
-  // }, []);
   const responseLimpezas = await axios.get('/statics/total-limpezas-actual-month');
   const limpezasMonth: number = responseLimpezas?.data as number;
 
