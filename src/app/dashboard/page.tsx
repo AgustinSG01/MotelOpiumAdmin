@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
 
+import { Employee } from '@/types/types';
 import { config } from '@/config';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
 import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
@@ -23,6 +24,10 @@ export default async function Page(): Promise<React.JSX.Element> {
 
   const responseControls = await axios.get('/statics/total-controls-actual-month');
   const controlsMonth: number = responseControls?.data as number;
+
+  const responseEmployee = await axios.get('/statics/empregado-more-limpezas-actual-month');
+  const employeeMonth: Employee = responseEmployee?.data as Employee;
+
   return (
     <Grid container spacing={3}>
       <Grid lg={3} sm={6} xs={12}>
@@ -34,8 +39,8 @@ export default async function Page(): Promise<React.JSX.Element> {
       {/* <Grid lg={3} sm={6} xs={12}>
         <TasksProgress sx={{ height: '100%' }} value={75.5} />
       </Grid> */}
-      <Grid lg={3} sm={6} xs={12}>
-        <TotalProfit sx={{ height: '100%' }} value="$15k" />
+      <Grid lg={6} sm={12} xs={24}>
+        <TotalProfit sx={{ height: '100%' }} value={employeeMonth.nome} />
       </Grid>
       <Grid lg={8} xs={12}>
         <Sales
