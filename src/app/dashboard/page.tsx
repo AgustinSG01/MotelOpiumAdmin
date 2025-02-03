@@ -10,7 +10,6 @@ import { LatestOrders } from '@/components/dashboard/overview/latest-orders';
 import { LatestProducts } from '@/components/dashboard/overview/latest-products';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { Sales } from '@/components/dashboard/overview/sales';
-// import { TasksProgress } from '@/components/dashboard/overview/tasks-progress';
 import { EmployeeMonth } from '@/components/dashboard/overview/total-profit';
 import { Traffic } from '@/components/dashboard/overview/traffic';
 
@@ -28,9 +27,6 @@ export default async function Page(): Promise<React.JSX.Element> {
   const responseEmployee = await axios.get('/statics/empregado-more-limpezas-actual-month');
   const employeeMonth: Employee = responseEmployee?.data as Employee;
 
-  const responseYearCleans = await axios.get('/statics/total-limpezas-every-month');
-  const yearCleans: { data: number[]; year: string } = responseYearCleans?.data as { data: number[]; year: string };
-
   return (
     <Grid container spacing={3}>
       <Grid lg={3} sm={6} xs={12}>
@@ -40,16 +36,13 @@ export default async function Page(): Promise<React.JSX.Element> {
         <ControlsMonth sx={{ height: '100%' }} value={controlsMonth} />
       </Grid>
       <Grid lg={6} sm={12} xs={24}>
-        <EmployeeMonth sx={{ height: '100%' }} value={employeeMonth.nome} />
+        <EmployeeMonth
+          sx={{ height: '100%' }}
+          value={employeeMonth?.nome ? employeeMonth.nome : 'Não houve nenhuma limpeza'}
+        />
       </Grid>
       <Grid lg={8} xs={12}>
-        <Sales
-          chartSeries={[
-            { name: yearCleans.year, data: yearCleans.data },
-            // { name: 'Last year', data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13] },
-          ]}
-          sx={{ height: '100%' }}
-        />
+        <Sales sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <Traffic chartSeries={[63, 15, 22]} labels={['Desktop', 'Tablet', 'Phone']} sx={{ height: '100%' }} />
