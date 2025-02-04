@@ -9,9 +9,11 @@ import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import { alpha, useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
+import { Stack } from '@mui/system';
 import { ArrowLeft } from '@phosphor-icons/react/dist/ssr';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import type { ApexOptions } from 'apexcharts';
+import dayjs from 'dayjs';
 
 import { Chart } from '@/components/core/chart';
 
@@ -22,10 +24,12 @@ export interface SalesProps {
 }
 
 export function Sales({ sx }: SalesProps): React.JSX.Element {
-  const actualYear: number = new Date().getFullYear();
-  const chartOptions = useChartOptions();
-  const [year, setYear] = React.useState<number>(new Date().getFullYear());
+  const actualYear: number = dayjs().year();
+  const [year, setYear] = React.useState<number>(dayjs().year());
+  const [month, setMonth] = React.useState<number>(dayjs().month());
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [suits, setSuits] = React.useState<string[]>([]);
+
   const [chartSeries, setChartSeries] = React.useState<{ name: string; data: number[] }[]>([
     {
       name: actualYear.toString(),
@@ -36,25 +40,36 @@ export function Sales({ sx }: SalesProps): React.JSX.Element {
   const fetchYearCleans = React.useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await axios.get('/statics/total-limpezas-every-month', {
-        params: { selectedYear: year },
+      const response = await axios.get('/statics/suits-promedy-per-month', {
+        params: {
+          selectedYear: year,
+          selectedMonth: month,
+        },
       });
-      const responseData = response.data as { data: number[]; year: number };
-      setChartSeries([{ name: responseData.year.toString(), data: responseData.data }]);
+      const responseData = response.data as {
+        promedyArray: number[];
+        suitsArray: string[];
+        year: number;
+        month: number[];
+      };
+      setSuits(responseData.suitsArray);
+      setChartSeries([{ name: responseData.month.toString(), data: responseData.promedyArray }]);
     } catch (error) {
       return;
     } finally {
       setLoading(false);
     }
-  }, [year]);
+  }, [year, month]);
 
   React.useEffect(() => {
     void fetchYearCleans();
   }, [fetchYearCleans]);
 
+  const chartOptions = useChartOptions(suits);
+
   return (
     <Card sx={sx}>
-      <CardHeader title="Limpezas" />
+      <CardHeader title="Número médio de controles de suits" />
       <CardContent>
         {loading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
@@ -68,18 +83,33 @@ export function Sales({ sx }: SalesProps): React.JSX.Element {
           color="inherit"
           size="small"
           onClick={() => {
-            setYear(year - 1);
+            if (month === 0) {
+              setMonth(11);
+              setYear(year - 1);
+            } else if (month > 0) {
+              setMonth(month - 1);
+            }
           }}
         >
           <ArrowLeft fontSize="var(--icon-fontSize-md)" />
         </IconButton>
-        <Typography>{year.toString()}</Typography>
+        <Stack sx={{ alignItems: 'center' }}>
+          <Typography>{year}</Typography>
+          <Typography sx={{ textTransform: 'capitalize' }}>
+            {dayjs(`${year}-${month + 1}-01`).format('MMMM')}
+          </Typography>
+        </Stack>
         <IconButton
-          disabled={year >= actualYear}
+          disabled={year >= actualYear && month >= dayjs().month()}
           color="inherit"
           size="small"
           onClick={() => {
-            setYear(year + 1);
+            if (month === 11 && year < actualYear) {
+              setMonth(0);
+              setYear(year + 1);
+            } else if (month < 11) {
+              setMonth(month + 1);
+            }
           }}
         >
           <ArrowRightIcon fontSize="var(--icon-fontSize-md)" />
@@ -89,7 +119,7 @@ export function Sales({ sx }: SalesProps): React.JSX.Element {
   );
 }
 
-function useChartOptions(): ApexOptions {
+function useChartOptions(categories: string[]): ApexOptions {
   const theme = useTheme();
 
   return {
@@ -111,7 +141,7 @@ function useChartOptions(): ApexOptions {
       axisBorder: { color: theme.palette.divider, show: true },
       axisTicks: { color: theme.palette.divider, show: true },
 
-      categories: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      categories,
       labels: { offsetY: 5, style: { colors: theme.palette.text.secondary } },
     },
     yaxis: {
