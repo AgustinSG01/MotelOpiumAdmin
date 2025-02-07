@@ -44,6 +44,7 @@ export interface Aspect {
   controleType: string;
   score: number;
   comment?: string;
+  image?: string;
 }
 
 export interface Notification {
