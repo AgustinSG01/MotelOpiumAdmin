@@ -11,32 +11,51 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
-
 import { type Employee } from '@/types/types';
 
+import TableRowsLoader from '../TableRowLoader';
 import EmployeeData from './employee-data';
-
-function noop(): void {
-  // do nothing
-}
 
 interface CustomersTableProps {
   count?: number;
-  page?: number;
   rows?: Employee[];
-  rowsPerPage?: number;
   handleDelete: (id: number, rol: string) => void;
   editEmployee: (id: number, rol: string) => void;
+  loading: boolean;
 }
 
 export function CustomersTable({
   count = 0,
   rows = [],
-  page = 0,
-  rowsPerPage = 0,
+  loading,
+
   handleDelete,
   editEmployee,
 }: CustomersTableProps): React.JSX.Element {
+  const [page, setPage] = React.useState(0); // Current page index
+  const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
+
+  const handleChangePage = (_event: unknown, newPage: number): void => {
+    setPage(newPage);
+  };
+
+  // Handle change in rows per page
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset the table to the first page whenever rows per page changes
+  };
+
+  const display = React.useMemo(() => {
+    return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  }, [rows, page, rowsPerPage]);
+
+  React.useEffect(() => {
+    // Si el número total de filas es menor que el índice de la primera fila en la página actual, reinicia la página a 0
+    if (rows.length && page * rowsPerPage >= rows.length) {
+      setPage(0);
+    }
+  }, [rows, rowsPerPage]);
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -50,9 +69,20 @@ export function CustomersTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              return <EmployeeData key={row.id} row={row} editEmployee={editEmployee} handleDelete={handleDelete} />;
-            })}
+            {loading ? (
+              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={4} />
+            ) : (
+              display.map((row) => {
+                return (
+                  <EmployeeData
+                    key={`${row.id}-${row.rol}`}
+                    row={row}
+                    editEmployee={editEmployee}
+                    handleDelete={handleDelete}
+                  />
+                );
+              })
+            )}
           </TableBody>
         </Table>
       </Box>
@@ -60,8 +90,8 @@ export function CustomersTable({
       <TablePagination
         component="div"
         count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}

@@ -20,7 +20,7 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
       <TableCell>
         <Typography variant="subtitle2">{row.nome}</Typography>
       </TableCell>
-      <TableCell>{row.cleansQuantity}</TableCell>
+      <TableCell >{row.cleansQuantity}</TableCell>
       <TableCell>{row.lastClean ? formattedDate : 'Nenhuma'}</TableCell>
 
       <TableCell>

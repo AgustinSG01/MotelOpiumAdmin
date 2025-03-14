@@ -13,17 +13,15 @@ import TableRow from '@mui/material/TableRow';
 
 import { type SuitInfo } from '@/types/types';
 
+import TableRowsLoader from '../TableRowLoader';
 import SuitData from './suit-data';
-
-function noop(): void {
-  // do nothing
-}
 
 interface SuitsTableProps {
   count?: number;
   page?: number;
   rows?: SuitInfo[];
   rowsPerPage?: number;
+  loading: boolean;
   handleDelete: (id: number) => void;
   editSuit: (id: number) => void;
 }
@@ -31,11 +29,25 @@ interface SuitsTableProps {
 export function SuitsTable({
   count = 0,
   rows = [],
-  page = 0,
-  rowsPerPage = 0,
   handleDelete,
   editSuit,
+  loading,
 }: SuitsTableProps): React.JSX.Element {
+  const [page, setPage] = React.useState(0); // Current page index
+  const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
+
+  const handleChangePage = (_event: unknown, newPage: number): void => {
+    setPage(newPage);
+  };
+
+  // Handle change in rows per page
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset the table to the first page whenever rows per page changes
+  };
+
+  const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -49,9 +61,13 @@ export function SuitsTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => {
-              return <SuitData key={row.id} row={row} editSuit={editSuit} handleDelete={handleDelete} />;
-            })}
+            {loading ? (
+              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={4} />
+            ) : (
+              display.map((row) => {
+                return <SuitData key={row.id} row={row} editSuit={editSuit} handleDelete={handleDelete} />;
+              })
+            )}
           </TableBody>
         </Table>
       </Box>
@@ -59,8 +75,8 @@ export function SuitsTable({
       <TablePagination
         component="div"
         count={count}
-        onPageChange={noop}
-        onRowsPerPageChange={noop}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}

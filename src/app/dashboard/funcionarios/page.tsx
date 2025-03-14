@@ -20,8 +20,7 @@ export default function Page(): React.JSX.Element {
     edit: false,
   });
   const [employee, setEmployee] = React.useState<null | Employee>(null);
-  const page = 0;
-  const rowsPerPage = 5;
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     void getEmployees();
@@ -29,10 +28,14 @@ export default function Page(): React.JSX.Element {
 
   async function getEmployees(): Promise<void> {
     try {
+      setLoading(true);
       const response = await axios.get('/empregado/all');
       const data: Employee[] = response.data as Employee[];
       setEmployees(data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
+
       return undefined;
     }
   }
@@ -96,11 +99,10 @@ export default function Page(): React.JSX.Element {
         </Stack>
         {/* <CustomersFilters /> */}
         <CustomersTable
+          loading={loading}
           handleDelete={deleteEmployee}
           count={employees.length}
-          page={page}
           rows={employees}
-          rowsPerPage={rowsPerPage}
           editEmployee={getEmployee}
         />
       </Stack>

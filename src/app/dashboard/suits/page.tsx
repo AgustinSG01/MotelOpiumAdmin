@@ -20,6 +20,7 @@ export default function Page(): React.JSX.Element {
     edit: false,
   });
   const [suit, setSuit] = React.useState<null | Suit>(null);
+  const [loading, setLoading] = React.useState(false);
   const page = 0;
   const rowsPerPage = 5;
 
@@ -29,10 +30,13 @@ export default function Page(): React.JSX.Element {
 
   async function getSuits(): Promise<void> {
     try {
+      setLoading(true);
       const response = await axios.get('/suit/info');
       const data: SuitInfo[] = response.data as SuitInfo[];
       setSuits(data);
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       return undefined;
     }
   }
@@ -96,6 +100,7 @@ export default function Page(): React.JSX.Element {
         </Stack>
         {/* <CustomersFilters /> */}
         <SuitsTable
+          loading={loading}
           handleDelete={deleteSuit}
           count={suits.length}
           page={page}
