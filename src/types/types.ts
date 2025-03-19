@@ -1,7 +1,7 @@
 export interface Employee {
   id: number;
   nome: string;
-  pin: number;
+  pin: string;
   rol: string;
   limpezas?: Limpeza[];
   createdAt: Date;

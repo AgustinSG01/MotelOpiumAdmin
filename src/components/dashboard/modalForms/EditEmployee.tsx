@@ -30,9 +30,9 @@ const style = {
 };
 
 const paths = {
-  "GERENTE": 'gerente/modify',
-  "CONTROL": 'control',
-  "LIMPEZA": 'limpeza',
+  GERENTE: 'gerente/modify',
+  CONTROL: 'control',
+  LIMPEZA: 'limpeza',
 };
 
 function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps): React.JSX.Element {
@@ -47,7 +47,7 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
   useEffect(() => {
     if (employee?.id) {
       updateForm('nome', employee.nome);
-      updateForm('pin', JSON.stringify(employee.pin));
+      updateForm('pin', employee.pin);
       updateForm('rol', employee.rol);
     }
   }, [employee]);
@@ -81,7 +81,10 @@ function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps
       };
       if (employee) {
         try {
-          const updatedEmployee = await instance.put(`/empregado/${paths[employee.rol as keyof typeof paths]}/${employee.id}`, data);
+          const updatedEmployee = await instance.put(
+            `/empregado/${paths[employee.rol as keyof typeof paths]}/${employee.id}`,
+            data
+          );
           if (updatedEmployee) {
             handleClose();
             setAlert({
