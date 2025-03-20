@@ -52,3 +52,11 @@ export interface Notification {
   controle: Controle;
   seen: boolean;
 }
+
+export interface Falta {
+  id: number;
+  empregado: Employee;
+  gerente: Employee;
+  data: Date;
+  comentario: string;
+}

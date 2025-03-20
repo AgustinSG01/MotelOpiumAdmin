@@ -8,6 +8,7 @@ export const paths = {
     employees: '/dashboard/funcionarios',
     suits: '/dashboard/suits',
     settings: '/dashboard/settings',
+    falta: '/dashboard/faltas',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

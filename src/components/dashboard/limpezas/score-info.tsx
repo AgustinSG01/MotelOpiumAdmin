@@ -95,7 +95,7 @@ const style = {
   flexDirection: 'column',
 };
 
-function CommentModal({
+export function CommentModal({
   comment,
   show,
   close,
