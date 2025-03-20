@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, TableCell, TableRow, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Pencil, Trash } from '@phosphor-icons/react';
+import { Trash } from '@phosphor-icons/react';
 import { Eye } from '@phosphor-icons/react/dist/ssr';
 import dayjs from 'dayjs';
 
