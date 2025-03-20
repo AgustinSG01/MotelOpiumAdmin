@@ -12,8 +12,13 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import dayjs from 'dayjs';
+import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 
 import { type Employee } from '@/types/types';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const statusMap = {
   StartFaxina: { label: 'Início Faxina', color: 'info' },
@@ -69,8 +74,8 @@ export function LatestMovements({ movements = [], sx }: LatestOrdersProps): Reac
               return (
                 <TableRow hover key={movement.id}>
                   <TableCell>{movement.responsable.nome}</TableCell>
-                  <TableCell>{dayjs(movement.data).format('DD/MM/YYYY')}</TableCell>
-                  <TableCell>{dayjs(movement.data).format('HH:MM')}</TableCell>
+                  <TableCell>{dayjs(movement.data).tz('America/Sao_Paulo').format('DD/MM/YYYY')}</TableCell>
+                  <TableCell>{dayjs(movement.data).tz('America/Sao_Paulo').format('HH:mm')}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
                   </TableCell>
