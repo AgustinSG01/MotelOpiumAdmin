@@ -22,9 +22,16 @@ interface LimpezasTableProps {
   getControle: (id: number) => void;
 
   loading: boolean;
+  handleDelete: (id: number, state: string) => void;
 }
 
-export function LimpezasTable({ count = 0, rows = [], getControle, loading }: LimpezasTableProps): React.JSX.Element {
+export function LimpezasTable({
+  count = 0,
+  rows = [],
+  getControle,
+  loading,
+  handleDelete,
+}: LimpezasTableProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
 
@@ -62,7 +69,7 @@ export function LimpezasTable({ count = 0, rows = [], getControle, loading }: Li
               <TableRowsLoader rowsNum={rowsPerPage} columnsNum={9} />
             ) : (
               display.map((row) => {
-                return <LimpezaData key={row.id} row={row} getControle={getControle} />;
+                return <LimpezaData key={row.id} row={row} getControle={getControle} handleDelete={handleDelete} />;
               })
             )}
           </TableBody>

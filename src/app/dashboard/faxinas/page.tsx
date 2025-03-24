@@ -66,6 +66,16 @@ export default function Page(): React.JSX.Element {
       return;
     }
   }
+  async function deleteLimpeza(id: number, stateLimpeza: string): Promise<void> {
+    try {
+      setLoading(true);
+      await axios.delete(`/limpeza/${stateLimpeza}/${id}`);
+      await getLimpezas();
+      setLoading(false);
+    } catch (error) {
+      return;
+    }
+  }
 
   return (
     <>
@@ -83,7 +93,13 @@ export default function Page(): React.JSX.Element {
           </Stack>
         </Stack>
         <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} />
-        <LimpezasTable getControle={getControle} count={limpezas.length} rows={limpezas} loading={loading} />
+        <LimpezasTable
+          getControle={getControle}
+          count={limpezas.length}
+          rows={limpezas}
+          loading={loading}
+          handleDelete={deleteLimpeza}
+        />
       </Stack>
     </>
   );

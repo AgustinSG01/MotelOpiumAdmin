@@ -13,7 +13,7 @@ import { LimpezasTable } from '@/components/dashboard/limpezas/limpezas-table';
 import axios from '../../../axios-config';
 
 export default function Page(): React.JSX.Element {
-  const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
+  const { orderBy, empregado, gerente, suit, initialDate, finalDate, state, resetFilters } = useLimpezaFilters();
 
   const [limpezas, setLimpezas] = React.useState<Limpeza[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -23,6 +23,7 @@ export default function Page(): React.JSX.Element {
   });
 
   React.useEffect(() => {
+    resetFilters();
     void getLimpezas();
   }, []);
   // TODO: agregar boton para aplicar filtros
@@ -67,6 +68,16 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function deleteLimpeza(id: number, stateLimpeza: string): Promise<void> {
+    try {
+      setLoading(true);
+      await axios.delete(`/limpeza/${stateLimpeza}/${id}`);
+      await getLimpezas();
+      setLoading(false);
+    } catch (error) {
+      return;
+    }
+  }
   return (
     <>
       <ControlInfo
@@ -83,7 +94,13 @@ export default function Page(): React.JSX.Element {
           </Stack>
         </Stack>
         <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} />
-        <LimpezasTable getControle={getControle} count={limpezas.length} rows={limpezas} loading={loading} />
+        <LimpezasTable
+          handleDelete={deleteLimpeza}
+          getControle={getControle}
+          count={limpezas.length}
+          rows={limpezas}
+          loading={loading}
+        />
       </Stack>
     </>
   );
