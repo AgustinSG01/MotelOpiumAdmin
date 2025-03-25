@@ -18,6 +18,7 @@ export interface Limpeza {
   faxina: boolean;
   data?: Date;
   score?: number;
+  esquecido: boolean;
 }
 export interface Suit {
   id: number;

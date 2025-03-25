@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button, Chip, Modal, TableCell, TableRow, Typography } from '@mui/material';
 import { Box, Stack } from '@mui/system';
-import { Eye } from '@phosphor-icons/react';
+import { Eye, Pencil } from '@phosphor-icons/react';
 import { Trash } from '@phosphor-icons/react/dist/ssr';
 import dayjs from 'dayjs';
 
 import { type Limpeza } from '@/types/types';
 
 import ModalButton from '../ModalButton';
+import EditLimpeza from '../modalForms/EditLimpeza';
 
 const style = {
   position: 'absolute',
@@ -25,10 +26,12 @@ interface LimpezaProps {
   row: Limpeza;
   getControle: (id: number) => void;
   handleDelete: (id: number, state: string) => void;
+  refresh: () => void;
 }
 
-function LimpezaData({ row, getControle, handleDelete }: LimpezaProps): React.JSX.Element {
+function LimpezaData({ row, getControle, handleDelete, refresh }: LimpezaProps): React.JSX.Element {
   const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   function getHour(hour: Date | undefined): string {
     if (!hour) return '-';
@@ -48,6 +51,24 @@ function LimpezaData({ row, getControle, handleDelete }: LimpezaProps): React.JS
   return (
     // TODO: terminar tabla de limpieza
     <>
+      {showEditModal ? (
+        <EditLimpeza
+          comeco={row.comeco}
+          data={row.data || null}
+          empregadoId={row.empregado?.id || null}
+          faxina={row.faxina}
+          gerenteId={row.gerente?.id || null}
+          suitId={row.suit?.id}
+          open={showEditModal}
+          handleClose={() => {
+            setShowEditModal(false);
+          }}
+          fim={row.fim || null}
+          id={row.id}
+          esquecido={row.esquecido}
+          refresh={refresh}
+        />
+      ) : null}
       <Modal
         open={showDeleteModal}
         onClose={() => {
@@ -121,7 +142,7 @@ function LimpezaData({ row, getControle, handleDelete }: LimpezaProps): React.JS
           <Stack direction="row" gap={2}>
             <Button
               variant="contained"
-              color="primary"
+              color="info"
               onClick={() => {
                 getControle(row.id);
               }}
@@ -129,7 +150,15 @@ function LimpezaData({ row, getControle, handleDelete }: LimpezaProps): React.JS
             >
               <Eye color="white" size={20} />
             </Button>
-
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                setShowEditModal(true);
+              }}
+            >
+              <Pencil color="white" size={20} />
+            </Button>
             <Button
               variant="contained"
               color="error"

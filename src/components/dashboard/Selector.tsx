@@ -1,12 +1,11 @@
 import React from 'react';
-import { MenuItem, TextField } from '@mui/material';
+import { MenuItem, Skeleton, TextField } from '@mui/material';
 
 import { type Employee, type Suit } from '@/types/types';
 
 interface PropsSel {
   value: string | number;
-  updateForm: (stateName: string, value: string | number) => void;
-  stateName: string;
+  handleChange: (value: string | number) => void;
   error: boolean;
   loading: boolean;
   items: Employee[] | Suit[];
@@ -15,7 +14,16 @@ interface PropsSel {
   labelId: string;
 }
 
-function Selector({ value, updateForm, stateName, error, loading, items, noItemsText, label, labelId }: PropsSel) {
+function Selector({
+  value,
+  handleChange,
+  error,
+  loading,
+  items,
+  noItemsText,
+  label,
+  labelId,
+}: PropsSel): React.JSX.Element {
   return (
     <TextField
       select
@@ -23,7 +31,7 @@ function Selector({ value, updateForm, stateName, error, loading, items, noItems
       value={value}
       label={label}
       onChange={(e) => {
-        updateForm(stateName, e.target.value);
+        handleChange(e.target.value);
       }}
       fullWidth
       InputProps={{
@@ -37,16 +45,22 @@ function Selector({ value, updateForm, stateName, error, loading, items, noItems
       }} // font size of input label
       sx={{ backgroundColor: 'white', maxWidth: '300px' }}
     >
-      {!error && !loading ? (
+      {loading ? (
+        <Skeleton
+          variant="rectangular"
+          width="100%"
+          height={25} // Ajusta la altura según el tamaño de los items
+        />
+      ) : error ? (
+        <MenuItem value={0} sx={{ fontSize: { sm: '1.4rem', lg: '1rem' } }} disabled>
+          {noItemsText}
+        </MenuItem>
+      ) : (
         items.map((item) => (
           <MenuItem key={item.id} value={item.id} sx={{ fontSize: { sm: '1.4rem', lg: '1rem' } }}>
             {item.nome}
           </MenuItem>
         ))
-      ) : (
-        <MenuItem value={0} sx={{ fontSize: { sm: '1.4rem', lg: '1rem' } }} disabled>
-          {noItemsText}
-        </MenuItem>
       )}
     </TextField>
   );

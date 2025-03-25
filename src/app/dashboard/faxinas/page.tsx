@@ -99,6 +99,7 @@ export default function Page(): React.JSX.Element {
           rows={limpezas}
           loading={loading}
           handleDelete={deleteLimpeza}
+          refresh={getLimpezas}
         />
       </Stack>
     </>

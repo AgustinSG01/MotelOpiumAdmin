@@ -100,6 +100,7 @@ export default function Page(): React.JSX.Element {
           count={limpezas.length}
           rows={limpezas}
           loading={loading}
+          refresh={getLimpezas}
         />
       </Stack>
     </>
