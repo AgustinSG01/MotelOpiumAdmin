@@ -164,6 +164,17 @@ function EditLimpeza({
     } else {
       try {
         await axios.post(`/limpeza/completed`, body);
+        if (!suitId) {
+          try {
+            await axios.delete(`/limpeza/inprocess/${id}`);
+          } catch (error) {
+            setAlert({
+              show: true,
+              message: 'Ocorreu um erro ao excluir a limpeza em andamento; exclua-a manualmente.',
+              type: 'error',
+            });
+          }
+        }
         setAlert({
           show: true,
           message: 'Limpeza atualizada com sucesso',
