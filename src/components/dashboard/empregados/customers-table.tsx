@@ -56,6 +56,10 @@ export function CustomersTable({
     }
   }, [rows, rowsPerPage]);
 
+  React.useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [page, rowsPerPage]);
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>

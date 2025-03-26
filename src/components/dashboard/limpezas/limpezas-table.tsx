@@ -50,6 +50,10 @@ export function LimpezasTable({
 
   const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+   React.useEffect(() => {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [page, rowsPerPage]);
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
