@@ -26,9 +26,7 @@ export interface SalesProps {
 export function Sales({ sx }: SalesProps): React.JSX.Element {
   const actualYear: number = dayjs().year();
   const [year, setYear] = React.useState<number>(dayjs().year());
-  const [month, setMonth] = React.useState<number>(dayjs().month());
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [suits, setSuits] = React.useState<string[]>([]);
 
   const [chartSeries, setChartSeries] = React.useState<{ name: string; data: number[] }[]>([
     {
@@ -40,36 +38,45 @@ export function Sales({ sx }: SalesProps): React.JSX.Element {
   const fetchYearCleans = React.useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await axios.get('/statics/suits-promedy-per-month', {
+      const response = await axios.get('/statics/controls-promedy-per-year', {
         params: {
           selectedYear: year,
-          selectedMonth: month,
         },
       });
       const responseData = response.data as {
-        promedyArray: number[];
-        suitsArray: string[];
-        year: number;
-        month: number[];
+        data: number[];
+        year: string;
       };
-      setSuits(responseData.suitsArray);
-      setChartSeries([{ name: responseData.month.toString(), data: responseData.promedyArray }]);
+      setChartSeries([{ name: responseData.year, data: responseData.data }]);
     } catch (error) {
       return;
     } finally {
       setLoading(false);
     }
-  }, [year, month]);
+  }, [year]);
 
   React.useEffect(() => {
     void fetchYearCleans();
   }, [fetchYearCleans]);
 
-  const chartOptions = useChartOptions(suits);
+  const chartOptions = useChartOptions([
+    'JAN',
+    'FEV',
+    'MAR',
+    'ABR',
+    'MAI',
+    'JUN',
+    'JUL',
+    'AGO',
+    'SET',
+    'OUT',
+    'NOV',
+    'DEZ',
+  ]);
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Número médio de controles de suits" />
+      <CardHeader title="Media de controles de qualidade por mês" />
       <CardContent>
         {loading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
@@ -83,32 +90,21 @@ export function Sales({ sx }: SalesProps): React.JSX.Element {
           color="inherit"
           size="small"
           onClick={() => {
-            if (month === 0) {
-              setMonth(11);
-              setYear(year - 1);
-            } else if (month > 0) {
-              setMonth(month - 1);
-            }
+            setYear(year - 1);
           }}
         >
           <ArrowLeft fontSize="var(--icon-fontSize-md)" />
         </IconButton>
         <Stack sx={{ alignItems: 'center' }}>
           <Typography>{year}</Typography>
-          <Typography sx={{ textTransform: 'capitalize' }}>
-            {dayjs(`${year}-${month + 1}-01`).format('MMMM')}
-          </Typography>
         </Stack>
         <IconButton
-          disabled={year >= actualYear && month >= dayjs().month()}
+          disabled={year >= actualYear}
           color="inherit"
           size="small"
           onClick={() => {
-            if (month === 11 && year < actualYear) {
-              setMonth(0);
+            if (year < actualYear) {
               setYear(year + 1);
-            } else if (month < 11) {
-              setMonth(month + 1);
             }
           }}
         >
