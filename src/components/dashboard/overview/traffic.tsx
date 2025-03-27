@@ -13,19 +13,59 @@ import { Desktop as DesktopIcon } from '@phosphor-icons/react/dist/ssr/Desktop';
 import { DeviceTablet as DeviceTabletIcon } from '@phosphor-icons/react/dist/ssr/DeviceTablet';
 import { Phone as PhoneIcon } from '@phosphor-icons/react/dist/ssr/Phone';
 import type { ApexOptions } from 'apexcharts';
+import dayjs from 'dayjs';
 
 import { Chart } from '@/components/core/chart';
+
+import axios from '../../../axios-config';
 
 const iconMapping = { Desktop: DesktopIcon, Tablet: DeviceTabletIcon, Phone: PhoneIcon } as Record<string, Icon>;
 
 export interface TrafficProps {
-  chartSeries: number[];
-  labels: string[];
   sx?: SxProps;
 }
+interface Result {
+  suit: string;
+  limpezas: number;
+}
+export function Traffic({ sx }: TrafficProps): React.JSX.Element {
+  const actualYear: number = dayjs().year();
+  const actualMonth: number = dayjs().month();
 
-export function Traffic({ chartSeries, labels, sx }: TrafficProps): React.JSX.Element {
+  const [year, _setYear] = React.useState<number>(actualYear);
+  const [month, _setMonth] = React.useState<number>(actualMonth);
+
+  const [_loading, setLoading] = React.useState<boolean>(false);
+  const [labels, setLabels] = React.useState<string[]>([]);
+  const [chartSeries, setChartSeries] = React.useState<number[]>([]);
+
   const chartOptions = useChartOptions(labels);
+
+  const fetchMonthCleans = React.useCallback(async (): Promise<void> => {
+    try {
+      setLoading(true);
+      const response = await axios.get('/statics/limpezas-per-suit-month', {
+        params: {
+          selectedYear: year,
+          selectedMonth: month,
+        },
+      });
+      const responseData = response.data as {
+        results: Result[];
+        year: string;
+      };
+      setChartSeries(responseData.results.map((item) => item.limpezas));
+      setLabels(responseData.results.map((item) => item.suit));
+    } catch (error) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+  }, [year, month]);
+
+  React.useEffect(() => {
+    void fetchMonthCleans();
+  }, [fetchMonthCleans]);
 
   return (
     <Card sx={sx}>

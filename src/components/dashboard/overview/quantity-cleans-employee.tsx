@@ -22,9 +22,14 @@ import axios from '../../../axios-config';
 export interface SalesProps {
   sx?: SxProps;
 }
-
-export function PromedyControls({ sx }: SalesProps): React.JSX.Element {
+interface Result {
+  suit: string;
+  limpezas: number;
+}
+export function CleansPerSuits({ sx }: SalesProps): React.JSX.Element {
   const actualYear: number = dayjs().year();
+  const actualMonth: number = dayjs().month();
+  const [month, setMonth] = React.useState<number>(actualMonth);
   const [year, setYear] = React.useState<number>(dayjs().year());
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -35,48 +40,39 @@ export function PromedyControls({ sx }: SalesProps): React.JSX.Element {
     },
   ]);
 
+  const [labels, setLabels] = React.useState<string[]>([]);
+
   const fetchYearCleans = React.useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await axios.get('/statics/controls-promedy-per-year', {
+      const response = await axios.get('/statics/limpezas-per-suit-month', {
         params: {
           selectedYear: year,
+          selectedMonth: month,
         },
       });
       const responseData = response.data as {
-        data: number[];
+        results: Result[];
         year: string;
       };
-      setChartSeries([{ name: responseData.year, data: responseData.data }]);
+      setChartSeries([{ name: responseData.year, data: responseData.results.map((item) => item.limpezas) }]);
+      setLabels(responseData.results.map((item) => item.suit));
     } catch (error) {
       return;
     } finally {
       setLoading(false);
     }
-  }, [year]);
+  }, [year, month]);
 
   React.useEffect(() => {
     void fetchYearCleans();
   }, [fetchYearCleans]);
 
-  const chartOptions = useChartOptions([
-    'JAN',
-    'FEV',
-    'MAR',
-    'ABR',
-    'MAI',
-    'JUN',
-    'JUL',
-    'AGO',
-    'SET',
-    'OUT',
-    'NOV',
-    'DEZ',
-  ]);
+  const chartOptions = useChartOptions(labels);
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Media de controles de qualidade por mês" />
+      <CardHeader title="Limpezas por mês" />
       <CardContent>
         {loading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
@@ -90,21 +86,30 @@ export function PromedyControls({ sx }: SalesProps): React.JSX.Element {
           color="inherit"
           size="small"
           onClick={() => {
-            setYear(year - 1);
+            if (month > 0) {
+              setMonth(month - 1);
+            } else {
+              setMonth(11);
+              setYear(year - 1);
+            }
           }}
         >
           <ArrowLeft fontSize="var(--icon-fontSize-md)" />
         </IconButton>
         <Stack sx={{ alignItems: 'center' }}>
           <Typography>{year}</Typography>
+          <Typography>{dayjs(new Date(year, month, 1)).format('MMMM')}</Typography>
         </Stack>
         <IconButton
-          disabled={year >= actualYear}
+          disabled={year > actualYear || (year === actualYear && month >= actualMonth)}
           color="inherit"
           size="small"
           onClick={() => {
-            if (year < actualYear) {
+            if (month === 11) {
+              setMonth(0);
               setYear(year + 1);
+            } else {
+              setMonth(month + 1);
             }
           }}
         >
