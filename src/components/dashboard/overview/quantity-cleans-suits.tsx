@@ -72,7 +72,7 @@ export function CleansPerSuits({ sx }: SalesProps): React.JSX.Element {
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Limpezas por mês" />
+      <CardHeader title="Limpezas do mês" />
       <CardContent>
         {loading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
