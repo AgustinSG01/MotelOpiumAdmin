@@ -17,16 +17,44 @@ import axios from '../../axios-config';
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export default async function Page(): Promise<React.JSX.Element> {
-  const responseLimpezas = await axios.get('/statics/total-limpezas-actual-month');
+  const responseLimpezas = await axios.get('/statics/total-limpezas-actual-month', {
+    // query URL without using browser cache
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
   const limpezasMonth: number = responseLimpezas?.data as number;
 
-  const responseControls = await axios.get('/statics/total-controls-actual-month');
+  const responseControls = await axios.get('/statics/total-controls-actual-month', {
+    // query URL without using browser cache
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
   const controlsMonth: number = responseControls?.data as number;
 
-  const responseEmployee = await axios.get('/statics/empregado-more-limpezas-actual-month');
+  const responseEmployee = await axios.get('/statics/empregado-more-limpezas-actual-month', {
+    // query URL without using browser cache
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
   const employeeMonth: Employee = responseEmployee?.data as Employee;
 
-  const responseMovements = await axios.get('/movements');
+  const responseMovements = await axios.get('/movements', {
+    // query URL without using browser cache
+    headers: {
+      'Cache-Control': 'no-cache',
+      Pragma: 'no-cache',
+      Expires: '0',
+    },
+  });
   const latestMovements = responseMovements?.data as Movement[];
 
   return (
