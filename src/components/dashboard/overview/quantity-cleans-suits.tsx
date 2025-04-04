@@ -17,56 +17,37 @@ import dayjs from 'dayjs';
 
 import { Chart } from '@/components/core/chart';
 
-import axios from '../../../axios-config';
-
 export interface SalesProps {
   sx?: SxProps;
+  chartSeries: { name: string; data: number[] }[];
+  labels: string[];
+  initialLoading: boolean;
+  manualGet: (year: number, month: number) => Promise<void>;
 }
-interface Result {
+export interface Result {
   suit: string;
   limpezas: number;
 }
-export function CleansPerSuits({ sx }: SalesProps): React.JSX.Element {
+export function CleansPerSuits({ sx, chartSeries, labels, initialLoading, manualGet }: SalesProps): React.JSX.Element {
   const actualYear: number = dayjs().year();
   const actualMonth: number = dayjs().month();
   const [month, setMonth] = React.useState<number>(actualMonth);
   const [year, setYear] = React.useState<number>(dayjs().year());
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const [chartSeries, setChartSeries] = React.useState<{ name: string; data: number[] }[]>([
-    {
-      name: actualYear.toString(),
-      data: [],
-    },
-  ]);
-
-  const [labels, setLabels] = React.useState<string[]>([]);
-
-  const fetchYearCleans = React.useCallback(async (): Promise<void> => {
+  async function getCleansPerSuit(): Promise<void> {
     try {
       setLoading(true);
-      const response = await axios.get('/statics/limpezas-per-suit-month', {
-        params: {
-          selectedYear: year,
-          selectedMonth: month,
-        },
-      });
-      const responseData = response.data as {
-        results: Result[];
-        year: string;
-      };
-      setChartSeries([{ name: responseData.year, data: responseData.results.map((item) => item.limpezas) }]);
-      setLabels(responseData.results.map((item) => item.suit));
-    } catch (error) {
-      return;
-    } finally {
+      await manualGet(year, month);
+      setLoading(false);
+    } catch (_error) {
       setLoading(false);
     }
-  }, [year, month]);
+  }
 
   React.useEffect(() => {
-    void fetchYearCleans();
-  }, [fetchYearCleans]);
+    void getCleansPerSuit();
+  }, [year, month]);
 
   const chartOptions = useChartOptions(labels);
 
@@ -74,7 +55,7 @@ export function CleansPerSuits({ sx }: SalesProps): React.JSX.Element {
     <Card sx={sx}>
       <CardHeader title="Limpezas do mês" />
       <CardContent>
-        {loading ? (
+        {loading || initialLoading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
         ) : (
           <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />
