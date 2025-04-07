@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,9 +11,10 @@ import { UserPlus } from '@phosphor-icons/react/dist/ssr';
 export interface TotalProfitProps {
   sx?: SxProps;
   value: string;
+  loading: boolean;
 }
 
-export function EmployeeMonth({ value, sx }: TotalProfitProps): React.JSX.Element {
+export function EmployeeMonth({ value, sx, loading }: TotalProfitProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
@@ -22,7 +24,7 @@ export function EmployeeMonth({ value, sx }: TotalProfitProps): React.JSX.Elemen
               <Typography color="text.secondary" variant="overline">
                 Funcionário
               </Typography>
-              <Typography variant="h5">{value}</Typography>
+              {loading ? <Skeleton variant="text" height={38} /> : <Typography variant="h5">{value}</Typography>}
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <UserPlus fontSize="var(--icon-fontSize-lg)" />

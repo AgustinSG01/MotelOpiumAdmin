@@ -1,7 +1,11 @@
 'use client';
 
-import * as React from 'react';
+import React from 'react';
+import { IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
+import { Stack } from '@mui/system';
+import { ArrowCounterClockwise } from '@phosphor-icons/react';
+import dayjs from 'dayjs';
 
 import { type Employee } from '@/types/types';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
@@ -36,6 +40,8 @@ export default function Page(): React.JSX.Element {
     notifications,
     setNotifications,
   } = useStatics();
+
+  const [time, setTime] = React.useState(dayjs());
 
   const fetchers: {
     url: string;
@@ -93,7 +99,7 @@ export default function Page(): React.JSX.Element {
 
   async function getStatics(): Promise<void> {
     setLoading(true);
-
+    setTime(dayjs());
     try {
       await Promise.all(
         fetchers.map(async ({ url, setter }) => {
@@ -168,16 +174,25 @@ export default function Page(): React.JSX.Element {
 
   return (
     <Grid container spacing={3}>
-      <Grid lg={3} sm={6} xs={12}>
-        <Limpezas sx={{ height: '100%' }} value={limpezasMonth} />
+      <Grid lg={12} sm={24} xs={48}>
+        <Stack sx={{ width: '100%' }} direction="row" spacing={2} alignItems="center">
+          <Typography variant="h4">Última atualização às {time.format('HH:mm')}</Typography>
+          <IconButton onClick={() => void refresh()}>
+            <ArrowCounterClockwise size={32} color="#635BFF" />
+          </IconButton>
+        </Stack>
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <ControlsMonth sx={{ height: '100%' }} value={controlsMonth} />
+        <Limpezas sx={{ height: '100%' }} value={limpezasMonth} loading={isLoading} />
+      </Grid>
+      <Grid lg={3} sm={6} xs={12}>
+        <ControlsMonth sx={{ height: '100%' }} value={controlsMonth} loading={isLoading} />
       </Grid>
       <Grid lg={6} sm={12} xs={24}>
         <EmployeeMonth
           sx={{ height: '100%' }}
           value={employeeMonth?.nome ? employeeMonth.nome : 'Não houve nenhuma limpeza'}
+          loading={isLoading}
         />
       </Grid>
       <Grid lg={8} xs={12}>

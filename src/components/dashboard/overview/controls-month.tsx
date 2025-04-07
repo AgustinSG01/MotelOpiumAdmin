@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,9 +11,10 @@ import { Eye } from '@phosphor-icons/react/dist/ssr';
 export interface ControlsMonthProps {
   sx?: SxProps;
   value: string | number;
+  loading: boolean;
 }
 
-export function ControlsMonth({ sx, value }: ControlsMonthProps): React.JSX.Element {
+export function ControlsMonth({ sx, value, loading }: ControlsMonthProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
@@ -22,7 +24,7 @@ export function ControlsMonth({ sx, value }: ControlsMonthProps): React.JSX.Elem
               <Typography color="text.secondary" variant="overline">
                 Controles
               </Typography>
-              <Typography variant="h4">{value}</Typography>
+              {loading ? <Skeleton variant="text" height={38} /> : <Typography variant="h4">{value}</Typography>}
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-success-main)', height: '56px', width: '56px' }}>
               <Eye fontSize="var(--icon-fontSize-lg)" />

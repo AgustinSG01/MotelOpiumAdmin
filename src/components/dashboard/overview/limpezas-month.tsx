@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Skeleton } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -10,9 +11,10 @@ import { Broom } from '@phosphor-icons/react/dist/ssr';
 export interface LimpezasProps {
   sx?: SxProps;
   value: number | string;
+  loading: boolean;
 }
 
-export function Limpezas({ sx, value }: LimpezasProps): React.JSX.Element {
+export function Limpezas({ sx, value, loading }: LimpezasProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
@@ -22,7 +24,7 @@ export function Limpezas({ sx, value }: LimpezasProps): React.JSX.Element {
               <Typography color="text.secondary" variant="overline">
                 Limpezas
               </Typography>
-              <Typography variant="h4">{value}</Typography>
+              {loading ? <Skeleton variant="text" height={38}/> : <Typography variant="h4">{value}</Typography>}
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <Broom fontSize="var(--icon-fontSize-lg)" />
