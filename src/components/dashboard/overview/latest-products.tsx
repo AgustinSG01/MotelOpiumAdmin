@@ -18,14 +18,7 @@ import dayjs from 'dayjs';
 
 import axios from '../../../axios-config';
 
-export interface Product {
-  id: string;
-  image: string;
-  name: string;
-  updatedAt: Date;
-}
-
-interface Notification {
+export interface Notification {
   id: number;
   suit: string;
   promedio: number;
@@ -37,11 +30,17 @@ interface Notification {
 
 export interface NotificationsProps {
   sx?: SxProps;
+  notifications: Notification[];
+  initialLoading: boolean;
+  refresh: () => Promise<void>;
 }
 
-export function LatestNotifications({ sx }: NotificationsProps): React.JSX.Element {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-
+export function LatestNotifications({
+  sx,
+  notifications,
+  initialLoading,
+  refresh,
+}: NotificationsProps): React.JSX.Element {
   const [loading, setLoading] = useState(false);
 
   const [page, setPage] = useState(0); // Current page index
@@ -67,13 +66,10 @@ export function LatestNotifications({ sx }: NotificationsProps): React.JSX.Eleme
   async function fetchNotifications(): Promise<void> {
     setLoading(true);
     try {
-      const response = await axios.get('/notification/all-month');
-      const data = response.data as Notification[];
-      setNotifications(data);
+      await refresh();
       setLoading(false);
     } catch (_error) {
       setLoading(false);
-      setNotifications([]);
     }
   }
 
@@ -91,15 +87,12 @@ export function LatestNotifications({ sx }: NotificationsProps): React.JSX.Eleme
     }
   }
 
-  useEffect(() => {
-    void fetchNotifications();
-  }, []);
   return (
     <Card sx={sx}>
       <CardHeader title="Últimas notificações" />
       <Divider />
       <List sx={{ minHeight: 395 }}>
-        {loading ? (
+        {loading || initialLoading ? (
           <Skeleton variant="rectangular" width="100%" height={395} />
         ) : (
           display.map((notification, index) => (

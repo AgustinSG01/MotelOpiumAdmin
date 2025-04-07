@@ -6,7 +6,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { type Employee } from '@/types/types';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
 import { LatestMovements, type Movement } from '@/components/dashboard/overview/latest-movements';
-import { LatestNotifications } from '@/components/dashboard/overview/latest-products';
+import { LatestNotifications, Notification } from '@/components/dashboard/overview/latest-products';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { CleansPerSuits, type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
 import { PromedyControls } from '@/components/dashboard/overview/sales';
@@ -33,6 +33,8 @@ export default function Page(): React.JSX.Element {
     setCleansPerSuit,
     promedyControls,
     setPromedyControls,
+    notifications,
+    setNotifications,
   } = useStatics();
 
   const fetchers: {
@@ -79,6 +81,12 @@ export default function Page(): React.JSX.Element {
             year: string;
           }
         );
+      },
+    },
+    {
+      url: '/notification/all-month',
+      setter: (data) => {
+        setNotifications(data as Notification[]);
       },
     },
   ];
@@ -138,6 +146,16 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getNotifications(): Promise<void> {
+    try {
+      const response = await axios.get('/notification/all-month');
+      const responseData = response.data as Notification[];
+      setNotifications(responseData);
+    } catch (_error) {
+      return;
+    }
+  }
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       void refresh();
@@ -175,7 +193,12 @@ export default function Page(): React.JSX.Element {
         {/*
         <Traffic sx={{ height: '100%' }} />
        */}
-        <LatestNotifications sx={{ height: '100%' }} />
+        <LatestNotifications
+          sx={{ height: '100%' }}
+          initialLoading={isLoading}
+          notifications={notifications}
+          refresh={getNotifications}
+        />
       </Grid>
       <Grid lg={6} xs={10}>
         <PromedyControls
