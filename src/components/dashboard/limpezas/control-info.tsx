@@ -54,9 +54,9 @@ function ControlInfo({ handleClose, open, controle }: ControlInfoProps): React.J
             <TableHead sx={{ width: '100%' }}>
               <TableRow sx={{ width: '100%' }}>
                 <TableCell>Categoria</TableCell>
-                <TableCell align="center">Puntuacion</TableCell>
-                <TableCell align="center">Comentario</TableCell>
-                <TableCell align="center">Imagen</TableCell>
+                <TableCell align="center">Pontuação</TableCell>
+                <TableCell align="center">Comentário</TableCell>
+                <TableCell align="center">Imagem</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{ width: '100%' }}>
