@@ -17,41 +17,26 @@ import dayjs from 'dayjs';
 
 import { Chart } from '@/components/core/chart';
 
-import axios from '../../../axios-config';
-
 export interface SalesProps {
   sx?: SxProps;
+  chartSeries: { name: string; data: number[] }[];
+  initialLoading: boolean;
+  manualGet: (year: number) => Promise<void>;
 }
 
-export function PromedyControls({ sx }: SalesProps): React.JSX.Element {
+export function PromedyControls({ sx, chartSeries, initialLoading, manualGet }: SalesProps): React.JSX.Element {
   const actualYear: number = dayjs().year();
   const [year, setYear] = React.useState<number>(dayjs().year());
   const [loading, setLoading] = React.useState<boolean>(false);
 
-  const [chartSeries, setChartSeries] = React.useState<{ name: string; data: number[] }[]>([
-    {
-      name: actualYear.toString(),
-      data: [],
-    },
-  ]);
-
   const fetchYearCleans = React.useCallback(async (): Promise<void> => {
     try {
       setLoading(true);
-      const response = await axios.get('/statics/controls-promedy-per-year', {
-        params: {
-          selectedYear: year,
-        },
-      });
-      const responseData = response.data as {
-        data: number[];
-        year: string;
-      };
-      setChartSeries([{ name: responseData.year, data: responseData.data }]);
-    } catch (error) {
-      return;
-    } finally {
+      await manualGet(year);
       setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      return;
     }
   }, [year]);
 
@@ -78,7 +63,7 @@ export function PromedyControls({ sx }: SalesProps): React.JSX.Element {
     <Card sx={sx}>
       <CardHeader title="Media de controles de qualidade por mês" />
       <CardContent>
-        {loading ? (
+        {loading || initialLoading ? (
           <Skeleton variant="rectangular" width="100%" height={350} sx={{ bgcolor: 'grey.100' }} />
         ) : (
           <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />

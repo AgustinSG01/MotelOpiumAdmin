@@ -15,6 +15,7 @@ interface StaticsState {
     chartSeries: { name: string; data: number[] }[];
     labels: string[];
   };
+  promedyControls: { name: string; data: number[] }[];
 
   // Actions
   setLimpezasMonth: (n: number) => void;
@@ -23,6 +24,7 @@ interface StaticsState {
   setMovements: (n: Movement[]) => void;
   setLoading: (n: boolean) => void;
   setCleansPerSuit: (n: { results: Result[]; year: string }) => void;
+  setPromedyControls: (n: { data: number[]; year: string }) => void;
 }
 
 const useStore = create<StaticsState>((set) => ({
@@ -32,6 +34,7 @@ const useStore = create<StaticsState>((set) => ({
   employeeMonth: null,
   movements: [],
   cleansPerSuit: { chartSeries: [], labels: [] },
+  promedyControls: [],
   setLoading: (isLoading: boolean): void => {
     set(() => ({ isLoading }));
   },
@@ -53,6 +56,11 @@ const useStore = create<StaticsState>((set) => ({
         chartSeries: [{ name: data.year, data: data.results.map((item) => item.limpezas) }],
         labels: data.results.map((item) => item.suit),
       },
+    }));
+  },
+  setPromedyControls: (data: { data: number[]; year: string }): void => {
+    set(() => ({
+      promedyControls: [{ name: data.year, data: data.data }],
     }));
   },
 }));

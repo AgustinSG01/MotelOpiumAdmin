@@ -31,6 +31,8 @@ export default function Page(): React.JSX.Element {
     setMovements,
     cleansPerSuit,
     setCleansPerSuit,
+    promedyControls,
+    setPromedyControls,
   } = useStatics();
 
   const fetchers: {
@@ -68,6 +70,17 @@ export default function Page(): React.JSX.Element {
         setCleansPerSuit(data as { results: Result[]; year: string });
       },
     },
+    {
+      url: '/statics/controls-promedy-per-year',
+      setter: (data) => {
+        setPromedyControls(
+          data as {
+            data: number[];
+            year: string;
+          }
+        );
+      },
+    },
   ];
 
   async function getStatics(): Promise<void> {
@@ -103,6 +116,23 @@ export default function Page(): React.JSX.Element {
         year: string;
       };
       setCleansPerSuit({ results: responseData.results, year: responseData.year });
+    } catch (_error) {
+      return;
+    }
+  }
+
+  async function getPromedyControls(year: number): Promise<void> {
+    try {
+      const response = await axios.get('/statics/controls-promedy-per-year', {
+        params: {
+          selectedYear: year,
+        },
+      });
+      const responseData = response.data as {
+        data: number[];
+        year: string;
+      };
+      setPromedyControls({ data: responseData.data, year: responseData.year });
     } catch (_error) {
       return;
     }
@@ -148,7 +178,12 @@ export default function Page(): React.JSX.Element {
         <LatestNotifications sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={6} xs={10}>
-        <PromedyControls sx={{ height: '100%' }} />
+        <PromedyControls
+          sx={{ height: '100%' }}
+          chartSeries={promedyControls}
+          initialLoading={isLoading}
+          manualGet={getPromedyControls}
+        />
       </Grid>
       <Grid lg={6} md={8} xs={14}>
         <LatestMovements movements={movements} sx={{ height: '100%' }} />
