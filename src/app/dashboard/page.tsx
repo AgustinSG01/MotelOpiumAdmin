@@ -176,9 +176,9 @@ export default function Page(): React.JSX.Element {
     <Grid container spacing={3}>
       <Grid lg={12} sm={24} xs={48}>
         <Stack sx={{ width: '100%' }} direction="row" spacing={2} alignItems="center">
-          <Typography variant="h4">Última atualização às {time.format('HH:mm')}</Typography>
+          <Typography variant="h5">Última atualização às {time.format('HH:mm')}</Typography>
           <IconButton onClick={() => void refresh()}>
-            <ArrowCounterClockwise size={32} color="#635BFF" />
+            <ArrowCounterClockwise size={24} color="#635BFF" />
           </IconButton>
         </Stack>
       </Grid>
