@@ -49,7 +49,7 @@ function LimpezaInfo({ handleClose, open, suit }: NewEmployeeProps): React.JSX.E
           Informações sobre a última limpeza no suíte {suit.nome}
         </h2>
         <Stack
-          gap={5}
+          gap={6}
           sx={{
             width: '80%',
           }}
@@ -58,31 +58,35 @@ function LimpezaInfo({ handleClose, open, suit }: NewEmployeeProps): React.JSX.E
           <Stack direction="row" sx={{ justifyContent: 'space-between', width: '100%', textAlign: 'center' }}>
             <Stack>
               <h2 style={{ marginBottom: 0 }}>Funcionario início</h2>
-              <h3 style={{ marginBottom: 0 }}>{suit.lastClean?.empregado?.nome || '-'}</h3>
+              <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>{suit.lastClean?.empregado?.nome || '-'}</h3>
             </Stack>
             <Stack>
               <h2 style={{ marginBottom: 0 }}>Funcionario fim</h2>
-              <h3 style={{ marginBottom: 0 }}>
+              <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>
                 {suit.lastClean?.endedBy?.nome || suit.lastClean?.empregado?.nome || '-'}
               </h3>
             </Stack>
           </Stack>
           <Stack sx={{ width: '100%', textAlign: 'center' }}>
             <h2 style={{ marginBottom: 0, marginTop: 0 }}>Gerente</h2>
-            <h3 style={{ marginBottom: 0 }}>{suit.lastClean?.gerente?.nome || '-'}</h3>
+            <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>{suit.lastClean?.gerente?.nome || '-'}</h3>
           </Stack>
           <Stack sx={{ width: '100%', textAlign: 'center' }}>
             <h2 style={{ marginBottom: 0, marginTop: 0 }}>Dia de limpeza</h2>
-            <h3 style={{ marginBottom: 0 }}>{dayjs(suit.lastClean?.data).format('DD/MM/YYYY')}</h3>
+            <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>
+              {dayjs(suit.lastClean?.data).format('DD/MM/YYYY')}
+            </h3>
           </Stack>
           <Stack direction="row" sx={{ justifyContent: 'space-between', width: '100%', textAlign: 'center' }}>
             <Stack>
-              <h2 style={{ marginBottom: 0, marginTop: 0 }}>Hora de início</h2>
-              <h3 style={{ marginBottom: 0 }}>{dayjs(suit.lastClean?.comeco).format('HH:mm')}</h3>
+              <h2 style={{ marginBottom: 0, marginTop: 0 }}>Horário de início</h2>
+              <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>{dayjs(suit.lastClean?.comeco).format('HH:mm')}</h3>
             </Stack>
             <Stack>
-              <h2 style={{ marginBottom: 0, marginTop: 0 }}>Hora de fim</h2>
-              <h3 style={{ marginBottom: 0 }}>{dayjs(suit.lastClean?.fim).format('HH:mm') || '-'}</h3>
+              <h2 style={{ marginBottom: 0, marginTop: 0 }}>Horário de fim</h2>
+              <h3 style={{ marginBottom: 0, fontWeight: 'normal' }}>
+                {dayjs(suit.lastClean?.fim).format('HH:mm') || '-'}
+              </h3>
             </Stack>
           </Stack>
           <Stack direction="row" justifyContent="center">
