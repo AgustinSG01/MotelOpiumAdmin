@@ -74,8 +74,8 @@ export function LatestMovements({ movements = [], sx }: LatestOrdersProps): Reac
               return (
                 <TableRow hover key={movement.id}>
                   <TableCell>{movement.responsable.nome}</TableCell>
-                  <TableCell>{dayjs(movement.data).tz('America/Sao_Paulo').format('DD/MM/YYYY')}</TableCell>
-                  <TableCell>{dayjs(movement.data).tz('America/Sao_Paulo').format('HH:mm')}</TableCell>
+                  <TableCell>{dayjs(movement.data).tz('America/Boa_Vista').format('DD/MM/YYYY')}</TableCell>
+                  <TableCell>{dayjs(movement.data).tz('America/Boa_Vista').format('HH:mm')}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
                   </TableCell>
