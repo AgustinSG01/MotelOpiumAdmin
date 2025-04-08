@@ -1,10 +1,12 @@
 import React from 'react';
 import { Button, TableCell, TableRow, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Pencil, Trash } from '@phosphor-icons/react';
+import { Eye, Pencil, Trash } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 
 import { type SuitInfo } from '@/types/types';
+
+import LimpezaInfo from '../modalForms/LimpezaInfo';
 
 interface SuitProps {
   row: SuitInfo;
@@ -13,38 +15,59 @@ interface SuitProps {
 }
 
 function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElement {
-  const currentDate = dayjs(row.lastClean);
+  const currentDate = dayjs(row.lastClean?.data);
   const formattedDate = currentDate.format('DD/MM/YYYY HH:mm');
+  const [showInfo, setShowInfo] = React.useState(false);
   return (
-    <TableRow hover key={row.id}>
-      <TableCell>
-        <Typography variant="subtitle2">{row.nome}</Typography>
-      </TableCell>
-      <TableCell >{row.cleansQuantity}</TableCell>
-      <TableCell>{row.lastClean ? formattedDate : 'Nenhuma'}</TableCell>
+    <>
+      <LimpezaInfo
+        handleClose={() => {
+          setShowInfo(false);
+        }}
+        open={showInfo}
+        suit={row}
+        key={`info-${row.id}`}
+      />
+      <TableRow hover key={row.id}>
+        <TableCell>
+          <Typography variant="subtitle2">{row.nome}</Typography>
+        </TableCell>
+        <TableCell>{row.cleansQuantity}</TableCell>
+        <TableCell>{row.lastClean ? formattedDate : 'Nenhuma'}</TableCell>
 
-      <TableCell>
-        <Stack direction="row" gap={2}>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={() => {
-              handleDelete(row.id);
-            }}
-          >
-            <Trash color="white" size={20} />
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              editSuit(row.id);
-            }}
-          >
-            <Pencil size={20} />
-          </Button>
-        </Stack>
-      </TableCell>
-    </TableRow>
+        <TableCell>
+          <Stack direction="row" gap={2}>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => {
+                setShowInfo(true);
+              }}
+            >
+              <Eye color="white" size={20} />
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                editSuit(row.id);
+              }}
+              disabled={!row.lastClean}
+            >
+              <Pencil size={20} />
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                handleDelete(row.id);
+              }}
+            >
+              <Trash color="white" size={20} />
+            </Button>
+          </Stack>
+        </TableCell>
+      </TableRow>
+    </>
   );
 }
 

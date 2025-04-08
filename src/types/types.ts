@@ -19,6 +19,7 @@ export interface Limpeza {
   data?: Date;
   score?: number;
   esquecido: boolean;
+  endedBy?: Employee
 }
 export interface Suit {
   id: number;
@@ -30,7 +31,7 @@ export interface SuitInfo {
   id: number;
   nome: string;
   cleansQuantity: number;
-  lastClean?: Date;
+  lastClean?: Limpeza;
 }
 
 export interface Controle {
