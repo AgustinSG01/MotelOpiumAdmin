@@ -28,7 +28,7 @@ function EmployeeData({ row, handleDelete, editEmployee }: EmployeeProps) {
       <TableCell>
         <Typography variant="subtitle2">{row.nome}</Typography>
       </TableCell>
-      <TableCell>{row.rol}</TableCell>
+      <TableCell>{row.rol.toUpperCase()}</TableCell>
       <TableCell
         onClick={() => {
           setShowPin(!showPin);

@@ -177,7 +177,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
               select
               id="rol-empregado"
               value={rol}
-              label="Rol"
+              label="Função"
               onChange={(e) => {
                 updateForm('rol', e.target.value);
               }}
@@ -193,6 +193,9 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
               }} // font size of input label
               sx={{ backgroundColor: 'white' }}
             >
+              <MenuItem value="directivo" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
+                Direção
+              </MenuItem>
               <MenuItem value="gerente" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
                 Gerente
               </MenuItem>
@@ -200,7 +203,7 @@ function NewEmployee({ handleClose, open, refresh }: NewEmployeeProps): React.JS
                 Control
               </MenuItem>
               <MenuItem value="limpeza" sx={{ fontSize: { sm: '1.4rem', lg: '1.4rem' } }}>
-                Limpeza
+                Funcionário
               </MenuItem>
             </TextField>
             <Stack direction="row" justifyContent="space-between">

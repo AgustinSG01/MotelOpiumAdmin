@@ -67,7 +67,7 @@ export function CustomersTable({
           <TableHead>
             <TableRow>
               <TableCell>Nome</TableCell>
-              <TableCell>Rol</TableCell>
+              <TableCell>Função</TableCell>
               <TableCell>Pin</TableCell>
               <TableCell>Ações</TableCell>
             </TableRow>

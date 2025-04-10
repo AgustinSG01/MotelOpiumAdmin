@@ -33,6 +33,7 @@ const paths = {
   GERENTE: 'gerente/modify',
   CONTROL: 'control',
   LIMPEZA: 'limpeza',
+  Direção: "directivo"
 };
 
 function EditEmployee({ handleClose, open, employee, refresh }: NewEmployeeProps): React.JSX.Element {
