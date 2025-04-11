@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 
 import { type Employee } from '@/types/types';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
+import { LatestMessages, Message } from '@/components/dashboard/overview/latest-messages';
 import { LatestMovements, type Movement } from '@/components/dashboard/overview/latest-movements';
 import { LatestNotifications, Notification } from '@/components/dashboard/overview/latest-products';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
@@ -39,6 +40,8 @@ export default function Page(): React.JSX.Element {
     setPromedyControls,
     notifications,
     setNotifications,
+    messages,
+    setMessages,
   } = useStatics();
 
   const [time, setTime] = React.useState(dayjs());
@@ -93,6 +96,12 @@ export default function Page(): React.JSX.Element {
       url: '/notification/all-month',
       setter: (data) => {
         setNotifications(data as Notification[]);
+      },
+    },
+    {
+      url: '/comments/allMessages',
+      setter: (data) => {
+        setMessages(data as Message[]);
       },
     },
   ];
@@ -162,6 +171,16 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getMessages(): Promise<void> {
+    try {
+      const response = await axios.get('/comments/allMessages');
+      const responseData = response.data as Message[];
+      setMessages(responseData);
+    } catch (_error) {
+      return;
+    }
+  }
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       void refresh();
@@ -225,6 +244,14 @@ export default function Page(): React.JSX.Element {
       </Grid>
       <Grid lg={6} md={8} xs={14}>
         <LatestMovements movements={movements} sx={{ height: '100%' }} />
+      </Grid>
+      <Grid lg={4} md={6} xs={12}>
+        <LatestMessages
+          sx={{ height: '100%' }}
+          initialLoading={isLoading}
+          messages={messages}
+          refresh={getMessages}
+        />
       </Grid>
     </Grid>
   );

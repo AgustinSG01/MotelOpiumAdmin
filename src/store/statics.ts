@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { type Employee } from '@/types/types';
+import { Message } from '@/components/dashboard/overview/latest-messages';
 import { type Movement } from '@/components/dashboard/overview/latest-movements';
 import { type Notification } from '@/components/dashboard/overview/latest-products';
 import { type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
@@ -18,6 +19,7 @@ interface StaticsState {
   };
   promedyControls: { name: string; data: number[] }[];
   notifications: Notification[];
+  messages: Message[];
 
   // Actions
   setLimpezasMonth: (n: number) => void;
@@ -28,6 +30,7 @@ interface StaticsState {
   setCleansPerSuit: (n: { results: Result[]; year: string }) => void;
   setPromedyControls: (n: { data: number[]; year: string }) => void;
   setNotifications: (n: Notification[]) => void;
+  setMessages: (n: Message[]) => void;
 }
 
 const useStore = create<StaticsState>((set) => ({
@@ -39,6 +42,7 @@ const useStore = create<StaticsState>((set) => ({
   cleansPerSuit: { chartSeries: [], labels: [] },
   promedyControls: [],
   notifications: [],
+  messages: [],
   setLoading: (isLoading: boolean): void => {
     set(() => ({ isLoading }));
   },
@@ -69,6 +73,9 @@ const useStore = create<StaticsState>((set) => ({
   },
   setNotifications(n: Notification[]): void {
     set(() => ({ notifications: n }));
+  },
+  setMessages(n: Message[]): void {
+    set(() => ({ messages: n }));
   },
 }));
 
