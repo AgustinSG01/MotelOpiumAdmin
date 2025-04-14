@@ -14,11 +14,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import type { SxProps } from '@mui/material/styles';
 import { Eye, EyeSlash } from '@phosphor-icons/react';
+
 // import dayjs from 'dayjs';
 
 import { type Employee, type Limpeza } from '@/types/types';
 
 import axios from '../../../axios-config';
+import ModalMessageById from '../modalForms/ModalMessageById';
 
 export interface Message {
   id: number;
@@ -41,6 +43,8 @@ export function LatestMessages({ sx, messages, initialLoading, refresh }: Messag
 
   const [page, setPage] = useState(0); // Current page index
   const [rowsPerPage, _setRowsPerPage] = useState(5); // Number of rows per page
+  const [selectedMessage, setSelectedMessage] = useState<number | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -84,52 +88,75 @@ export function LatestMessages({ sx, messages, initialLoading, refresh }: Messag
   }
 
   return (
-    <Card sx={sx}>
-      <CardHeader title="Mensagens" />
-      <Divider />
-      <List sx={{ minHeight: 395 }}>
-        {loading || initialLoading ? (
-          <Skeleton variant="rectangular" width="100%" height={395} />
-        ) : (
-          display.map((message, index) => (
-            <ListItem
-              divider={false}
-              key={message.id}
-              sx={{
-                // background: notification.seen
-                //   ? '#f5f5f5'
-                //   : 'linear-gradient(90deg, rgba(255,51,51,1) 0%, rgba(255,51,51,0) 1%)',
-                borderLeft: message.seen ? '4px solid #33ff89' : '4px solid #ff3333',
-
-                borderTop: '1px solid #e0e0e0',
-                borderBottom: index === display.length - 1 ? '1px solid #e0e0e0' : 'none',
-              }}
-            >
-              <ListItemText
-                primary={message.message}
-                primaryTypographyProps={{ variant: 'subtitle1' }}
-                secondary={`Suíte ${message.limpeza?.suit?.nome}`}
-                secondaryTypographyProps={{ variant: 'body2' }}
-              />
-              <IconButton edge="end" onClick={() => markAsSeenOrUnsee(message.id, message.seen)}>
-                {message.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
-              </IconButton>
-            </ListItem>
-          ))
-        )}
-      </List>
-      <Divider />
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <TablePagination
-          component="div"
-          count={messages.length}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={none}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[]}
+    <>
+      {selectedMessage ? (
+        <ModalMessageById
+          handleClose={() => {
+            setShowModal(false);
+            setSelectedMessage(null);
+          }}
+          open={showModal}
+          messageId={selectedMessage}
         />
-      </CardActions>
-    </Card>
+      ) : null}
+      <Card sx={sx}>
+        <CardHeader title="Mensagens" />
+        <Divider />
+        <List sx={{ minHeight: 395 }}>
+          {loading || initialLoading ? (
+            <Skeleton variant="rectangular" width="100%" height={395} />
+          ) : (
+            display.map((message, index) => (
+              <ListItem
+                divider={false}
+                key={message.id}
+                sx={{
+                  borderLeft: message.seen ? '4px solid #33ff89' : '4px solid #ff3333',
+
+                  borderTop: '1px solid #e0e0e0',
+                  borderBottom: index === display.length - 1 ? '1px solid #e0e0e0' : 'none',
+                }}
+              >
+                <ListItemText
+                  primary={message.message}
+                  primaryTypographyProps={{
+                    variant: 'subtitle1',
+                    sx: {
+                      textOverflow: 'ellipsis',
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                    },
+                  }}
+                  secondary={`Suíte ${message.limpeza?.suit?.nome}`}
+                  secondaryTypographyProps={{ variant: 'body2' }}
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    setSelectedMessage(message.id);
+                    setShowModal(true);
+                  }}
+                />
+                <IconButton edge="end" onClick={() => markAsSeenOrUnsee(message.id, message.seen)}>
+                  {message.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
+                </IconButton>
+              </ListItem>
+            ))
+          )}
+        </List>
+        <Divider />
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <TablePagination
+            component="div"
+            count={messages.length}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={none}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[]}
+          />
+        </CardActions>
+      </Card>
+    </>
   );
 }
