@@ -9,6 +9,7 @@ import { type Controle, type Limpeza } from '@/types/types';
 import ControlInfo from '@/components/dashboard/limpezas/control-info';
 import { LimpezasFilters } from '@/components/dashboard/limpezas/limpezas-filters';
 import { LimpezasTable } from '@/components/dashboard/limpezas/limpezas-table';
+import NewLimpeza from '@/components/dashboard/modalForms/NewLimpeza';
 
 import axios from '../../../axios-config';
 
@@ -20,6 +21,7 @@ export default function Page(): React.JSX.Element {
   const [control, setControl] = React.useState<Controle>();
   const [showModal, setShowModal] = React.useState({
     control: false,
+    new: false,
   });
 
   React.useEffect(() => {
@@ -60,7 +62,7 @@ export default function Page(): React.JSX.Element {
       const data = response.data as Controle;
       if (data) {
         setControl(data);
-        setShowModal({ control: true });
+        setShowModal({ control: true, new: false });
       }
     } catch (error) {
       return;
@@ -79,11 +81,19 @@ export default function Page(): React.JSX.Element {
 
   return (
     <>
+      <NewLimpeza
+        faxina
+        open={showModal.new}
+        handleClose={() => {
+          setShowModal({ new: false, control: false });
+        }}
+        refresh={getLimpezas}
+      />
       <ControlInfo
         controle={control}
         open={showModal.control}
         handleClose={() => {
-          setShowModal({ control: false });
+          setShowModal({ control: false, new: false });
         }}
       />
       <Stack spacing={3}>
