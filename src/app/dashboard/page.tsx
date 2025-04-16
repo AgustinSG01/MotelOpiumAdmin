@@ -15,6 +15,7 @@ import { LatestNotifications, Notification } from '@/components/dashboard/overvi
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { CleansPerSuits, type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
 import { PromedyControls } from '@/components/dashboard/overview/sales';
+import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
 import { EmployeeMonth } from '@/components/dashboard/overview/total-profit';
 
 import axios from '../../axios-config';
@@ -42,6 +43,8 @@ export default function Page(): React.JSX.Element {
     setNotifications,
     messages,
     setMessages,
+    setTimePerSuit,
+    timesPerSuit,
   } = useStatics();
 
   const [time, setTime] = React.useState(dayjs());
@@ -102,6 +105,12 @@ export default function Page(): React.JSX.Element {
       url: '/comments/allMessages',
       setter: (data) => {
         setMessages(data as Message[]);
+      },
+    },
+    {
+      url: '/statics/time-promedy-limpeza-per-suit',
+      setter: (data) => {
+        setTimePerSuit(data as { labels: string[]; chartSeries: { data: number[]; name: string } });
       },
     },
   ];
@@ -245,13 +254,16 @@ export default function Page(): React.JSX.Element {
       <Grid lg={6} md={8} xs={14}>
         <LatestMovements movements={movements} sx={{ height: '100%' }} />
       </Grid>
-      <Grid lg={4} md={6} xs={12}>
-        <LatestMessages
+      <Grid lg={8} xs={12}>
+        <TimePerSuit
           sx={{ height: '100%' }}
-          initialLoading={isLoading}
-          messages={messages}
-          refresh={getMessages}
+          chartSeries={timesPerSuit.chartSeries}
+          labels={timesPerSuit.labels}
+          loading={isLoading}
         />
+      </Grid>
+      <Grid lg={4} md={6} xs={12}>
+        <LatestMessages sx={{ height: '100%' }} initialLoading={isLoading} messages={messages} refresh={getMessages} />
       </Grid>
     </Grid>
   );

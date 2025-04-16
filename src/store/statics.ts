@@ -20,6 +20,10 @@ interface StaticsState {
   promedyControls: { name: string; data: number[] }[];
   notifications: Notification[];
   messages: Message[];
+  timesPerSuit: {
+    chartSeries: { name: string; data: number[] }[];
+    labels: string[];
+  };
 
   // Actions
   setLimpezasMonth: (n: number) => void;
@@ -31,6 +35,7 @@ interface StaticsState {
   setPromedyControls: (n: { data: number[]; year: string }) => void;
   setNotifications: (n: Notification[]) => void;
   setMessages: (n: Message[]) => void;
+  setTimePerSuit: (n: { labels: string[]; chartSeries: { data: number[]; name: string } }) => void;
 }
 
 const useStore = create<StaticsState>((set) => ({
@@ -43,6 +48,8 @@ const useStore = create<StaticsState>((set) => ({
   promedyControls: [],
   notifications: [],
   messages: [],
+  timesPerSuit: { chartSeries: [], labels: [] },
+
   setLoading: (isLoading: boolean): void => {
     set(() => ({ isLoading }));
   },
@@ -76,6 +83,14 @@ const useStore = create<StaticsState>((set) => ({
   },
   setMessages(n: Message[]): void {
     set(() => ({ messages: n }));
+  },
+  setTimePerSuit: (data: { labels: string[]; chartSeries: { data: number[]; name: string } }): void => {
+    set(() => ({
+      timesPerSuit: {
+        chartSeries: [{ name: data.chartSeries.name, data: data.chartSeries.data }],
+        labels: data.labels,
+      },
+    }));
   },
 }));
 
