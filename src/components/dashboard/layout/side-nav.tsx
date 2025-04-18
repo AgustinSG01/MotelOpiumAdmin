@@ -3,6 +3,7 @@
 import * as React from 'react';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useLimpezaFilters } from '@/store/filters';
 // import useStore from '@/store/store';
 import { getGerenteInService } from '@/utils/get-gerente-in-service';
 import Box from '@mui/material/Box';
@@ -14,6 +15,7 @@ import type { NavItemConfig } from '@/types/nav';
 import { type Employee } from '@/types/types';
 // import { paths } from '@/paths';
 import { isNavItemActive } from '@/lib/is-nav-item-active';
+
 // import { Logo } from '@/components/core/logo';
 
 import { navItems } from './config';
@@ -136,6 +138,7 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
   const Icon = icon ? navIcons[icon] : null;
   // const { notifications } = useStore();
+  const { resetFilters } = useLimpezaFilters();
 
   return (
     <li>
@@ -148,6 +151,13 @@ function NavItem({ disabled, external, href, icon, matcher, pathname, title }: N
               rel: external ? 'noreferrer' : undefined,
             }
           : { role: 'button' })}
+        onClick={
+          title === 'Limpezas' || title === 'Faxinas'
+            ? () => {
+                resetFilters();
+              }
+            : undefined
+        }
         sx={{
           alignItems: 'center',
           borderRadius: 1,

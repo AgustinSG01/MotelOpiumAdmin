@@ -16,7 +16,7 @@ import NewLimpeza from '@/components/dashboard/modalForms/NewLimpeza';
 import axios from '../../../axios-config';
 
 export default function Page(): React.JSX.Element {
-  const { orderBy, empregado, gerente, suit, initialDate, finalDate, state, resetFilters } = useLimpezaFilters();
+  const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
 
   const [limpezas, setLimpezas] = React.useState<Limpeza[]>([]);
   const [loading, setLoading] = React.useState(false);
@@ -27,10 +27,9 @@ export default function Page(): React.JSX.Element {
   });
 
   React.useEffect(() => {
-    resetFilters();
     void getLimpezas();
   }, []);
-  // TODO: agregar boton para aplicar filtros
+
 
   async function getLimpezas(): Promise<void> {
     const filters = orderBy.split(';');

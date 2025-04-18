@@ -243,7 +243,7 @@ export default function Page(): React.JSX.Element {
           refresh={getNotifications}
         />
       </Grid>
-      <Grid lg={6} xs={10}>
+      <Grid lg={6} xs={12}>
         <PromedyControls
           sx={{ height: '100%' }}
           chartSeries={promedyControls}

@@ -1,7 +1,9 @@
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import { useLimpezaFilters } from '@/store/filters';
 import { Button, TableCell, TableRow, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import { Eye, Pencil, Trash } from '@phosphor-icons/react';
+import { Eye, List, Pencil, Trash } from '@phosphor-icons/react';
 import dayjs from 'dayjs';
 
 import { type SuitInfo } from '@/types/types';
@@ -15,9 +17,12 @@ interface SuitProps {
 }
 
 function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElement {
+  const router = useRouter();
   const currentDate = dayjs(row.lastClean?.data);
   const formattedDate = currentDate.format('DD/MM/YYYY HH:mm');
   const [showInfo, setShowInfo] = React.useState(false);
+
+  const { setSuit } = useLimpezaFilters();
   return (
     <>
       <LimpezaInfo
@@ -45,6 +50,16 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
               }}
             >
               <Eye color="white" size={20} />
+            </Button>
+            <Button
+              variant="contained"
+              color="info"
+              onClick={() => {
+                setSuit(`${row.id}`);
+                router.push('/dashboard/limpezas');
+              }}
+            >
+              <List color="white" size={20} />
             </Button>
             <Button
               variant="contained"
