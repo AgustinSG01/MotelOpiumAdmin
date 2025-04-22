@@ -24,6 +24,11 @@ interface StaticsState {
     chartSeries: { name: string; data: number[] }[];
     labels: string[];
   };
+  cleansPerSuitByEmpregado: {
+    chartSeries: { name: string; data: number[] }[];
+    labels: string[];
+    empregadoId: number;
+  };
 
   // Actions
   setLimpezasMonth: (n: number) => void;
@@ -36,6 +41,11 @@ interface StaticsState {
   setNotifications: (n: Notification[]) => void;
   setMessages: (n: Message[]) => void;
   setTimePerSuit: (n: { labels: string[]; chartSeries: { data: number[]; name: string } }) => void;
+  setCleansPerSuitByEmpregado: (n: {
+    labels: string[];
+    chartSeries: { data: number[]; name: string };
+    empregadoId: number;
+  }) => void;
 }
 
 const useStore = create<StaticsState>((set) => ({
@@ -49,6 +59,7 @@ const useStore = create<StaticsState>((set) => ({
   notifications: [],
   messages: [],
   timesPerSuit: { chartSeries: [], labels: [] },
+  cleansPerSuitByEmpregado: { chartSeries: [], labels: [], empregadoId: 0 },
 
   setLoading: (isLoading: boolean): void => {
     set(() => ({ isLoading }));
@@ -89,6 +100,19 @@ const useStore = create<StaticsState>((set) => ({
       timesPerSuit: {
         chartSeries: [{ name: data.chartSeries.name, data: data.chartSeries.data }],
         labels: data.labels,
+      },
+    }));
+  },
+  setCleansPerSuitByEmpregado: (data: {
+    labels: string[];
+    chartSeries: { data: number[]; name: string };
+    empregadoId: number;
+  }): void => {
+    set(() => ({
+      cleansPerSuitByEmpregado: {
+        chartSeries: [{ name: data.chartSeries.name, data: data.chartSeries.data }],
+        labels: data.labels,
+        empregadoId: data.empregadoId,
       },
     }));
   },

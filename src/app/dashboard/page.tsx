@@ -12,6 +12,7 @@ import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
 import { LatestMessages, Message } from '@/components/dashboard/overview/latest-messages';
 import { LatestMovements, type Movement } from '@/components/dashboard/overview/latest-movements';
 import { LatestNotifications, Notification } from '@/components/dashboard/overview/latest-products';
+import { LimpezaPerSuitEmpregado } from '@/components/dashboard/overview/limpeza-per-suit-empregado';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { CleansPerSuits, type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
 import { PromedyControls } from '@/components/dashboard/overview/sales';
@@ -45,6 +46,8 @@ export default function Page(): React.JSX.Element {
     setMessages,
     setTimePerSuit,
     timesPerSuit,
+    cleansPerSuitByEmpregado,
+    setCleansPerSuitByEmpregado,
   } = useStatics();
 
   const [time, setTime] = React.useState(dayjs());
@@ -111,6 +114,14 @@ export default function Page(): React.JSX.Element {
       url: '/statics/time-promedy-limpeza-per-suit',
       setter: (data) => {
         setTimePerSuit(data as { labels: string[]; chartSeries: { data: number[]; name: string } });
+      },
+    },
+    {
+      url: '/statics/limpezas-per-suit-empregado/first',
+      setter: (data) => {
+        setCleansPerSuitByEmpregado(
+          data as { labels: string[]; chartSeries: { data: number[]; name: string }; empregadoId: number }
+        );
       },
     },
   ];
@@ -190,6 +201,20 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getLimpezasPerSuitByEmpregado(empregadoId: number): Promise<void> {
+    try {
+      const response = await axios.get(`/statics/limpezas-per-suit-empregado/${empregadoId}`);
+      const responseData = response.data as {
+        labels: string[];
+        chartSeries: { data: number[]; name: string };
+        empregadoId: number;
+      };
+      setCleansPerSuitByEmpregado(responseData);
+    } catch (_error) {
+      return;
+    }
+  }
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       void refresh();
@@ -264,6 +289,16 @@ export default function Page(): React.JSX.Element {
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <LatestMessages sx={{ height: '100%' }} initialLoading={isLoading} messages={messages} refresh={getMessages} />
+      </Grid>
+      <Grid lg={12} xs={12}>
+        <LimpezaPerSuitEmpregado
+          sx={{ height: '100%' }}
+          chartSeries={cleansPerSuitByEmpregado.chartSeries}
+          labels={cleansPerSuitByEmpregado.labels}
+          loading={isLoading}
+          empregadoId={cleansPerSuitByEmpregado.empregadoId}
+          getLimpezasPerSuitByEmpregado={getLimpezasPerSuitByEmpregado}
+        />
       </Grid>
     </Grid>
   );
