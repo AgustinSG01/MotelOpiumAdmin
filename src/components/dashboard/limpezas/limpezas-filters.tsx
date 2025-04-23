@@ -95,7 +95,7 @@ export function LimpezasFilters({ applyFilters, withoutFilters }: FiltersProps):
         <TextField
           defaultValue={suitFiltered}
           value={suitFiltered}
-          label="Suit"
+          label="Suíte"
           fullWidth
           onChange={(e) => {
             setSuit(e.target.value);

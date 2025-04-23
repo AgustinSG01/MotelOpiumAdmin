@@ -60,7 +60,7 @@ export function LimpezasTable({
         <Table sx={{ minWidth: '800px' }}>
           <TableHead>
             <TableRow>
-              <TableCell>Suit</TableCell>
+              <TableCell>Suíte</TableCell>
               <TableCell>Funcionário</TableCell>
               <TableCell>Gerente</TableCell>
               <TableCell>Pontuação controle</TableCell>
