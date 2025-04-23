@@ -201,7 +201,7 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function getLimpezasPerSuitByEmpregado(empregadoId: number): Promise<void> {
+  async function getLimpezasPerSuitByEmpregado(empregadoId: string | number): Promise<void> {
     try {
       const response = await axios.get(`/statics/limpezas-per-suit-empregado/${empregadoId}`);
       const responseData = response.data as {

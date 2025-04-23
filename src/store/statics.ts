@@ -27,7 +27,7 @@ interface StaticsState {
   cleansPerSuitByEmpregado: {
     chartSeries: { name: string; data: number[] }[];
     labels: string[];
-    empregadoId: number;
+    empregadoId: number | string;
   };
 
   // Actions
@@ -44,7 +44,7 @@ interface StaticsState {
   setCleansPerSuitByEmpregado: (n: {
     labels: string[];
     chartSeries: { data: number[]; name: string };
-    empregadoId: number;
+    empregadoId: number | string;
   }) => void;
 }
 
@@ -59,7 +59,7 @@ const useStore = create<StaticsState>((set) => ({
   notifications: [],
   messages: [],
   timesPerSuit: { chartSeries: [], labels: [] },
-  cleansPerSuitByEmpregado: { chartSeries: [], labels: [], empregadoId: 0 },
+  cleansPerSuitByEmpregado: { chartSeries: [], labels: [], empregadoId: '' },
 
   setLoading: (isLoading: boolean): void => {
     set(() => ({ isLoading }));
@@ -106,7 +106,7 @@ const useStore = create<StaticsState>((set) => ({
   setCleansPerSuitByEmpregado: (data: {
     labels: string[];
     chartSeries: { data: number[]; name: string };
-    empregadoId: number;
+    empregadoId: number | string;
   }): void => {
     set(() => ({
       cleansPerSuitByEmpregado: {

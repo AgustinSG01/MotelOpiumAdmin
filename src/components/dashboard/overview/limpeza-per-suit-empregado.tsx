@@ -20,8 +20,8 @@ export interface SalesProps {
   chartSeries: { name: string; data: number[] }[];
   labels: string[];
   loading: boolean;
-  getLimpezasPerSuitByEmpregado: (empregadoId: number) => Promise<void>;
-  empregadoId: number;
+  getLimpezasPerSuitByEmpregado: (empregadoId: number | string) => Promise<void>;
+  empregadoId: number | string;
 }
 export interface Result {
   suit: string;
@@ -74,7 +74,7 @@ export function LimpezaPerSuitEmpregado({
         )}
       </CardContent>
       <Divider />
-      <CardActions sx={{ justifyContent: 'space-between', px: 2 }}>
+      <CardActions sx={{ justifyContent: 'center', px: 2 }}>
         <Selector
           error={error}
           items={empregados}
@@ -84,6 +84,7 @@ export function LimpezaPerSuitEmpregado({
           value={empregado}
           handleChange={changeEmpregado}
           noItemsText="Nenhum funcionário cadastrado"
+          variant="standard"
         />
       </CardActions>
     </Card>
