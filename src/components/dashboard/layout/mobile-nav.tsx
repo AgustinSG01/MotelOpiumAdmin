@@ -105,7 +105,7 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
               </Typography>
             ) : (
               <Typography color="inherit" variant="subtitle1">
-                Nenhum gerente de serviço
+                Nenhum gerente ativo
               </Typography>
             )}
           </Box>

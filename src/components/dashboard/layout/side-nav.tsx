@@ -99,7 +99,7 @@ export function SideNav(): React.JSX.Element {
               </Typography>
             ) : (
               <Typography color="inherit" variant="subtitle1">
-                Nenhum gerente de serviço
+                Nenhum gerente ativo
               </Typography>
             )}
           </Box>
