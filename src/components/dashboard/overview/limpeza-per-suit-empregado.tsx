@@ -1,14 +1,18 @@
 'use client';
 
 import * as React from 'react';
-import { CardActions, Skeleton } from '@mui/material';
+import { CardActions, IconButton, Skeleton, Typography } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import { alpha, useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
+import { Stack } from '@mui/system';
+import { ArrowLeft } from '@phosphor-icons/react';
+import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import type { ApexOptions } from 'apexcharts';
+import dayjs from 'dayjs';
 
 import useEmpregados from '@/hooks/use-empregados';
 import { Chart } from '@/components/core/chart';
@@ -20,7 +24,7 @@ export interface SalesProps {
   chartSeries: { name: string; data: number[] }[];
   labels: string[];
   loading: boolean;
-  getLimpezasPerSuitByEmpregado: (empregadoId: number | string) => Promise<void>;
+  getLimpezasPerSuitByEmpregado: (empregadoId: number | string, year: number, month: number) => Promise<void>;
   empregadoId: number | string;
 }
 export interface Result {
@@ -41,13 +45,19 @@ export function LimpezaPerSuitEmpregado({
 
   const [empregado, setEmpregado] = React.useState<string | number>(empregadoId);
   const [actualLoading, setActualLoading] = React.useState(false);
+
+  const actualYear: number = dayjs().year();
+  const actualMonth: number = dayjs().month();
+  const [month, setMonth] = React.useState<number>(actualMonth);
+  const [year, setYear] = React.useState<number>(dayjs().year());
+
   function changeEmpregado(value: string | number): void {
     setEmpregado(value);
   }
 
   async function getInfo(): Promise<void> {
     setActualLoading(true);
-    await getLimpezasPerSuitByEmpregado(Number(empregado));
+    await getLimpezasPerSuitByEmpregado(Number(empregado), year, month);
     setActualLoading(false);
   }
 
@@ -55,7 +65,7 @@ export function LimpezaPerSuitEmpregado({
     if (empregado !== undefined && empregado !== '') {
       void getInfo();
     }
-  }, [empregado]);
+  }, [empregado, year, month]);
 
   React.useEffect(() => {
     if (empregadoId !== undefined && empregadoId !== null) {
@@ -74,7 +84,7 @@ export function LimpezaPerSuitEmpregado({
         )}
       </CardContent>
       <Divider />
-      <CardActions sx={{ justifyContent: 'center', px: 2 }}>
+      <CardActions sx={{ alignItems: 'center', px: 2, flexDirection: 'column', gap: 2 }}>
         <Selector
           error={error}
           items={empregados}
@@ -86,6 +96,41 @@ export function LimpezaPerSuitEmpregado({
           noItemsText="Nenhum funcionário cadastrado"
           variant="standard"
         />
+        <Stack direction="row" sx={{ width: '100%', justifyContent: 'space-between' }}>
+          <IconButton
+            color="inherit"
+            size="small"
+            onClick={() => {
+              if (month > 0) {
+                setMonth(month - 1);
+              } else {
+                setMonth(11);
+                setYear(year - 1);
+              }
+            }}
+          >
+            <ArrowLeft fontSize="var(--icon-fontSize-md)" />
+          </IconButton>
+          <Stack sx={{ alignItems: 'center' }}>
+            <Typography>{year}</Typography>
+            <Typography>{dayjs(new Date(year, month, 1)).format('MMMM')}</Typography>
+          </Stack>
+          <IconButton
+            disabled={year > actualYear || (year === actualYear && month >= actualMonth)}
+            color="inherit"
+            size="small"
+            onClick={() => {
+              if (month === 11) {
+                setMonth(0);
+                setYear(year + 1);
+              } else {
+                setMonth(month + 1);
+              }
+            }}
+          >
+            <ArrowRightIcon fontSize="var(--icon-fontSize-md)" />
+          </IconButton>
+        </Stack>
       </CardActions>
     </Card>
   );
