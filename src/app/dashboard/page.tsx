@@ -48,6 +48,8 @@ export default function Page(): React.JSX.Element {
     timesPerSuit,
     cleansPerSuitByEmpregado,
     setCleansPerSuitByEmpregado,
+    setTimePerSuitByEmpregado,
+    timePerSuitByEmpregado,
   } = useStatics();
 
   const [time, setTime] = React.useState(dayjs());
@@ -120,6 +122,14 @@ export default function Page(): React.JSX.Element {
       url: '/statics/limpezas-per-suit-empregado/first',
       setter: (data) => {
         setCleansPerSuitByEmpregado(
+          data as { labels: string[]; chartSeries: { data: number[]; name: string }; empregadoId: number }
+        );
+      },
+    },
+    {
+      url: '/statics/time-promedy-limpeza-per-suit-by-empregado/first',
+      setter: (data) => {
+        setTimePerSuitByEmpregado(
           data as { labels: string[]; chartSeries: { data: number[]; name: string }; empregadoId: number }
         );
       },
@@ -224,6 +234,25 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getTimePerSuitByEmpregado(empregadoId: string | number, year: number, month: number): Promise<void> {
+    try {
+      const response = await axios.get(`/statics/time-promedy-limpeza-per-suit-by-empregado/${empregadoId}`, {
+        params: {
+          selectedYear: year,
+          selectedMonth: month,
+        },
+      });
+      const responseData = response.data as {
+        labels: string[];
+        chartSeries: { data: number[]; name: string };
+        empregadoId: number;
+      };
+      setTimePerSuitByEmpregado(responseData);
+    } catch (_error) {
+      return;
+    }
+  }
+
   React.useEffect(() => {
     const interval = setInterval(() => {
       void refresh();
@@ -302,11 +331,12 @@ export default function Page(): React.JSX.Element {
       <Grid lg={12} xs={12}>
         <LimpezaPerSuitEmpregado
           sx={{ height: '100%' }}
-          chartSeries={cleansPerSuitByEmpregado.chartSeries}
+          chartSeries={[...cleansPerSuitByEmpregado.chartSeries, ...timePerSuitByEmpregado.chartSeries]}
           labels={cleansPerSuitByEmpregado.labels}
           loading={isLoading}
           empregadoId={cleansPerSuitByEmpregado.empregadoId}
           getLimpezasPerSuitByEmpregado={getLimpezasPerSuitByEmpregado}
+          getTimePerSuitByEmpregado={getTimePerSuitByEmpregado}
         />
       </Grid>
     </Grid>
