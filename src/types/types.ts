@@ -19,7 +19,7 @@ export interface Limpeza {
   data?: Date;
   score?: number;
   esquecido: boolean;
-  endedBy?: Employee
+  endedBy?: Employee;
 }
 export interface Suit {
   id: number;
@@ -47,6 +47,26 @@ export interface Aspect {
   score: number;
   comment?: string;
   image?: string;
+}
+
+export interface ControleData {
+  id: number;
+  data: Date;
+  aspectos: {
+    limpeza: Aspect;
+    cheiro: Aspect;
+    manut: Aspect;
+    tv: Aspect;
+    roupa: Aspect;
+    garagem: Aspect;
+    faxina: Aspect;
+    abastec: Aspect;
+  };
+  empregado: string;
+  gerente: string;
+  suit: string;
+  mg: string;
+  mc: string;
 }
 
 export interface Notification {

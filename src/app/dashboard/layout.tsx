@@ -9,37 +9,11 @@ import GlobalStyles from '@mui/material/GlobalStyles';
 import { MainNav } from '@/components/dashboard/layout/main-nav';
 import { SideNav } from '@/components/dashboard/layout/side-nav';
 
-import axios from '../../axios-config';
-import useStore from '../../store/store';
-
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps): React.JSX.Element {
-  const { setNotifications } = useStore();
-
-  async function getNotificationsQuantity(): Promise<void> {
-    try {
-      const res = await axios.get<Notification[]>('/notification/unseen');
-      const notifications: number = res.data.length;
-      setNotifications(notifications);
-    } catch (error) {
-      setNotifications(0);
-    }
-  }
-
-  React.useEffect(() => {
-    void getNotificationsQuantity();
-    const interval = setInterval(() => {
-      void getNotificationsQuantity();
-    }, 60000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
   return (
     // <AuthGuard>
     <>
