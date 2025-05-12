@@ -137,20 +137,18 @@ export default function Page(): React.JSX.Element {
   ];
 
   async function getStatics(): Promise<void> {
-    setLoading(true);
-    setTime(dayjs());
-    try {
-      await Promise.all(
-        fetchers.map(async ({ url, setter }) => {
-          const response = await axios.get(url);
-          setter(response.data);
-        })
-      );
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
+  setLoading(true);
+  setTime(dayjs());
+  try {
+    for (const { url, setter } of fetchers) {
+      const response = await axios.get(url);
+      setter(response.data);
     }
+    setLoading(false);
+  } catch (error) {
+    setLoading(false);
   }
+}
 
   async function refresh(): Promise<void> {
     await getStatics();
