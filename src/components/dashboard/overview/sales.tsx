@@ -115,7 +115,7 @@ function useChartOptions(categories: string[]): ApexOptions {
       yaxis: { lines: { show: true } },
     },
     legend: { show: false },
-    plotOptions: { bar: { columnWidth: '40px' } },
+    plotOptions: { bar: { columnWidth: '30px' } },
     stroke: { colors: ['transparent'], show: true, width: 2 },
     theme: { mode: theme.palette.mode },
     xaxis: {
