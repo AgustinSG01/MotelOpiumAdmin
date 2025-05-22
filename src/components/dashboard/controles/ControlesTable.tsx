@@ -13,13 +13,14 @@ import TableRow from '@mui/material/TableRow';
 
 import { type ControleData as InfoControle } from '@/types/types';
 
+// import { type Value } from '../MultipleSelector';
 import TableRowsLoader from '../TableRowLoader';
 import ControleData from './ControleData';
 
 interface ControleTableProps {
   count?: number;
   rows?: InfoControle[];
-//   getControle: (id: number) => void;
+  //   getControle: (id: number) => void;
 
   refresh: () => void;
 
@@ -30,13 +31,15 @@ interface ControleTableProps {
 export function ControlesTable({
   count = 0,
   rows = [],
-//   getControle,
+  //   getControle,
   loading,
   handleDelete,
   refresh,
 }: ControleTableProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
+
+  // const [selectedItems, setSelectedItems] = React.useState<Value[]>([]); // State to manage selected items
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -54,6 +57,9 @@ export function ControlesTable({
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [page, rowsPerPage]);
 
+  // function selectItems(items: Value[]): void {
+  //   setSelectedItems(items);
+  // }
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -63,7 +69,29 @@ export function ControlesTable({
               <TableCell>Data</TableCell>
               <TableCell>Suite</TableCell>
               <TableCell>Limpeza</TableCell>
-              <TableCell>Cheiro</TableCell>
+              {/* <TableCell>
+                <MultipleSelector
+                  items={[
+                    { text: '0', valor: 0 },
+                    { text: '1', valor: 1 },
+                    { text: '2', valor: 2 },
+                    { text: '3', valor: 3 },
+                    { text: '4', valor: 4 },
+                    { text: '5', valor: 5 },
+                    { text: '6', valor: 6 },
+                    { text: '7', valor: 7 },
+                    { text: '8', valor: 8 },
+                    { text: '9', valor: 9 },
+                    { text: '10', valor: 10 },
+                  ]}
+                  selectedItems={selectedItems}
+                  setSelectedItems={selectItems}
+                  label="Cheiro"
+                  formSx={{ maxWidth: '100px' }}
+
+                />
+              </TableCell> */}
+              <TableCell>Cherio</TableCell>
               <TableCell>Manut.</TableCell>
               <TableCell>TV</TableCell>
               <TableCell>Roupa</TableCell>
@@ -78,7 +106,7 @@ export function ControlesTable({
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={9} />
+              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={14} />
             ) : (
               display.map((row) => {
                 return (

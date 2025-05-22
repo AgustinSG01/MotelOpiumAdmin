@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { useLimpezaFilters } from '@/store/filters';
+// import { useLimpezaFilters } from '@/store/filters';
 // import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -18,15 +18,15 @@ import { ControlesTable } from '@/components/dashboard/controles/ControlesTable'
 import axios from '../../../axios-config';
 
 export default function Page(): React.JSX.Element {
-  const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
+  // const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
 
   const [controls, setControls] = React.useState<InfoControle[]>([]);
   const [loading, setLoading] = React.useState(false);
   //   const [control, setControl] = React.useState<Controle>();
-  const [showModal, setShowModal] = React.useState({
-    control: false,
-    new: false,
-  });
+  // const [showModal, setShowModal] = React.useState({
+  //   control: false,
+  //   new: false,
+  // });
 
   React.useEffect(() => {
     void getLimpezas();
@@ -38,7 +38,6 @@ export default function Page(): React.JSX.Element {
       setLoading(true);
       const response = await axios.get(`/controle`);
       const data: InfoControle[] = response.data as InfoControle[];
-      console.log('data', data);
       setControls(data);
       setLoading(false);
     } catch (error) {
@@ -59,17 +58,17 @@ export default function Page(): React.JSX.Element {
   //     }
   //   }
 
-  async function withoutFilters(): Promise<void> {
-    try {
-      setLoading(true);
-      const response = await axios.get(`/controle`);
-      const data: InfoControle[] = response.data as InfoControle[];
-      setControls(data);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-    }
-  }
+  // async function withoutFilters(): Promise<void> {
+  //   try {
+  //     setLoading(true);
+  //     const response = await axios.get(`/controle`);
+  //     const data: InfoControle[] = response.data as InfoControle[];
+  //     setControls(data);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //   }
+  // }
 
   async function deleteLimpeza(id: number, stateLimpeza: string): Promise<void> {
     try {
