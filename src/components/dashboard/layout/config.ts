@@ -9,5 +9,6 @@ export const navItems = [
   { key: 'limpezas', title: 'Limpezas', href: paths.dashboard.account, icon: 'broom' },
   { key: 'faxinas', title: 'Faxinas', href: paths.dashboard.faxina, icon: 'spray' },
   { key: 'faltas', title: 'Faltas', href: paths.dashboard.falta, icon: 'faltas' },
+  { key: 'relatorio', title: 'Relatório mensal', href: paths.dashboard.relatorio, icon: 'relatorio' },
   // { key: 'notifications', title: 'Notificações', href: paths.errors.notFound, icon: 'bell' },
 ] satisfies NavItemConfig[];
