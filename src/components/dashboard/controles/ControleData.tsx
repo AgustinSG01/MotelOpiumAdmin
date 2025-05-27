@@ -18,11 +18,7 @@ function ControleData({ row }: ControleProps): React.JSX.Element {
     return dateDayjs.format('DD/MM/YYYY');
   }
 
-  // const state = row.fim ? 'completed' : 'inprocess';
-  //             handleDelete(row.id, state);
-
   return (
-    // TODO: terminar tabla de limpieza
     <TableRow hover key={row.id}>
       <TableCell>
         <Typography variant="subtitle2" sx={{ textAlign: 'center' }}>

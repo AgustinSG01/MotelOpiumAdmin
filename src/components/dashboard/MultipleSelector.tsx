@@ -61,37 +61,39 @@ export default function MultipleSelector({
   };
 
   return (
-    <div>
-      <FormControl sx={{ m: 1, width: 300, ...formSx }}>
-        <Select
-          id="multiple-checkbox"
-          multiple
-          value={selectedItems.length > 0 ? selectedItems : ['']}
-          onChange={handleChange}
-          input={<OutlinedInput />}
-          renderValue={() => label}
-          MenuProps={MenuProps}
-          sx={{
-            '& .MuiOutlinedInput-notchedOutline': {
-              border: 0,
-            },
-            '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              border: 0,
-            },
-            color: '#667085',
-            fontWeight: 500,
-            ...selectSx,
-          }}
-          displayEmpty
-        >
-          {items.map((item: Item) => (
-            <MenuItem key={item.valor} value={item.valor} sx={{ ...itemSx }}>
-              <Checkbox checked={selectedItems.includes(item.valor)} sx={{ ...checkboxSx }} />
-              <ListItemText primary={item.text} sx={{ ...listItemSx }} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </div>
+    <FormControl sx={{ m: 1, width: 300, padding: 0, ...formSx }}>
+      <Select
+        id="multiple-checkbox"
+        multiple
+        value={selectedItems.length > 0 ? selectedItems : ['']}
+        onChange={handleChange}
+        input={<OutlinedInput />}
+        renderValue={() => label}
+        MenuProps={MenuProps}
+        sx={{
+          '& .MuiOutlinedInput-notchedOutline': {
+            border: 0,
+          },
+          '&.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            border: 0,
+          },
+          '& .mui-1idmfta-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.mui-1idmfta-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input.mui-1idmfta-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input':
+            { padding: 0 },
+          color: '#667085',
+          fontWeight: 500,
+          fontSize: '0.875rem',
+          padding: 0,
+          ...selectSx,
+        }}
+        displayEmpty
+      >
+        {items.map((item: Item) => (
+          <MenuItem key={item.valor} value={item.valor} sx={{ ...itemSx }}>
+            <Checkbox checked={selectedItems.includes(item.valor)} sx={{ ...checkboxSx }} />
+            <ListItemText primary={item.text} sx={{ ...listItemSx }} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
