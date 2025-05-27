@@ -1,29 +1,93 @@
-// import { create } from 'zustand';
+import { create } from 'zustand';
 
-// const baseScores = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+import { type Value } from '@/components/dashboard/MultipleSelector';
 
-// interface filterState {
-//   suitList: number[] | string[];
-//   limpezaScoreList: number[] | string[];
-//   cheiroScoreList: number[] | string[];
-//   manutScoreList: number[] | string[];
-//   tvScoreList: number[] | string[];
-//   roupaScoreList: number[] | string[];
-//   garagemScoreList: number[] | string[];
-//   faxinaScoreList: number[] | string[];
-//   abastecScoreList: number[] | string[];
-//   empregadoList: string[] | number[];
-//   gerenteList: string[] | number[];
-//   setSuitList: (suitList: number[] | string[]) => void;
-//   setLimpezaScoreList: (limpezaScoreList: number[] | string[]) => void;
-//   setCheiroScoreList: (cheiroScoreList: number[] | string[]) => void;
-//   setManutScoreList: (manutScoreList: number[] | string[]) => void;
-//   setTvScoreList: (tvScoreList: number[] | string[]) => void;
-//   setRoupaScoreList: (roupaScoreList: number[] | string[]) => void;
-//   setGaragemScoreList: (garagemScoreList: number[] | string[]) => void;
-//   setFaxinaScoreList: (faxinaScoreList: number[] | string[]) => void;
-//   setAbastecScoreList: (abastecScoreList: number[] | string[]) => void;
-//   setEmpregadoList: (empregadoList: string[] | number[]) => void;
-//   setGerenteList: (gerenteList: string[] | number[]) => void;
-//   resetFilters: () => void;
-// }
+const baseScores = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+interface FilterState {
+  suitList: Value[];
+  limpezaScoreList: Value[];
+  cheiroScoreList: Value[];
+  manutScoreList: Value[];
+  tvScoreList: Value[];
+  roupaScoreList: Value[];
+  garagemScoreList: Value[];
+  faxinaScoreList: Value[];
+  abastecScoreList: Value[];
+  empregadoList: Value[];
+  gerenteList: Value[];
+  setSuitList: (suitList: Value[]) => void;
+  setLimpezaScoreList: (limpezaScoreList: Value[]) => void;
+  setCheiroScoreList: (cheiroScoreList: Value[]) => void;
+  setManutScoreList: (manutScoreList: Value[]) => void;
+  setTvScoreList: (tvScoreList: Value[]) => void;
+  setRoupaScoreList: (roupaScoreList: Value[]) => void;
+  setGaragemScoreList: (garagemScoreList: Value[]) => void;
+  setFaxinaScoreList: (faxinaScoreList: Value[]) => void;
+  setAbastecScoreList: (abastecScoreList: Value[]) => void;
+  setEmpregadoList: (empregadoList: Value[]) => void;
+  setGerenteList: (gerenteList: Value[]) => void;
+  resetFilters: () => void;
+}
+
+export const useControleFilters = create<FilterState>((set) => ({
+  suitList: [],
+  limpezaScoreList: baseScores,
+  cheiroScoreList: baseScores,
+  manutScoreList: baseScores,
+  tvScoreList: baseScores,
+  roupaScoreList: baseScores,
+  garagemScoreList: baseScores,
+  faxinaScoreList: baseScores,
+  abastecScoreList: baseScores,
+  empregadoList: [],
+  gerenteList: [],
+  setSuitList: (suitList: Value[]) => {
+    set({ suitList });
+  },
+  setLimpezaScoreList: (limpezaScoreList: Value[]) => {
+    set({ limpezaScoreList });
+  },
+  setCheiroScoreList: (cheiroScoreList: Value[]) => {
+    set({ cheiroScoreList });
+  },
+  setManutScoreList: (manutScoreList: Value[]) => {
+    set({ manutScoreList });
+  },
+  setTvScoreList: (tvScoreList: Value[]) => {
+    set({ tvScoreList });
+  },
+  setRoupaScoreList: (roupaScoreList: Value[]) => {
+    set({ roupaScoreList });
+  },
+  setGaragemScoreList: (garagemScoreList: Value[]) => {
+    set({ garagemScoreList });
+  },
+  setFaxinaScoreList: (faxinaScoreList: Value[]) => {
+    set({ faxinaScoreList });
+  },
+  setAbastecScoreList: (abastecScoreList: Value[]) => {
+    set({ abastecScoreList });
+  },
+  setEmpregadoList: (empregadoList: Value[]) => {
+    set({ empregadoList });
+  },
+  setGerenteList: (gerenteList: Value[]) => {
+    set({ gerenteList });
+  },
+  resetFilters: () => {
+    set({
+      suitList: [],
+      empregadoList: [],
+      gerenteList: [],
+      limpezaScoreList: baseScores,
+      cheiroScoreList: baseScores,
+      manutScoreList: baseScores,
+      tvScoreList: baseScores,
+      roupaScoreList: baseScores,
+      garagemScoreList: baseScores,
+      faxinaScoreList: baseScores,
+      abastecScoreList: baseScores,
+    });
+  },
+}));
