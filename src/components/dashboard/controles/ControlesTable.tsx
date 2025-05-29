@@ -28,10 +28,7 @@ interface ControleTableProps {
   empregados: Employee[];
   gerentes: Employee[];
 
-  refresh: () => void;
-
   loading: boolean;
-  handleDelete: (id: number, state: string) => void;
   getControles: () => void;
 }
 
@@ -40,11 +37,9 @@ export function ControlesTable({
   rows = [],
   //   getControle,
   loading,
-  handleDelete,
   suits,
   empregados,
   gerentes,
-  refresh,
   getControles,
 }: ControleTableProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
@@ -88,10 +83,6 @@ export function ControlesTable({
 
   const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
-  React.useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [page, rowsPerPage]);
-
   const baseScoreOptions = [
     { text: '0', valor: 0 },
     { text: '1', valor: 1 },
@@ -109,8 +100,13 @@ export function ControlesTable({
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
-        <Table sx={{ minWidth: '800px' }}>
+        <Table sx={{ minWidth: '800px' }} title="Controles">
           <TableHead>
+            <TableRow sx={{ width: '100%' }}>
+              <TableCell sx={{ textAlign: 'start' }} colSpan={14}>
+                TABELA DE CONTROLES
+              </TableCell>
+            </TableRow>
             <TableRow>
               <TableCell>Data</TableCell>
               <TableCell>
@@ -258,8 +254,6 @@ export function ControlesTable({
                     key={row.id}
                     row={row}
                     // getControle={getControle}
-                    handleDelete={handleDelete}
-                    refresh={refresh}
                   />
                 );
               })

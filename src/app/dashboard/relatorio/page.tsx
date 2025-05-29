@@ -14,6 +14,8 @@ import { type ControleData as InfoControle } from '@/types/types';
 import useEmpregados from '@/hooks/use-empregados';
 import useSuits from '@/hooks/use-suits';
 import { ControlesTable } from '@/components/dashboard/controles/ControlesTable';
+import { MediaEmpregadoTable } from '@/components/dashboard/controles/MediaEmpregadoTable';
+import { MediaGerenteTable } from '@/components/dashboard/controles/MediaGerenteTable';
 
 // import ControlInfo from '@/components/dashboard/limpezas/control-info';
 // import { LimpezasFilters } from '@/components/dashboard/limpezas/limpezas-filters';
@@ -21,11 +23,28 @@ import { ControlesTable } from '@/components/dashboard/controles/ControlesTable'
 
 import axios from '../../../axios-config';
 
+export interface MediaGerente {
+  id: number;
+  nome: string;
+  limpezas: number;
+  controles: string;
+}
+
+export interface MediaEmpregado {
+  id: number;
+  nome: string;
+  limpezas: number;
+  controles: string;
+  quantityControles: number;
+}
+
 export default function Page(): React.JSX.Element {
   // const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
 
   const [controls, setControls] = React.useState<InfoControle[]>([]);
   const [loading, setLoading] = React.useState(false);
+  const [mediaGerentes, setMediaGerentes] = React.useState<MediaGerente[]>([]);
+  const [mediaEmpregados, setMediaEmpregados] = React.useState<MediaEmpregado[]>([]);
   //   const [control, setControl] = React.useState<Controle>();
   // const [showModal, setShowModal] = React.useState({
   //   control: false,
@@ -33,7 +52,7 @@ export default function Page(): React.JSX.Element {
   // });
 
   React.useEffect(() => {
-    void getLimpezas();
+    void fetchData();
   }, []);
 
   const {
@@ -62,13 +81,43 @@ export default function Page(): React.JSX.Element {
 
   const empregadoIds = React.useMemo(() => empregados?.map((empregado) => empregado.id) || [], [empregados]);
 
-  async function getLimpezas(): Promise<void> {
+  async function getControles(): Promise<void> {
     // const filters = orderBy.split(';');
     try {
-      setLoading(true);
       const response = await axios.get(`/controle`);
       const data: InfoControle[] = response.data as InfoControle[];
       setControls(data);
+    } catch (error) {
+      setControls([]);
+    }
+  }
+
+  async function getMediaGerentes(): Promise<void> {
+    try {
+      const response = await axios.get(`/empregado/gerente/media`);
+      const data: MediaGerente[] = response.data as MediaGerente[];
+      setMediaGerentes(data);
+    } catch (error) {
+      setMediaGerentes([]);
+    }
+  }
+
+  async function getMediaEmpregado(): Promise<void> {
+    try {
+      const response = await axios.get(`/empregado/limpeza/media`);
+      const data: MediaEmpregado[] = response.data as MediaEmpregado[];
+      setMediaEmpregados(data);
+    } catch (error) {
+      setMediaEmpregados([]);
+    }
+  }
+
+  async function fetchData(): Promise<void> {
+    try {
+      setLoading(true);
+      await getControles();
+      await getMediaGerentes();
+      await getMediaEmpregado();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -118,16 +167,6 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function deleteLimpeza(id: number, stateLimpeza: string): Promise<void> {
-    try {
-      setLoading(true);
-      await axios.delete(`/limpeza/${stateLimpeza}/${id}`);
-      await getLimpezas();
-      setLoading(false);
-    } catch (error) {
-      return;
-    }
-  }
   React.useEffect(() => {
     if (gerenteIds.length) setGerenteList(gerenteIds);
     if (suitIds.length) setSuitList(suitIds);
@@ -141,14 +180,17 @@ export default function Page(): React.JSX.Element {
         </Stack>
       </Grid>
       {/* <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} /> */}
+      <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
+        <MediaGerenteTable loading={loading} count={mediaGerentes.length} rows={mediaGerentes} />
+      </Grid>
+      <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
+        <MediaEmpregadoTable loading={loading} count={mediaEmpregados.length} rows={mediaEmpregados} />
+      </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <ControlesTable
-          handleDelete={deleteLimpeza}
-          //   getControle={getControle}
           count={controls.length}
           rows={controls}
           loading={loading}
-          refresh={getLimpezas}
           empregados={empregados}
           suits={suits}
           gerentes={gerentes}
