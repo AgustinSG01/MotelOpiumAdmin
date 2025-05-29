@@ -7,8 +7,6 @@ import { type ControleData as ControleInfo } from '@/types/types';
 interface ControleProps {
   row: ControleInfo;
   //   getControle: (id: number) => void;
-  handleDelete: (id: number, state: string) => void;
-  refresh: () => void;
 }
 
 function ControleData({ row }: ControleProps): React.JSX.Element {
