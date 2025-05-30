@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { type MediaEmpregado } from '@/app/dashboard/relatorio/page';
+import { type LavagemEmpregado } from '@/app/dashboard/relatorio/page';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Divider from '@mui/material/Divider';
@@ -13,15 +13,15 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 
 import TableRowsLoader from '../TableRowLoader';
-import MediaEmpregadoData from './MediaEmpregadoData';
+import LavagemEmpregadoData from './LavagemEmpregadoData';
 
-interface MediaEmpregadoProps {
+interface LavagemEmpregadoProps {
   count?: number;
-  rows?: MediaEmpregado[];
+  rows?: LavagemEmpregado[];
   loading: boolean;
 }
 
-export function MediaEmpregadoTable({ count = 0, rows = [], loading }: MediaEmpregadoProps): React.JSX.Element {
+export function LavagemEmpregadoTable({ count = 0, rows = [], loading }: LavagemEmpregadoProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
 
@@ -44,22 +44,20 @@ export function MediaEmpregadoTable({ count = 0, rows = [], loading }: MediaEmpr
           <TableHead>
             <TableRow>
               <TableCell sx={{ textAlign: 'center' }} colSpan={14}>
-                MEDIA SERVIÇOS GERAIS
+                QUANTIDADE DE LAVAGEM POR CAMAREIRA
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>FUNCIONÁRIO</TableCell>
-              <TableCell>MEDIA</TableCell>
-              <TableCell>SUITES VISTORIADAS</TableCell>
-              <TableCell>SUITES LIMPAS</TableCell>
+              <TableCell>CAMAREIRA</TableCell>
+              <TableCell>QUANT. LAVADA</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading ? (
-              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={4} />
+              <TableRowsLoader rowsNum={rowsPerPage} columnsNum={2} />
             ) : (
               display.map((row) => {
-                return <MediaEmpregadoData key={row.id} row={row} />;
+                return <LavagemEmpregadoData key={row.id} row={row} />;
               })
             )}
           </TableBody>

@@ -16,6 +16,8 @@ interface FilterState {
   abastecScoreList: Value[];
   empregadoList: Value[];
   gerenteList: Value[];
+  selectedYear: number;
+  selectedMonth: number;
   setSuitList: (suitList: Value[]) => void;
   setLimpezaScoreList: (limpezaScoreList: Value[]) => void;
   setCheiroScoreList: (cheiroScoreList: Value[]) => void;
@@ -28,6 +30,8 @@ interface FilterState {
   setEmpregadoList: (empregadoList: Value[]) => void;
   setGerenteList: (gerenteList: Value[]) => void;
   resetFilters: () => void;
+  setSelectedYear: (year: number) => void;
+  setSelectedMonth: (month: number) => void;
 }
 
 export const useControleFilters = create<FilterState>((set) => ({
@@ -42,6 +46,8 @@ export const useControleFilters = create<FilterState>((set) => ({
   abastecScoreList: baseScores,
   empregadoList: [],
   gerenteList: [],
+  selectedYear: new Date().getFullYear(),
+  selectedMonth: new Date().getMonth(),
   setSuitList: (suitList: Value[]) => {
     set({ suitList });
   },
@@ -74,6 +80,12 @@ export const useControleFilters = create<FilterState>((set) => ({
   },
   setGerenteList: (gerenteList: Value[]) => {
     set({ gerenteList });
+  },
+  setSelectedYear: (year: number) => {
+    set({ selectedYear: year });
+  },
+  setSelectedMonth: (month: number) => {
+    set({ selectedMonth: month });
   },
   resetFilters: () => {
     set({
