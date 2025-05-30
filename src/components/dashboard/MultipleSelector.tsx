@@ -54,10 +54,13 @@ export default function MultipleSelector({
     const {
       target: { value },
     } = event;
-    setSelectedItems(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? (value.split(',') as Value[]) : value
-    );
+
+    const newValue = typeof value === 'string' ? value.split(',') : value;
+
+    // Filtrar valores vacíos o undefined
+    const filteredValue = newValue.filter((item) => item !== '' && item !== null);
+
+    setSelectedItems(filteredValue);
   };
 
   return (

@@ -3,19 +3,24 @@
 import * as React from 'react';
 import { useControleFilters } from '@/store/controle-filters';
 import { Grid } from '@mui/material';
+
 // import { useLimpezaFilters } from '@/store/filters';
 // import { Button } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 
 // import { Plus as PlusIcon } from '@phosphor-s/react/dist/ssr/Plus';
 
 import { type ControleData as InfoControle } from '@/types/types';
 import useEmpregados from '@/hooks/use-empregados';
 import useSuits from '@/hooks/use-suits';
+import { CalcFinalEmpregadoTable } from '@/components/dashboard/controles/CalcFinalEmpregadoTable';
+import { CalcFinalGerenteTable } from '@/components/dashboard/controles/CalcFinalGerenteTable';
+import { CalcFinalRecepTable } from '@/components/dashboard/controles/CalcFinalRecepTable';
 import { ControlesTable } from '@/components/dashboard/controles/ControlesTable';
+import { LavagemEmpregadoTable } from '@/components/dashboard/controles/LavagemEmpregadoTable';
+import { LavagemGerenteTable } from '@/components/dashboard/controles/LavagemGerenteTable';
 import { MediaEmpregadoTable } from '@/components/dashboard/controles/MediaEmpregadoTable';
 import { MediaGerenteTable } from '@/components/dashboard/controles/MediaGerenteTable';
+import MonthAndYearSelector from '@/components/dashboard/controles/MonthAndYearSelector';
 
 // import ControlInfo from '@/components/dashboard/limpezas/control-info';
 // import { LimpezasFilters } from '@/components/dashboard/limpezas/limpezas-filters';
@@ -38,6 +43,60 @@ export interface MediaEmpregado {
   quantityControles: number;
 }
 
+export interface LavagemGerente {
+  id: number;
+  nome: string;
+  faxinas: number;
+  input: number;
+  result: number;
+}
+
+export interface LavagemEmpregado {
+  id: number;
+  nome: string;
+  limpezas: number;
+}
+export interface CalcFinalEmpreado {
+  id: number;
+  nome: string;
+  nota: number;
+  lavagem: number;
+  solicita: { id: number; value: boolean; empregado_id: number; year: number; month: number };
+  faltou: boolean;
+  faltou2: boolean;
+  subtotal: number;
+  total: number;
+  zeros: number;
+  pagamento: number;
+}
+
+export interface CalcFinalGerente {
+  id: number;
+  nome: string;
+  nota: number;
+  lavagem: number;
+  solicita: { id: number; value: boolean; gerente_id: number; year: number; month: number };
+  faltou: boolean;
+  faltou2: boolean;
+  subtotal: number;
+  total: number;
+  zeros: number;
+  pagamento: number;
+}
+
+export interface CalcFinalRecep {
+  id: number;
+  nome: string;
+  nota: number;
+  lavagem: number;
+  solicita: { id: number; value: boolean; gerente_id: number; year: number; month: number };
+  faltou: boolean;
+  faltou2: boolean;
+  subtotal: number;
+  total: number;
+  zeros: number;
+  pagamento: number;
+}
 export default function Page(): React.JSX.Element {
   // const { orderBy, empregado, gerente, suit, initialDate, finalDate, state } = useLimpezaFilters();
 
@@ -45,15 +104,11 @@ export default function Page(): React.JSX.Element {
   const [loading, setLoading] = React.useState(false);
   const [mediaGerentes, setMediaGerentes] = React.useState<MediaGerente[]>([]);
   const [mediaEmpregados, setMediaEmpregados] = React.useState<MediaEmpregado[]>([]);
-  //   const [control, setControl] = React.useState<Controle>();
-  // const [showModal, setShowModal] = React.useState({
-  //   control: false,
-  //   new: false,
-  // });
-
-  React.useEffect(() => {
-    void fetchData();
-  }, []);
+  const [lavagemsGerentes, setLavagemsGerentes] = React.useState<LavagemGerente[]>([]);
+  const [quantityFaxinaEmpregados, setQuantityFaxinaEmpregados] = React.useState<LavagemEmpregado[]>([]);
+  const [calcFinalEmpregados, setCalcFinalEmpregados] = React.useState<CalcFinalEmpreado[]>([]);
+  const [calcFinalGerentes, setCalcFinalGerentes] = React.useState<CalcFinalGerente[]>([]);
+  const [calcFinalReceps, setCalcFinalReceps] = React.useState<CalcFinalRecep[]>([]);
 
   const {
     setGerenteList,
@@ -70,7 +125,13 @@ export default function Page(): React.JSX.Element {
     roupaScoreList,
     suitList,
     tvScoreList,
+    selectedMonth,
+    selectedYear,
+    setSelectedMonth,
+    setSelectedYear,
+    resetFilters,
   } = useControleFilters();
+
   const { suits } = useSuits();
   const { empregados } = useEmpregados('limpeza');
   const { empregados: gerentes } = useEmpregados('gerente');
@@ -84,7 +145,7 @@ export default function Page(): React.JSX.Element {
   async function getControles(): Promise<void> {
     // const filters = orderBy.split(';');
     try {
-      const response = await axios.get(`/controle`);
+      const response = await axios.get(`/controle?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`);
       const data: InfoControle[] = response.data as InfoControle[];
       setControls(data);
     } catch (error) {
@@ -94,7 +155,9 @@ export default function Page(): React.JSX.Element {
 
   async function getMediaGerentes(): Promise<void> {
     try {
-      const response = await axios.get(`/empregado/gerente/media`);
+      const response = await axios.get(
+        `/empregado/gerente/media?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
       const data: MediaGerente[] = response.data as MediaGerente[];
       setMediaGerentes(data);
     } catch (error) {
@@ -104,7 +167,9 @@ export default function Page(): React.JSX.Element {
 
   async function getMediaEmpregado(): Promise<void> {
     try {
-      const response = await axios.get(`/empregado/limpeza/media`);
+      const response = await axios.get(
+        `/empregado/limpeza/media?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
       const data: MediaEmpregado[] = response.data as MediaEmpregado[];
       setMediaEmpregados(data);
     } catch (error) {
@@ -112,36 +177,21 @@ export default function Page(): React.JSX.Element {
     }
   }
 
-  async function fetchData(): Promise<void> {
+  async function getLavagemGerentes(): Promise<void> {
     try {
-      setLoading(true);
-      await getControles();
-      await getMediaGerentes();
-      await getMediaEmpregado();
-      setLoading(false);
+      const response = await axios.get(
+        `/empregado/gerente/lavagem?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: LavagemGerente[] = response.data as LavagemGerente[];
+      setLavagemsGerentes(data);
     } catch (error) {
-      setLoading(false);
+      setLavagemsGerentes([]);
     }
   }
 
   async function getControleWithFilters(): Promise<void> {
-    /**
-      selectedYear,
-    selectedMonth,
-    suitList,
-    limpezaScoreList,
-    cheiroScoreList,
-    manutScoreList,
-    tvScoreList,
-    roupaScoreList,
-    garagemScoreList,
-    faxinaScoreList,
-    abastecScoreList,
-    gerenteList,
-    empregadoList,
-     */
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth();
+    const year = selectedYear;
+    const month = selectedMonth;
     const suitsIds = suitList.length ? suitList.toString() : '';
     const gerentesIds = gerenteList.length ? gerenteList.toString() : '';
     const empregadosIds = empregadoList.length ? empregadoList.toString() : '';
@@ -167,17 +217,269 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function getQuantityFaxinaEmpregados(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/empregado/limpeza/quantityFaxinas?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: LavagemEmpregado[] = response.data as LavagemEmpregado[];
+      setQuantityFaxinaEmpregados(data);
+    } catch (error) {
+      return;
+    }
+  }
+
+  async function getCalcFinalEmpregados(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/empregado/limpeza/finalcalc?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: CalcFinalEmpreado[] = response.data as CalcFinalEmpreado[];
+      setCalcFinalEmpregados(data);
+    } catch (error) {
+      return;
+    }
+  }
+  async function getCalcFinalGerentes(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/empregado/gerente/finalcalc?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: CalcFinalGerente[] = response.data as CalcFinalGerente[];
+      setCalcFinalGerentes(data);
+    } catch (error) {
+      return;
+    }
+  }
+
+  async function getCalcFinalRecep(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/empregado/recep/finalcalc?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: CalcFinalRecep[] = response.data as CalcFinalRecep[];
+      setCalcFinalReceps(data);
+    } catch (error) {
+      return;
+    }
+  }
+
+  const handleApplyInputs = async (data: { gerente_id: number; value: number }[]): Promise<void> => {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/inputGerente', {
+        data,
+        year,
+        month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getLavagemGerentes();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  };
+
+  async function updateSolicita(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth; // getMonth() retorna 0-11
+
+      await axios.post('/inputs/solicitaEmpregado', {
+        empregado_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalEmpregados();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+  async function updateSolicitaGerente(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/solicitaGerente', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalGerentes();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateFaltaOneGerente(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltaoneGerente', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalGerentes();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateFaltaTwoGerente(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltatwoGerente', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalGerentes();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateSolicitaRecep(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/solicitaRecep', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalRecep();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateFaltaOneRecep(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltaoneRecep', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalRecep();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateFaltaTwoRecep(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltatwoRecep', {
+        gerente_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalRecep();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+  function setIds() {
+    if (gerenteIds.length) setGerenteList(gerenteIds);
+    if (suitIds.length) setSuitList(suitIds);
+    if (empregadoIds.length) setEmpregadoList(empregadoIds);
+  }
+
+  async function withoutFilters(): Promise<void> {
+    resetFilters();
+    await getControles();
+    setIds();
+  }
+
   React.useEffect(() => {
     if (gerenteIds.length) setGerenteList(gerenteIds);
     if (suitIds.length) setSuitList(suitIds);
     if (empregadoIds.length) setEmpregadoList(empregadoIds);
   }, [gerenteIds, suitIds, empregadoIds, setGerenteList, setSuitList, setEmpregadoList]);
+
+  async function fetchData(): Promise<void> {
+    try {
+      setLoading(true);
+      await getControles();
+      await getMediaGerentes();
+      await getMediaEmpregado();
+      await getLavagemGerentes();
+      await getQuantityFaxinaEmpregados();
+      await getCalcFinalEmpregados();
+      await getCalcFinalGerentes();
+      await getCalcFinalRecep();
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
+  }
+
+  React.useEffect(() => {
+    void fetchData();
+  }, []);
+
   return (
     <Grid container spacing={3} sx={{ paddingX: 0 }}>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} item>
-        <Stack spacing={1} sx={{ flex: '1 1 auto' }}>
-          <Typography variant="h4">Relatório mensal</Typography>
-        </Stack>
+        <MonthAndYearSelector
+          initialMonth={selectedMonth}
+          initialYear={selectedYear}
+          onDateChange={(year, month) => {
+            setSelectedYear(year);
+            setSelectedMonth(month);
+          }}
+          onApply={fetchData}
+        />
       </Grid>
       {/* <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} /> */}
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
@@ -185,6 +487,49 @@ export default function Page(): React.JSX.Element {
       </Grid>
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
         <MediaEmpregadoTable loading={loading} count={mediaEmpregados.length} rows={mediaEmpregados} />
+      </Grid>
+      <Grid xs={12} sm={12} md={7} lg={7} xl={7} sx={{ paddingX: 0 }} item>
+        <LavagemGerenteTable
+          loading={loading}
+          count={lavagemsGerentes.length}
+          rows={lavagemsGerentes}
+          onApply={handleApplyInputs}
+        />
+      </Grid>
+      <Grid xs={12} sm={12} md={5} lg={5} xl={5} sx={{ paddingX: 0 }} item>
+        <LavagemEmpregadoTable
+          loading={loading}
+          count={quantityFaxinaEmpregados.length}
+          rows={quantityFaxinaEmpregados}
+        />
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
+        <CalcFinalEmpregadoTable
+          changeSolicita={updateSolicita}
+          loading={loading}
+          count={calcFinalEmpregados.length}
+          rows={calcFinalEmpregados}
+        />
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
+        <CalcFinalRecepTable
+          changeFalta={updateFaltaOneRecep}
+          changeFaltaTwo={updateFaltaTwoRecep}
+          changeSolicita={updateSolicitaRecep}
+          loading={loading}
+          count={calcFinalReceps.length}
+          rows={calcFinalReceps}
+        />
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
+        <CalcFinalGerenteTable
+          changeSolicita={updateSolicitaGerente}
+          loading={loading}
+          count={calcFinalGerentes.length}
+          rows={calcFinalGerentes}
+          changeFalta={updateFaltaOneGerente}
+          changeFaltaTwo={updateFaltaTwoGerente}
+        />
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <ControlesTable
@@ -195,6 +540,7 @@ export default function Page(): React.JSX.Element {
           suits={suits}
           gerentes={gerentes}
           getControles={getControleWithFilters}
+          resetFilters={withoutFilters}
         />
       </Grid>
     </Grid>

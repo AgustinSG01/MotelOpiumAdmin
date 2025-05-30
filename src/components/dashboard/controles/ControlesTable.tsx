@@ -29,7 +29,8 @@ interface ControleTableProps {
   gerentes: Employee[];
 
   loading: boolean;
-  getControles: () => void;
+  getControles: () => Promise<void>;
+  resetFilters: () => Promise<void>;
 }
 
 export function ControlesTable({
@@ -41,6 +42,7 @@ export function ControlesTable({
   empregados,
   gerentes,
   getControles,
+  resetFilters,
 }: ControleTableProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
@@ -58,7 +60,6 @@ export function ControlesTable({
     roupaScoreList,
     suitList,
     tvScoreList,
-    resetFilters,
     setAbastecScoreList,
     setCheiroScoreList,
     setEmpregadoList,
@@ -81,6 +82,20 @@ export function ControlesTable({
     setPage(0); // Reset the table to the first page whenever rows per page changes
   };
 
+  async function applyFilters(): Promise<void> {
+    setSubmitting(true);
+    setPage(0);
+    await getControles();
+    setSubmitting(false);
+  }
+
+  async function reset(): Promise<void> {
+    setSubmitting(true);
+    setPage(0);
+    await resetFilters();
+    setSubmitting(false);
+  }
+
   const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   const baseScoreOptions = [
@@ -96,6 +111,8 @@ export function ControlesTable({
     { text: '9', valor: 9 },
     { text: '10', valor: 10 },
   ];
+
+  const [submitting, setSubmitting] = React.useState(false);
 
   return (
     <Card>
@@ -245,7 +262,7 @@ export function ControlesTable({
             </TableRow>
           </TableHead>
           <TableBody>
-            {loading ? (
+            {loading || submitting ? (
               <TableRowsLoader rowsNum={rowsPerPage} columnsNum={14} />
             ) : (
               display.map((row) => {
@@ -264,15 +281,8 @@ export function ControlesTable({
       <Divider />
       <Stack direction="row" justifyContent="space-between">
         <Stack direction="row" alignContent="center" sx={{ paddingLeft: 2 }}>
-          <Button onClick={getControles}>Aplicar filtros</Button>
-          <Button
-            onClick={() => {
-              resetFilters();
-              getControles();
-            }}
-          >
-            Redefinir filtros
-          </Button>
+          <Button onClick={applyFilters}>Aplicar filtros</Button>
+          <Button onClick={reset}>Redefinir filtros</Button>
         </Stack>
         <TablePagination
           component="div"
