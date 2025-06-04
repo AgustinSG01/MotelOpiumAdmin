@@ -20,6 +20,8 @@ interface CalcFinalProps {
   rows?: CalcFinalEmpreado[];
   loading: boolean;
   changeSolicita: (empregado_id: number, value: boolean) => Promise<void>;
+  updateFaltaOne: (empregado_id: number, value: boolean) => Promise<void>;
+  updateFaltaTwo: (empregado_id: number, value: boolean) => Promise<void>;
 }
 
 export function CalcFinalEmpregadoTable({
@@ -28,6 +30,8 @@ export function CalcFinalEmpregadoTable({
   //   getControle,
   loading,
   changeSolicita,
+  updateFaltaOne,
+  updateFaltaTwo,
 }: CalcFinalProps): React.JSX.Element {
   const [page, setPage] = React.useState(0); // Current page index
   const [rowsPerPage, setRowsPerPage] = React.useState(5); // Number of rows per page
@@ -36,6 +40,18 @@ export function CalcFinalEmpregadoTable({
   async function handleChangeSolicita(empregadoid: number, value: boolean): Promise<void> {
     setSubmitting(true);
     await changeSolicita(empregadoid, value);
+    setSubmitting(false);
+  }
+
+  async function handleChangeFalta(empregadoid: number, value: boolean): Promise<void> {
+    setSubmitting(true);
+    await updateFaltaOne(empregadoid, value);
+    setSubmitting(false);
+  }
+
+  async function handleChangeFaltaTwo(empregadoid: number, value: boolean): Promise<void> {
+    setSubmitting(true);
+    await updateFaltaTwo(empregadoid, value);
     setSubmitting(false);
   }
 
@@ -79,7 +95,15 @@ export function CalcFinalEmpregadoTable({
               <TableRowsLoader rowsNum={rowsPerPage} columnsNum={10} />
             ) : (
               display.map((row) => {
-                return <CalcFinalEmpregadoData key={row.id} row={row} changeSolicita={handleChangeSolicita} />;
+                return (
+                  <CalcFinalEmpregadoData
+                    key={row.id}
+                    row={row}
+                    updateFaltaOne={handleChangeFalta}
+                    updateFaltaTwo={handleChangeFaltaTwo}
+                    changeSolicita={handleChangeSolicita}
+                  />
+                );
               })
             )}
           </TableBody>

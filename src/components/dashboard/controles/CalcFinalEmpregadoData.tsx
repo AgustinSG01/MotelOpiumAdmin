@@ -1,14 +1,23 @@
 import React from 'react';
 import { type CalcFinalEmpreado } from '@/app/dashboard/relatorio/page';
-import { Checkbox, Chip, TableCell, TableRow } from '@mui/material';
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 
 interface CalcFinalProps {
   row: CalcFinalEmpreado;
   changeSolicita: (empregado_id: number, value: boolean) => void;
+  updateFaltaOne: (empregado_id: number, value: boolean) => void;
+  updateFaltaTwo: (empregado_id: number, value: boolean) => void;
 }
 
-function CalcFinalEmpregadoData({ row, changeSolicita }: CalcFinalProps): React.JSX.Element {
+function CalcFinalEmpregadoData({
+  row,
+  changeSolicita,
+  updateFaltaOne,
+  updateFaltaTwo,
+}: CalcFinalProps): React.JSX.Element {
   const [checked, setChecked] = React.useState(row.solicita || false);
+  const [checkedFaltaOne, setCheckedFaltaOne] = React.useState(row.faltou || false);
+  const [checkedFaltaTwo, setCheckedFaltaTwo] = React.useState(row.faltou2 || false);
   return (
     <TableRow hover key={row.id}>
       <TableCell>{row.nome || '-'}</TableCell>
@@ -25,11 +34,25 @@ function CalcFinalEmpregadoData({ row, changeSolicita }: CalcFinalProps): React.
         />
       </TableCell>
       <TableCell>
-        <Chip label={row.faltou ? 'Sim' : 'No'} color={row.faltou ? 'error' : 'success'} />
+        <Checkbox
+          checked={checkedFaltaOne}
+          onChange={(e) => {
+            setCheckedFaltaOne(e.target.checked);
+            updateFaltaOne(row.id, e.target.checked);
+          }}
+          sx={{ padding: 0 }}
+        />
       </TableCell>
       <TableCell>{row.subtotal || '-'}</TableCell>
       <TableCell>
-        <Chip label={row.faltou ? 'Sim' : 'No'} color={row.faltou ? 'error' : 'success'} />
+        <Checkbox
+          checked={checkedFaltaTwo}
+          onChange={(e) => {
+            setCheckedFaltaTwo(e.target.checked);
+            updateFaltaTwo(row.id, e.target.checked);
+          }}
+          sx={{ padding: 0 }}
+        />
       </TableCell>
       <TableCell>{row.total || '-'}</TableCell>
       <TableCell>{row.zeros || '-'}</TableCell>

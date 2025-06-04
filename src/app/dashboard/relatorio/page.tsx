@@ -325,6 +325,48 @@ export default function Page(): React.JSX.Element {
     }
   }
 
+  async function updateFaltaOneEmpregado(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltaoneEmpregado', {
+        empregado_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalEmpregados();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
+  async function updateFaltaTwoEmpregado(id: number, value: boolean): Promise<void> {
+    try {
+      const year = selectedYear;
+      const month = selectedMonth;
+
+      await axios.post('/inputs/faltatwoEmpregado', {
+        empregado_id: id,
+        value,
+        selectedYear: year,
+        selectedMonth: month,
+      });
+
+      // Aquí podrías mostrar un mensaje de éxito o actualizar el estado
+      // Por ejemplo, recargar los datos de la tabla
+      await getCalcFinalEmpregados();
+    } catch (error) {
+      return;
+      // Manejar error - mostrar mensaje al usuario
+    }
+  }
+
   async function updateFaltaOneGerente(id: number, value: boolean): Promise<void> {
     try {
       const year = selectedYear;
@@ -505,6 +547,8 @@ export default function Page(): React.JSX.Element {
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <CalcFinalEmpregadoTable
+          updateFaltaOne={updateFaltaOneEmpregado}
+          updateFaltaTwo={updateFaltaTwoEmpregado}
           changeSolicita={updateSolicita}
           loading={loading}
           count={calcFinalEmpregados.length}
