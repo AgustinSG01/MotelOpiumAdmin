@@ -10,7 +10,7 @@ interface CalcFinalProps {
 }
 
 function CalcFinalRecepData({ row, changeSolicita, changeFalta, changeFaltaTwo }: CalcFinalProps): React.JSX.Element {
-  const [checked, setChecked] = React.useState(row.solicita.value || false);
+  const [checked, setChecked] = React.useState(row.solicita || false);
   const [checkedFalta, setCheckedFalta] = React.useState(row.faltou || false);
   const [checkedFaltaTwo, setCheckedFaltaTwo] = React.useState(row.faltou2 || false);
   return (
