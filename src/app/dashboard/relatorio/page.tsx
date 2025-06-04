@@ -61,7 +61,7 @@ export interface CalcFinalEmpreado {
   nome: string;
   nota: number;
   lavagem: number;
-  solicita: { id: number; value: boolean; empregado_id: number; year: number; month: number };
+  solicita: boolean;
   faltou: boolean;
   faltou2: boolean;
   subtotal: number;
@@ -75,7 +75,7 @@ export interface CalcFinalGerente {
   nome: string;
   nota: number;
   lavagem: number;
-  solicita: { id: number; value: boolean; gerente_id: number; year: number; month: number };
+  solicita: boolean;
   faltou: boolean;
   faltou2: boolean;
   subtotal: number;
@@ -89,7 +89,7 @@ export interface CalcFinalRecep {
   nome: string;
   nota: number;
   lavagem: number;
-  solicita: { id: number; value: boolean; gerente_id: number; year: number; month: number };
+  solicita: boolean;
   faltou: boolean;
   faltou2: boolean;
   subtotal: number;
@@ -271,8 +271,8 @@ export default function Page(): React.JSX.Element {
 
       await axios.post('/inputs/inputGerente', {
         data,
-        year,
-        month,
+        selectedYear: year,
+        selectedMonth: month,
       });
 
       // Aquí podrías mostrar un mensaje de éxito o actualizar el estado

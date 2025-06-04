@@ -8,7 +8,7 @@ interface CalcFinalProps {
 }
 
 function CalcFinalEmpregadoData({ row, changeSolicita }: CalcFinalProps): React.JSX.Element {
-  const [checked, setChecked] = React.useState(row.solicita.value || false);
+  const [checked, setChecked] = React.useState(row.solicita || false);
   return (
     <TableRow hover key={row.id}>
       <TableCell>{row.nome || '-'}</TableCell>
