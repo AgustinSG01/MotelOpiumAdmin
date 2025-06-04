@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { type CalcFinalGerente } from '@/app/dashboard/relatorio/page';
-import { Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Divider from '@mui/material/Divider';
@@ -12,7 +11,6 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Stack } from '@mui/system';
 
 import TableRowsLoader from '../TableRowLoader';
 import CalcFinalGerenteData from './CalcFinalGerenteData';
@@ -68,8 +66,6 @@ export function CalcFinalGerenteTable({
   };
 
   const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  const total = rows.reduce((acc, row) => acc + (row.total || 0), 0);
-  const tPagamento = rows.reduce((acc, row) => acc + (row.pagamento || 0), 0);
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -113,25 +109,16 @@ export function CalcFinalGerenteTable({
         </Table>
       </Box>
       <Divider />
-      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ pl: 2 }}>
-        <Stack>
-          <Typography variant="subtitle2" component="div" sx={{ fontWeight: 400 }}>
-            Total: {total.toFixed(2)}
-          </Typography>
-          <Typography variant="subtitle2" component="div" sx={{ fontWeight: 400 }}>
-            Valor pagamento: {tPagamento.toFixed(2)}
-          </Typography>
-        </Stack>
-        <TablePagination
-          component="div"
-          count={count}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[5, 10, 25]}
-        />
-      </Stack>
+
+      <TablePagination
+        component="div"
+        count={count}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+      />
     </Card>
   );
 }
