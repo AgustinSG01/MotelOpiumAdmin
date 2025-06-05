@@ -15,11 +15,13 @@ import useSuits from '@/hooks/use-suits';
 import { CalcFinalEmpregadoTable } from '@/components/dashboard/controles/CalcFinalEmpregadoTable';
 import { CalcFinalGerenteTable } from '@/components/dashboard/controles/CalcFinalGerenteTable';
 import { CalcFinalRecepTable } from '@/components/dashboard/controles/CalcFinalRecepTable';
+import { ConstantesTable } from '@/components/dashboard/controles/ConstantesTable';
 import { ControlesTable } from '@/components/dashboard/controles/ControlesTable';
 import { LavagemEmpregadoTable } from '@/components/dashboard/controles/LavagemEmpregadoTable';
 import { LavagemGerenteTable } from '@/components/dashboard/controles/LavagemGerenteTable';
 import { MediaEmpregadoTable } from '@/components/dashboard/controles/MediaEmpregadoTable';
 import { MediaGerenteTable } from '@/components/dashboard/controles/MediaGerenteTable';
+import { MessagesTable } from '@/components/dashboard/controles/MessagesTable';
 import MonthAndYearSelector from '@/components/dashboard/controles/MonthAndYearSelector';
 
 // import ControlInfo from '@/components/dashboard/limpezas/control-info';
@@ -28,6 +30,29 @@ import MonthAndYearSelector from '@/components/dashboard/controles/MonthAndYearS
 
 import axios from '../../../axios-config';
 
+export interface Message {
+  id: number;
+  message: string;
+  data: Date;
+  directivo: {
+    id: number;
+    nome: string;
+  };
+  limpeza: {
+    suit: {
+      id: number;
+      nome: string;
+    };
+  };
+}
+
+export interface Constantes {
+  limpezas: number;
+  servg: number;
+  rec: number;
+  ger: number;
+  total: number;
+}
 export interface MediaGerente {
   id: number;
   nome: string;
@@ -109,6 +134,8 @@ export default function Page(): React.JSX.Element {
   const [calcFinalEmpregados, setCalcFinalEmpregados] = React.useState<CalcFinalEmpreado[]>([]);
   const [calcFinalGerentes, setCalcFinalGerentes] = React.useState<CalcFinalGerente[]>([]);
   const [calcFinalReceps, setCalcFinalReceps] = React.useState<CalcFinalRecep[]>([]);
+  const [constantes, setConstantes] = React.useState<Constantes[]>([]);
+  const [messages, setMessages] = React.useState<Message[]>([]);
 
   const {
     setGerenteList,
@@ -174,6 +201,17 @@ export default function Page(): React.JSX.Element {
       setMediaEmpregados(data);
     } catch (error) {
       setMediaEmpregados([]);
+    }
+  }
+  async function getConstantes(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/statics/constantes?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data: Constantes[] = response.data as Constantes[];
+      setConstantes(data);
+    } catch (error) {
+      setConstantes([]);
     }
   }
 
@@ -283,6 +321,18 @@ export default function Page(): React.JSX.Element {
       // Manejar error - mostrar mensaje al usuario
     }
   };
+
+  async function getMessages(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/comments/allMessagesWithInfo?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const responseData = response.data as Message[];
+      setMessages(responseData);
+    } catch (_error) {
+      return;
+    }
+  }
 
   async function updateSolicita(id: number, value: boolean): Promise<void> {
     try {
@@ -500,6 +550,8 @@ export default function Page(): React.JSX.Element {
       await getCalcFinalEmpregados();
       await getCalcFinalGerentes();
       await getCalcFinalRecep();
+      await getConstantes();
+      await getMessages();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -522,6 +574,12 @@ export default function Page(): React.JSX.Element {
           }}
           onApply={fetchData}
         />
+      </Grid>
+      <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
+        <ConstantesTable loading={loading} rows={constantes} />
+      </Grid>
+      <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
+        <MessagesTable loading={loading} rows={messages} />
       </Grid>
       {/* <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} /> */}
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
