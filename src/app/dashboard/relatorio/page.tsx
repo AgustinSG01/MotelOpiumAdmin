@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { useControleFilters } from '@/store/controle-filters';
-import { Grid } from '@mui/material';
+import { Button, Grid, TextField } from '@mui/material';
+import { Stack } from '@mui/system';
 
 // import { useLimpezaFilters } from '@/store/filters';
 // import { Button } from '@mui/material';
@@ -136,6 +137,7 @@ export default function Page(): React.JSX.Element {
   const [calcFinalReceps, setCalcFinalReceps] = React.useState<CalcFinalRecep[]>([]);
   const [constantes, setConstantes] = React.useState<Constantes[]>([]);
   const [messages, setMessages] = React.useState<Message[]>([]);
+  const [limpezas, setLimpezas] = React.useState<{ totalLimpezas: number; totalLimpezasManual: number | null }>();
 
   const {
     setGerenteList,
@@ -168,6 +170,31 @@ export default function Page(): React.JSX.Element {
   const suitIds = React.useMemo(() => suits?.map((suit) => suit.id) || [], [suits]);
 
   const empregadoIds = React.useMemo(() => empregados?.map((empregado) => empregado.id) || [], [empregados]);
+
+  async function getQuantityLimpezas(): Promise<void> {
+    try {
+      const response = await axios.get(
+        `/statics/total-limpezas-manual-and-total?selectedYear=${selectedYear}&selectedMonth=${selectedMonth}`
+      );
+      const data = response.data as { totalLimpezas: number; totalLimpezasManual: number | null };
+      setLimpezas(data);
+    } catch (error) {
+      setLimpezas(undefined);
+    }
+  }
+
+  async function updateLimpezas(): Promise<void> {
+    try {
+      await axios.post(`/statics/update-or-create-limpeza-manual`, {
+        selectedMonth,
+        selectedYear,
+        totalLimpezasManual: limpezas?.totalLimpezasManual || limpezas?.totalLimpezas || 0,
+      });
+      await fetchData();
+    } catch (error) {
+      return;
+    }
+  }
 
   async function getControles(): Promise<void> {
     // const filters = orderBy.split(';');
@@ -552,6 +579,7 @@ export default function Page(): React.JSX.Element {
       await getCalcFinalRecep();
       await getConstantes();
       await getMessages();
+      await getQuantityLimpezas();
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -574,6 +602,30 @@ export default function Page(): React.JSX.Element {
           }}
           onApply={fetchData}
         />
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} xl={12} item>
+        <Stack direction="row" spacing={4} sx={{ paddingX: 0, justifyContent: 'center', alignItems: 'center' }}>
+          <TextField
+            id="total-limpezas"
+            label="Limpeza do banco de dados"
+            disabled
+            value={limpezas?.totalLimpezas || 0}
+          />
+          {'>'}
+          <TextField
+            id="total-limpezas-manual"
+            label="Limpezas inseridas manualmente"
+            defaultValue={limpezas?.totalLimpezasManual || limpezas?.totalLimpezas}
+            value={limpezas?.totalLimpezasManual || limpezas?.totalLimpezas || 0}
+            onChange={(e) => {
+              setLimpezas({
+                totalLimpezas: limpezas?.totalLimpezas ?? 0,
+                totalLimpezasManual: Number(e.target.value) || 0,
+              });
+            }}
+          />
+          <Button onClick={updateLimpezas}>Aplicar</Button>
+        </Stack>
       </Grid>
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
         <ConstantesTable loading={loading} rows={constantes} />
