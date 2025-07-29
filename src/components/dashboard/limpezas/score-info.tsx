@@ -134,7 +134,7 @@ interface ImageModalProps {
   show: boolean;
   close: () => void;
 }
-function ImageModal({ image, show, close }: ImageModalProps): React.JSX.Element {
+export function ImageModal({ image, show, close }: ImageModalProps): React.JSX.Element {
   return (
     <Modal open={show} onClose={close} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
       <Box sx={modalStyle}>

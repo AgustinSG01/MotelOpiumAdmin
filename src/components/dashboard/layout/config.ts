@@ -10,5 +10,6 @@ export const navItems = [
   { key: 'faxinas', title: 'Faxinas', href: paths.dashboard.faxina, icon: 'spray' },
   { key: 'faltas', title: 'Faltas', href: paths.dashboard.falta, icon: 'faltas' },
   { key: 'relatorio', title: 'Relatório mensal', href: paths.dashboard.relatorio, icon: 'relatorio' },
+  { key: 'relatorioTeam', title: 'Relatório plantão', href: paths.dashboard.relatorioTeam, icon: 'relatorioTeam' },
   // { key: 'notifications', title: 'Notificações', href: paths.errors.notFound, icon: 'bell' },
 ] satisfies NavItemConfig[];

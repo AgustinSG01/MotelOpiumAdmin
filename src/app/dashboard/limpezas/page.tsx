@@ -48,7 +48,7 @@ export default function Page(): React.JSX.Element {
 
   async function getControle(id: number): Promise<void> {
     try {
-      const response = await axios.get(`/controle/${id}`);
+      const response = await axios.get(`/controle/withlimpeza/${id}`);
       const data = response.data as Controle;
       if (data) {
         setControl(data);

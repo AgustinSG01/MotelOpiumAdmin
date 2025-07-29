@@ -16,4 +16,5 @@ export const navIcons = {
   spray: SprayBottle,
   faltas: SealWarning,
   relatorio: Graph,
+  relatorioTeam: Graph,
 } as Record<string, Icon>;
