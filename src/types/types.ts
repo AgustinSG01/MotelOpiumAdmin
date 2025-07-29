@@ -47,6 +47,9 @@ export interface Aspect {
   score: number;
   comment?: string;
   image?: string;
+  suit?: string;
+  empregado?: string;
+  gerente?: string;
 }
 
 export interface ControleData {

@@ -10,6 +10,7 @@ export const paths = {
     settings: '/dashboard/settings',
     falta: '/dashboard/faltas',
     relatorio: '/dashboard/relatorio',
+    relatorioTeam: '/dashboard/relatorioTeam',
   },
   errors: { notFound: '/errors/not-found' },
 } as const;

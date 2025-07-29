@@ -12,9 +12,10 @@ export interface LimpezasProps {
   sx?: SxProps;
   value: number | string;
   loading: boolean;
+  text?: string;
 }
 
-export function Limpezas({ sx, value, loading }: LimpezasProps): React.JSX.Element {
+export function Limpezas({ sx, value, loading, text = 'No mês atual' }: LimpezasProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
@@ -24,7 +25,7 @@ export function Limpezas({ sx, value, loading }: LimpezasProps): React.JSX.Eleme
               <Typography color="text.secondary" variant="overline">
                 Limpezas
               </Typography>
-              {loading ? <Skeleton variant="text" height={38}/> : <Typography variant="h4">{value}</Typography>}
+              {loading ? <Skeleton variant="text" height={38} /> : <Typography variant="h4">{value}</Typography>}
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-primary-main)', height: '56px', width: '56px' }}>
               <Broom fontSize="var(--icon-fontSize-lg)" />
@@ -33,7 +34,7 @@ export function Limpezas({ sx, value, loading }: LimpezasProps): React.JSX.Eleme
 
           <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
             <Typography color="text.secondary" variant="caption">
-              No mês atual
+              {text}
             </Typography>
           </Stack>
         </Stack>
