@@ -36,7 +36,7 @@ function AspectsData({ row }: ControleProps): React.JSX.Element {
         <TableCell>{row.gerente || '-'}</TableCell>
         <TableCell>{row.empregado || '-'}</TableCell>
         <TableCell>{row.controleType || '-'}</TableCell>
-        <TableCell>{row.score || '-'}</TableCell>
+        <TableCell>{row.score !== undefined && row.score !== null ? row.score : '-'}</TableCell>
         <TableCell>
           <Button
             variant="contained"
