@@ -30,7 +30,7 @@ function AspectsData({ row }: ControleProps): React.JSX.Element {
           setShowComment(false);
         }}
       />
-      <TableRow hover key={row.id}>
+      <TableRow key={row.id} sx={{ backgroundColor: row.score === 0 ? '#ed4337c4' : '' }}>
         <TableCell>{row.suit || '-'}</TableCell>
 
         <TableCell>{row.gerente || '-'}</TableCell>
