@@ -10,11 +10,13 @@ import { type Aspect, type ControleData as InfoControle } from '@/types/types';
 import useEmpregados from '@/hooks/use-empregados';
 import { AspectsTable } from '@/components/dashboard/controles/AspectsTable';
 import { ControlesTableWithoutFilters } from '@/components/dashboard/controles/ControlesTableWithoutFilters';
+import { TablaMediaGeneral } from '@/components/dashboard/controles/TablaMediaGeneral';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
 import Selector from '@/components/dashboard/Selector';
 
 import axios from '../../../axios-config';
+import { MediaEmpregado } from '../relatorio/page';
 
 export default function Page(): React.JSX.Element {
   const [timesPerSuit, setTimesPerSuit] = React.useState<{
@@ -30,6 +32,8 @@ export default function Page(): React.JSX.Element {
   const [gerenteId, setGerenteId] = React.useState<number | null>(null);
   const [aspects, setAspects] = React.useState<Aspect[]>([]);
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
+  const [mediaEmpregados, setMediaEmpregados] = React.useState<MediaEmpregado[]>([]);
+  const [mediaGerente, setMediaGerente] = React.useState<MediaEmpregado[]>([]);
 
   const { empregados: gerentes, error, loading } = useEmpregados('gerente');
 
@@ -42,6 +46,28 @@ export default function Page(): React.JSX.Element {
         chartSeries: [response.data.chartSeries],
         labels: response.data.labels,
       });
+    } catch (_error) {
+      return;
+    }
+  }
+
+  async function getMediaEmpregados(): Promise<void> {
+    try {
+      const response = await axios.get<MediaEmpregado[]>(
+        `/empregado/limpeza/media/team/${gerenteId}?selectedDay=${date?.date()}&selectedMonth=${date?.month()}&selectedYear=${date?.year()}`
+      );
+      setMediaEmpregados(response.data);
+    } catch (_error) {
+      return;
+    }
+  }
+
+  async function getMediaGerente(): Promise<void> {
+    try {
+      const response = await axios.get<MediaEmpregado[]>(
+        `/empregado/gerente/media/team/${gerenteId}?selectedDay=${date?.date()}&selectedMonth=${date?.month()}&selectedYear=${date?.year()}`
+      );
+      setMediaGerente(response.data);
     } catch (_error) {
       return;
     }
@@ -88,6 +114,8 @@ export default function Page(): React.JSX.Element {
       await getControleWithFilters();
       await getTotalLimpezas();
       await getAspects();
+      await getMediaEmpregados();
+      await getMediaGerente();
       setIsLoading(false);
     } catch (_error) {
       setIsLoading(false);
@@ -147,6 +175,9 @@ export default function Page(): React.JSX.Element {
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <AspectsTable count={aspects.length} rows={aspects} loading={isLoading} />
+      </Grid>
+      <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
+        <TablaMediaGeneral count={controls.length} rows={[...mediaGerente, ...mediaEmpregados]} loading={isLoading} />
       </Grid>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <ControlesTableWithoutFilters count={controls.length} rows={controls} loading={isLoading} />
