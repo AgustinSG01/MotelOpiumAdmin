@@ -14,9 +14,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import type { SxProps } from '@mui/material/styles';
 import { Eye, EyeSlash } from '@phosphor-icons/react';
+import { ChatText } from '@phosphor-icons/react/dist/ssr';
 import dayjs from 'dayjs';
 
 import axios from '../../../axios-config';
+import { CommentModal } from '../limpezas/score-info';
 
 export interface Notification {
   id: number;
@@ -26,6 +28,7 @@ export interface Notification {
   lowerScore: number;
   data: Date;
   seen: boolean;
+  message?: string;
 }
 
 export interface NotificationsProps {
@@ -45,6 +48,7 @@ export function LatestNotifications({
 
   const [page, setPage] = useState(0); // Current page index
   const [rowsPerPage, _setRowsPerPage] = useState(5); // Number of rows per page
+  const [showMessage, setShowMessage] = useState(0); // State to control message visibility
 
   const handleChangePage = (_event: unknown, newPage: number): void => {
     setPage(newPage);
@@ -96,29 +100,50 @@ export function LatestNotifications({
           <Skeleton variant="rectangular" width="100%" height={395} />
         ) : (
           display.map((notification, index) => (
-            <ListItem
-              divider={false}
-              key={notification.id}
-              sx={{
-                // background: notification.seen
-                //   ? '#f5f5f5'
-                //   : 'linear-gradient(90deg, rgba(255,51,51,1) 0%, rgba(255,51,51,0) 1%)',
-                borderLeft: notification.seen ? '4px solid #33ff89' : '4px solid #ff3333',
-
-                borderTop: '1px solid #e0e0e0',
-                borderBottom: index === display.length - 1 ? '1px solid #e0e0e0' : 'none',
-              }}
-            >
-              <ListItemText
-                primary={`Suíte ${notification.suit} - ${notification.lowerScore} em ${notification.lowerAspect}`}
-                primaryTypographyProps={{ variant: 'subtitle1' }}
-                secondary={dayjs(notification.data).format('DD/MM/YYYY - HH:mm')}
-                secondaryTypographyProps={{ variant: 'body2' }}
+            <>
+              <CommentModal
+                comment={notification.message}
+                close={() => {
+                  setShowMessage(0);
+                }}
+                show={showMessage === notification.id}
+                key={notification.id}
               />
-              <IconButton edge="end" onClick={() => markAsSeenOrUnsee(notification.id, notification.seen)}>
-                {notification.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
-              </IconButton>
-            </ListItem>
+              <ListItem
+                divider={false}
+                key={notification.id}
+                sx={{
+                  // background: notification.seen
+                  //   ? '#f5f5f5'
+                  //   : 'linear-gradient(90deg, rgba(255,51,51,1) 0%, rgba(255,51,51,0) 1%)',
+                  borderLeft: notification.seen ? '4px solid #33ff89' : '4px solid #ff3333',
+
+                  borderTop: '1px solid #e0e0e0',
+                  borderBottom: index === display.length - 1 ? '1px solid #e0e0e0' : 'none',
+                }}
+              >
+                <ListItemText
+                  primary={`Suíte ${notification.suit} - ${notification.lowerScore} em ${notification.lowerAspect}`}
+                  primaryTypographyProps={{ variant: 'subtitle1' }}
+                  secondary={dayjs(notification.data).format('DD/MM/YYYY - HH:mm')}
+                  secondaryTypographyProps={{ variant: 'body2' }}
+                />
+                {notification.message ? (
+                  <IconButton
+                    edge="end"
+                    onClick={() => {
+                      setShowMessage(notification.id);
+                    }}
+                    sx={{marginRight: 1}}
+                  >
+                    <ChatText weight="bold" />
+                  </IconButton>
+                ) : null}
+                <IconButton edge="end" onClick={() => markAsSeenOrUnsee(notification.id, notification.seen)}>
+                  {notification.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
+                </IconButton>
+              </ListItem>
+            </>
           ))
         )}
       </List>
