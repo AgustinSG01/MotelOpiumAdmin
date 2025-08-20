@@ -48,6 +48,7 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
               onClick={() => {
                 setShowInfo(true);
               }}
+              disabled={row.nome === 'Cozinha'}
             >
               <Eye color="white" size={20} />
             </Button>
@@ -58,6 +59,7 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
                 setSuit(`${row.id}`);
                 router.push('/dashboard/limpezas');
               }}
+              disabled={row.nome === 'Cozinha'}
             >
               <List color="white" size={20} />
             </Button>
@@ -66,7 +68,7 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
               onClick={() => {
                 editSuit(row.id);
               }}
-              disabled={!row.lastClean}
+              disabled={row.nome === 'Cozinha'}
             >
               <Pencil size={20} />
             </Button>
@@ -76,6 +78,7 @@ function SuitData({ row, handleDelete, editSuit }: SuitProps): React.ReactElemen
               onClick={() => {
                 handleDelete(row.id);
               }}
+              disabled={row.nome === 'Cozinha'}
             >
               <Trash color="white" size={20} />
             </Button>
