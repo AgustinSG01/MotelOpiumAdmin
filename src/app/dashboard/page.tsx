@@ -5,9 +5,11 @@ import { IconButton, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Stack } from '@mui/system';
 import { ArrowCounterClockwise } from '@phosphor-icons/react';
+import { Info } from '@phosphor-icons/react/dist/ssr';
 import dayjs from 'dayjs';
 
 import { type Employee } from '@/types/types';
+import { CommentModal } from '@/components/dashboard/limpezas/score-info';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
 import { LatestMessages, Message } from '@/components/dashboard/overview/latest-messages';
 import { LatestMovements, type Movement } from '@/components/dashboard/overview/latest-movements';
@@ -53,6 +55,8 @@ export default function Page(): React.JSX.Element {
   } = useStatics();
 
   const [time, setTime] = React.useState(dayjs());
+  const [quantityMessages, setQuantityMessages] = React.useState(0);
+  const [showModal, setShowModal] = React.useState(false);
 
   const fetchers: {
     url: string;
@@ -134,21 +138,27 @@ export default function Page(): React.JSX.Element {
         );
       },
     },
+    {
+      url: '/comments/quantityMessages',
+      setter: (data) => {
+        setQuantityMessages(data as number);
+      },
+    },
   ];
 
   async function getStatics(): Promise<void> {
-  setLoading(true);
-  setTime(dayjs());
-  try {
-    for (const { url, setter } of fetchers) {
-      const response = await axios.get(url);
-      setter(response.data);
+    setLoading(true);
+    setTime(dayjs());
+    try {
+      for (const { url, setter } of fetchers) {
+        const response = await axios.get(url);
+        setter(response.data);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
     }
-    setLoading(false);
-  } catch (error) {
-    setLoading(false);
   }
-}
 
   async function refresh(): Promise<void> {
     await getStatics();
@@ -263,11 +273,26 @@ export default function Page(): React.JSX.Element {
 
   return (
     <Grid container spacing={3}>
+      <CommentModal
+        close={() => {
+          setShowModal(false);
+        }}
+        comment={`Ontem, dia ${dayjs().subtract(1, 'day').format('DD/MM/YYYY')} teve ${quantityMessages} comentários`}
+        show={showModal}
+      />
       <Grid lg={12} sm={24} xs={48}>
         <Stack sx={{ width: '100%' }} direction="row" spacing={2} alignItems="center">
           <Typography variant="h5">Última atualização às {time.format('HH:mm')}</Typography>
           <IconButton onClick={() => void refresh()}>
             <ArrowCounterClockwise size={24} color="#635BFF" />
+          </IconButton>
+          <IconButton
+            onClick={() => {
+              setShowModal(true);
+            }}
+            sx={{ marginLeft: 'auto' }}
+          >
+            <Info size={24} color={quantityMessages < 3 ? '#ff3333' : '#635BFF'} />
           </IconButton>
         </Stack>
       </Grid>
