@@ -10,10 +10,11 @@ import dayjs from 'dayjs';
 
 import { type Employee } from '@/types/types';
 import { CommentModal } from '@/components/dashboard/limpezas/score-info';
+import ModalMessageAlert from '@/components/dashboard/ModalMessageAlert';
 import { ControlsMonth } from '@/components/dashboard/overview/controls-month';
-import { LatestMessages, Message } from '@/components/dashboard/overview/latest-messages';
+import { LatestMessages, type Message } from '@/components/dashboard/overview/latest-messages';
 import { LatestMovements, type Movement } from '@/components/dashboard/overview/latest-movements';
-import { LatestNotifications, Notification } from '@/components/dashboard/overview/latest-products';
+import { LatestNotifications, type Notification } from '@/components/dashboard/overview/latest-products';
 import { LimpezaPerSuitEmpregado } from '@/components/dashboard/overview/limpeza-per-suit-empregado';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { CleansPerSuits, type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
@@ -57,6 +58,7 @@ export default function Page(): React.JSX.Element {
   const [time, setTime] = React.useState(dayjs());
   const [quantityMessages, setQuantityMessages] = React.useState(0);
   const [showModal, setShowModal] = React.useState(false);
+  const [messageModal, setMessageModal] = React.useState(false);
 
   const fetchers: {
     url: string;
@@ -142,6 +144,17 @@ export default function Page(): React.JSX.Element {
       url: '/comments/quantityMessages',
       setter: (data) => {
         setQuantityMessages(data as number);
+      },
+    },
+    {
+      url: '/comments/lastmessageadmin',
+      setter: (data: unknown) => {
+        const typedData = data as { id?: number };
+        if (typedData?.id) {
+          setMessageModal(false);
+        } else {
+          setMessageModal(true);
+        }
       },
     },
   ];
@@ -271,8 +284,31 @@ export default function Page(): React.JSX.Element {
     };
   }, []);
 
+  async function submitMessage(data: {
+    ropaBool: boolean;
+    ropaMessage: string | null;
+    utensilioBool: boolean;
+    utensilioMessage: string | null;
+    consumibleBool: boolean;
+    consumibleMessage: string | null;
+  }): Promise<void> {
+    try {
+      await axios.post('/comments/sendMessageAdmin', data);
+      setMessageModal(false);
+    } catch (error) {
+      return;
+    }
+  }
+
   return (
     <Grid container spacing={3}>
+      <ModalMessageAlert
+        open={messageModal}
+        handleClose={() => {
+          setMessageModal(false);
+        }}
+        handleSubmit={submitMessage}
+      />
       <CommentModal
         close={() => {
           setShowModal(false);
