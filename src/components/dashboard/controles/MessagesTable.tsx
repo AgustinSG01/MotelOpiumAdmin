@@ -33,6 +33,8 @@ export function MessagesTable({ count = 0, rows = [], loading }: MessagesTablePr
     setPage(0);
   };
 
+  const display = rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
     <Card>
       <Box sx={{ overflowX: 'auto' }}>
@@ -55,7 +57,7 @@ export function MessagesTable({ count = 0, rows = [], loading }: MessagesTablePr
             {loading ? (
               <TableRowsLoader rowsNum={6} columnsNum={5} />
             ) : (
-              rows.map((row) => {
+              display.map((row) => {
                 return <MessagesData key={row.id} row={row} />;
               })
             )}

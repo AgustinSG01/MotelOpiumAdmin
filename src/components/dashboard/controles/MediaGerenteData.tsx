@@ -10,6 +10,7 @@ function MediaGerenteData({ row }: MediaGerenteProps): React.JSX.Element {
   return (
     <TableRow hover key={row.id}>
       <TableCell>{row.nome || '-'}</TableCell>
+      <TableCell>{row.prevControles || '-'}</TableCell>
       <TableCell>{row.controles || '-'}</TableCell>
       <TableCell>{row.limpezas || '-'}</TableCell>
     </TableRow>

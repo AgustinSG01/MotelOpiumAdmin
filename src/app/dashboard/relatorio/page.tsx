@@ -59,6 +59,7 @@ export interface MediaGerente {
   nome: string;
   limpezas: number;
   controles: string;
+  prevControles: string;
 }
 
 export interface MediaEmpregado {
@@ -66,6 +67,7 @@ export interface MediaEmpregado {
   nome: string;
   limpezas: number;
   controles: string;
+  prevControles: string;
   quantityControles: number;
 }
 
@@ -631,7 +633,7 @@ export default function Page(): React.JSX.Element {
         <ConstantesTable loading={loading} rows={constantes} />
       </Grid>
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
-        <MessagesTable loading={loading} rows={messages} />
+        <MessagesTable loading={loading} rows={messages} count={messages.length} />
       </Grid>
       {/* <LimpezasFilters applyFilters={getLimpezas} withoutFilters={withoutFilters} /> */}
       <Grid xs={12} sm={12} md={6} lg={6} xl={6} sx={{ paddingX: 0 }} item>
