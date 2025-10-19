@@ -54,6 +54,7 @@ export function MediaGerenteTable({
             </TableRow>
             <TableRow>
               <TableCell>GERENTE</TableCell>
+              <TableCell>MEDIA ANTERIOR</TableCell>
               <TableCell>MEDIA</TableCell>
               <TableCell>LOCAÇÕES</TableCell>
             </TableRow>

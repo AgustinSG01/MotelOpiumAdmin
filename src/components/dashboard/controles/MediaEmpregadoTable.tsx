@@ -49,6 +49,7 @@ export function MediaEmpregadoTable({ count = 0, rows = [], loading }: MediaEmpr
             </TableRow>
             <TableRow>
               <TableCell>FUNCIONÁRIO</TableCell>
+              <TableCell>MEDIA ANTERIOR</TableCell>
               <TableCell>MEDIA</TableCell>
               <TableCell>SUITES VISTORIADAS</TableCell>
               <TableCell>SUITES LIMPAS</TableCell>
