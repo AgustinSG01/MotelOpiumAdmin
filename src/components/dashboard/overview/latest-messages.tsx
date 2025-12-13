@@ -1,19 +1,21 @@
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
-import { Skeleton, TablePagination } from '@mui/material';
+import { Checkbox, Skeleton, Stack, TablePagination } from '@mui/material';
 // import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
+import { green, pink } from '@mui/material/colors';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
+// import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 // import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import type { SxProps } from '@mui/material/styles';
-import { Eye, EyeSlash } from '@phosphor-icons/react';
+
+// import { Eye, EyeSlash } from '@phosphor-icons/react';
 
 // import dayjs from 'dayjs';
 
@@ -100,8 +102,10 @@ export function LatestMessages({ sx, messages, initialLoading, refresh }: Messag
         />
       ) : null}
       <Card sx={sx}>
-        <CardHeader title="Mensagens" />
-        <Divider />
+        <Stack direction="row" spacing={1}>
+          <CardHeader title="Acionado" />
+          <CardHeader title="Mensagem" />
+        </Stack>
         <List sx={{ minHeight: 395 }}>
           {loading || initialLoading ? (
             <Skeleton variant="rectangular" width="100%" height={395} />
@@ -111,12 +115,26 @@ export function LatestMessages({ sx, messages, initialLoading, refresh }: Messag
                 divider={false}
                 key={message.id}
                 sx={{
-                  borderLeft: message.seen ? '4px solid #33ff89' : '4px solid #ff3333',
+                  borderLeft: message.seen ? `4px solid ${green[600]}` : `4px solid ${pink[800]}`,
 
                   borderTop: '1px solid #e0e0e0',
                   borderBottom: index === display.length - 1 ? '1px solid #e0e0e0' : 'none',
                 }}
               >
+                <Checkbox
+                  checked={message.seen}
+                  sx={{
+                    color: pink[800],
+                    '&.Mui-checked': {
+                      color: green[600],
+                    },
+                    marginLeft: "20px"
+                  }}
+                  onChange={() => markAsSeenOrUnsee(message.id, message.seen)}
+                />
+                {/* <IconButton edge="end" onClick={() => markAsSeenOrUnsee(message.id, message.seen)}>
+                  {message.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
+                </IconButton> */}
                 <ListItemText
                   primary={message.message}
                   primaryTypographyProps={{
@@ -131,15 +149,13 @@ export function LatestMessages({ sx, messages, initialLoading, refresh }: Messag
                   secondaryTypographyProps={{ variant: 'body2' }}
                   sx={{
                     cursor: 'pointer',
+                    marginLeft: '80px',
                   }}
                   onClick={() => {
                     setSelectedMessage(message.id);
                     setShowModal(true);
                   }}
                 />
-                <IconButton edge="end" onClick={() => markAsSeenOrUnsee(message.id, message.seen)}>
-                  {message.seen ? <Eye weight="bold" /> : <EyeSlash weight="bold" />}
-                </IconButton>
               </ListItem>
             ))
           )}

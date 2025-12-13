@@ -19,7 +19,7 @@ import { LimpezaPerSuitEmpregado } from '@/components/dashboard/overview/limpeza
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
 import { CleansPerSuits, type Result } from '@/components/dashboard/overview/quantity-cleans-suits';
 import { PromedyControls } from '@/components/dashboard/overview/sales';
-import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
+// import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
 import { EmployeeMonth } from '@/components/dashboard/overview/total-profit';
 
 import axios from '../../axios-config';
@@ -48,7 +48,7 @@ export default function Page(): React.JSX.Element {
     messages,
     setMessages,
     setTimePerSuit,
-    timesPerSuit,
+    // timesPerSuit,
     cleansPerSuitByEmpregado,
     setCleansPerSuitByEmpregado,
     setTimePerSuitByEmpregado,
@@ -78,7 +78,7 @@ export default function Page(): React.JSX.Element {
       },
     },
     {
-      url: '/statics/empregado-more-limpezas-actual-month',
+      url: '/empregado/limpeza/media/lowest',
       setter: (data) => {
         setEmployeeMonth(data as Employee);
       },
@@ -376,15 +376,15 @@ export default function Page(): React.JSX.Element {
       <Grid lg={6} md={8} xs={14}>
         <LatestMovements movements={movements} sx={{ height: '100%' }} />
       </Grid>
-      <Grid lg={8} xs={12}>
+      {/* <Grid lg={8} xs={12}>
         <TimePerSuit
           sx={{ height: '100%' }}
           chartSeries={timesPerSuit.chartSeries}
           labels={timesPerSuit.labels}
           loading={isLoading}
         />
-      </Grid>
-      <Grid lg={4} md={6} xs={12}>
+      </Grid> */}
+      <Grid lg={12} md={12} xs={12}>
         <LatestMessages sx={{ height: '100%' }} initialLoading={isLoading} messages={messages} refresh={getMessages} />
       </Grid>
       <Grid lg={12} xs={12}>
