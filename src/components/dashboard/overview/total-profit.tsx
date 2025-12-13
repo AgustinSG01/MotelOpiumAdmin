@@ -34,7 +34,7 @@ export function EmployeeMonth({ value, sx, loading }: TotalProfitProps): React.J
             <Typography color="text.secondary" variant="caption">
               <Stack sx={{ alignItems: 'center' }} direction="row" spacing={2}>
                 <Typography color="text.secondary" variant="caption">
-                  Funcionário com mais limpezas neste mês
+                  Funcionário com média mais baixa neste mês
                 </Typography>
               </Stack>
             </Typography>
