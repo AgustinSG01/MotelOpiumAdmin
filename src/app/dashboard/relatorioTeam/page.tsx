@@ -12,20 +12,20 @@ import { AspectsTable } from '@/components/dashboard/controles/AspectsTable';
 import { ControlesTableWithoutFilters } from '@/components/dashboard/controles/ControlesTableWithoutFilters';
 import { TablaMediaGeneral } from '@/components/dashboard/controles/TablaMediaGeneral';
 import { Limpezas } from '@/components/dashboard/overview/limpezas-month';
-import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
+// import { TimePerSuit } from '@/components/dashboard/overview/time-per-suts';
 import Selector from '@/components/dashboard/Selector';
 
 import axios from '../../../axios-config';
 import { MediaEmpregado } from '../relatorio/page';
 
 export default function Page(): React.JSX.Element {
-  const [timesPerSuit, setTimesPerSuit] = React.useState<{
-    chartSeries: { name: string; data: number[] }[];
-    labels: string[];
-  }>({
-    chartSeries: [],
-    labels: [],
-  });
+  // const [timesPerSuit, setTimesPerSuit] = React.useState<{
+  //   chartSeries: { name: string; data: number[] }[];
+  //   labels: string[];
+  // }>({
+  //   chartSeries: [],
+  //   labels: [],
+  // });
   const [totalLimpezas, setTotalLimpezas] = React.useState<number>(0);
   const [controls, setControls] = React.useState<InfoControle[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -37,19 +37,19 @@ export default function Page(): React.JSX.Element {
 
   const { empregados: gerentes, error, loading } = useEmpregados('gerente');
 
-  async function getTimesPerSuit(): Promise<void> {
-    try {
-      const response = await axios.get<{ chartSeries: { name: string; data: number[] }; labels: string[] }>(
-        `/statics/time-promedy-limpeza-per-suit-team/${gerenteId}?selectedDay=${date?.date()}&selectedMonth=${date?.month()}&selectedYear=${date?.year()}`
-      );
-      setTimesPerSuit({
-        chartSeries: [response.data.chartSeries],
-        labels: response.data.labels,
-      });
-    } catch (_error) {
-      return;
-    }
-  }
+  // async function getTimesPerSuit(): Promise<void> {
+  //   try {
+  //     const response = await axios.get<{ chartSeries: { name: string; data: number[] }; labels: string[] }>(
+  //       `/statics/time-promedy-limpeza-per-suit-team/${gerenteId}?selectedDay=${date?.date()}&selectedMonth=${date?.month()}&selectedYear=${date?.year()}`
+  //     );
+  //     setTimesPerSuit({
+  //       chartSeries: [response.data.chartSeries],
+  //       labels: response.data.labels,
+  //     });
+  //   } catch (_error) {
+  //     return;
+  //   }
+  // }
 
   async function getMediaEmpregados(): Promise<void> {
     try {
@@ -110,7 +110,7 @@ export default function Page(): React.JSX.Element {
   async function fetchData(): Promise<void> {
     try {
       setIsLoading(true);
-      await getTimesPerSuit();
+      // await getTimesPerSuit();
       await getControleWithFilters();
       await getTotalLimpezas();
       await getAspects();
@@ -165,14 +165,14 @@ export default function Page(): React.JSX.Element {
       <Grid lg={3} sm={6} xs={12} item>
         <Limpezas sx={{ height: '100%' }} value={totalLimpezas} loading={isLoading} text="" />
       </Grid>
-      <Grid lg={12} xs={12} item>
+      {/* <Grid lg={12} xs={12} item>
         <TimePerSuit
           sx={{ height: '100%' }}
           chartSeries={timesPerSuit.chartSeries}
           labels={timesPerSuit.labels || []}
           loading={isLoading}
         />
-      </Grid>
+      </Grid> */}
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} sx={{ paddingX: 0 }} item>
         <AspectsTable count={aspects.length} rows={aspects} loading={isLoading} />
       </Grid>
