@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import PrintIcon from '@mui/icons-material/Print';
 import { Button, Grid } from '@mui/material';
 import { Stack } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -34,7 +35,7 @@ export default function Page(): React.JSX.Element {
   const [date, setDate] = React.useState<Dayjs | null>(dayjs());
   const [mediaEmpregados, setMediaEmpregados] = React.useState<MediaEmpregado[]>([]);
   const [mediaGerente, setMediaGerente] = React.useState<MediaEmpregado[]>([]);
-
+  console.log("mediaGerente", mediaGerente);
   const { empregados: gerentes, error, loading } = useEmpregados('gerente');
 
   // async function getTimesPerSuit(): Promise<void> {
@@ -50,6 +51,26 @@ export default function Page(): React.JSX.Element {
   //     return;
   //   }
   // }
+
+  function handlePrint(): void {
+  const gerenteSeleccionado = gerentes.find((g) => g.id === gerenteId);
+
+  sessionStorage.setItem(
+    'relatorio-print-data',
+    JSON.stringify({
+      controls: controls,     
+      lowScores: aspects,      
+      totalLimpezas,
+      gerenteName: gerenteSeleccionado?.nome || '-',
+      mediaGerente: mediaGerente[0]?.controles || '0.00',
+      //convertir a formato DD/MM/YYYY el timestamp date
+      date: date?.format('DD/MM/YYYY (HH:mm)'),
+      shift: dayjs().hour() >= 6 && dayjs().hour() < 18 ? 'Dia' : 'Noite',
+    })
+  );
+
+  window.open('/dashboard/relatorioTeam/print', '_blank');
+}
 
   async function getMediaEmpregados(): Promise<void> {
     try {
@@ -137,7 +158,13 @@ export default function Page(): React.JSX.Element {
   return (
     <Grid container spacing={3} sx={{ paddingX: 0 }}>
       <Grid xs={12} sm={12} md={12} lg={12} xl={12} item>
-        <Stack spacing={3} direction="row" alignItems="center" justifyContent="center" sx={{ width: '100%' }}>
+        <Stack
+          spacing={3}
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{ width: '100%', flexWrap: 'wrap' }}
+        >
           <Selector
             items={gerentes}
             value={gerenteId ?? ''}
@@ -159,6 +186,9 @@ export default function Page(): React.JSX.Element {
           />
           <Button onClick={fetchData} sx={{ fontWeight: 'bold', color: '1.2rem' }}>
             Aplicar
+          </Button>
+          <Button variant="contained" startIcon={<PrintIcon />} onClick={handlePrint}>
+            Imprimir relatório
           </Button>
         </Stack>
       </Grid>
