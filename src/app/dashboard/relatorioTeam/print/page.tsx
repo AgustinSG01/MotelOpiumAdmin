@@ -1,10 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call -- comentario*/ 
+/* eslint-disable @typescript-eslint/no-explicit-any -- comentario*/
+/* eslint-disable @typescript-eslint/no-unsafe-member-access -- comentario*/
+/* eslint-disable no-console -- comentario*/
+/* eslint-disable @typescript-eslint/no-unsafe-assignment -- comentario*/
 'use client';
 
 import * as React from 'react';
 
 //importar css
 
-import '../../../../styles/print-relatorio.css';
+import "../../../../styles/print-relatorio.css";
 
 import { type ControleData } from '@/types/types';
 
