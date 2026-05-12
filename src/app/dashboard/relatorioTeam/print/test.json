@@ -1,0 +1,108 @@
+{
+  "controls": [
+    {
+      "id": 3417,
+      "data": "2026-05-11T12:28:55.970Z",
+      "empregado": "Luisanny ",
+      "gerente": "Neudis Gerente",
+      "suit": "208",
+      "mg": "10.00",
+      "mc": "10.00",
+      "aspectos": {
+        "limpeza": { "id": 26822, "score": 10, "comment": "", "image": null },
+        "cheiro": { "id": 26823, "score": 10, "comment": "", "image": null },
+        "manut": { "id": 26824, "score": 10, "comment": "", "image": null },
+        "tv": { "id": 26825, "score": 10, "comment": "", "image": null },
+        "roupa": { "id": 26826, "score": 10, "comment": "", "image": null },
+        "garagem": { "id": 26827, "score": 10, "comment": "", "image": null },
+        "faxina": { "id": 26828, "score": 10, "comment": "", "image": null },
+        "abastec": { "id": 26829, "score": 10, "comment": "", "image": null }
+      }
+    },
+    {
+      "id": 3420,
+      "data": "2026-05-11T12:37:20.710Z",
+      "empregado": "Luisanny ",
+      "gerente": "Neudis Gerente",
+      "suit": "209",
+      "mg": "10.00",
+      "mc": "10.00",
+      "aspectos": {
+        "limpeza": { "id": 26846, "score": 10, "comment": "", "image": null },
+        "cheiro": { "id": 26847, "score": 10, "comment": "", "image": null },
+        "manut": { "id": 26848, "score": 10, "comment": "", "image": null },
+        "tv": { "id": 26849, "score": 10, "comment": "", "image": null },
+        "roupa": { "id": 26850, "score": 10, "comment": "", "image": null },
+        "garagem": { "id": 26851, "score": 10, "comment": "", "image": null },
+        "faxina": { "id": 26852, "score": 10, "comment": "", "image": null },
+        "abastec": { "id": 26853, "score": 10, "comment": "", "image": null }
+      }
+    },
+    {
+      "id": 3419,
+      "data": "2026-05-11T12:34:22.627Z",
+      "empregado": "Luisanny ",
+      "gerente": "Neudis Gerente",
+      "suit": "210",
+      "mg": "8.50",
+      "mc": "8.00",
+      "aspectos": {
+        "limpeza": { "id": 26838, "score": 4, "comment": "Cabelo no chão", "image": null },
+        "cheiro": { "id": 26839, "score": 10, "comment": "", "image": null },
+        "manut": { "id": 26840, "score": 10, "comment": "", "image": null },
+        "tv": { "id": 26841, "score": 10, "comment": "", "image": null },
+        "roupa": { "id": 26842, "score": 10, "comment": "", "image": null },
+        "garagem": { "id": 26843, "score": 10, "comment": "", "image": null },
+        "faxina": { "id": 26844, "score": 10, "comment": "", "image": null },
+        "abastec": { "id": 26845, "score": 10, "comment": "", "image": null }
+      }
+    },
+    {
+      "id": 3412,
+      "data": "2026-05-11T11:59:06.264Z",
+      "empregado": "Luisanny ",
+      "gerente": "Neudis Gerente",
+      "suit": "203",
+      "mg": "8.75",
+      "mc": "10.00",
+      "aspectos": {
+        "limpeza": { "id": 26790, "score": 10, "comment": "", "image": null },
+        "cheiro": { "id": 26791, "score": 10, "comment": "", "image": null },
+        "manut": { "id": 26792, "score": 10, "comment": "", "image": null },
+        "tv": { "id": 26793, "score": 10, "comment": "", "image": null },
+        "roupa": { "id": 26794, "score": 10, "comment": "", "image": null },
+        "garagem": { "id": 26795, "score": 10, "comment": "", "image": null },
+        "faxina": { "id": 26796, "score": 10, "comment": "", "image": null },
+        "abastec": {
+          "id": 26797,
+          "score": 5,
+          "comment": "Suíte abastecida com duas Fanta laranja faltando uma Fanta uva",
+          "image": null
+        }
+      }
+    },
+    {
+      "id": 3415,
+      "data": "2026-05-11T12:12:55.336Z",
+      "empregado": "Luisanny ",
+      "gerente": "Neudis Gerente",
+      "suit": "101",
+      "mg": "10.00",
+      "mc": "10.00",
+      "aspectos": {
+        "limpeza": { "id": 26814, "score": 10, "comment": "", "image": null },
+        "cheiro": { "id": 26815, "score": 10, "comment": "", "image": null },
+        "manut": { "id": 26816, "score": 10, "comment": "", "image": null },
+        "tv": { "id": 26817, "score": 10, "comment": "", "image": null },
+        "roupa": { "id": 26818, "score": 10, "comment": "", "image": null },
+        "garagem": { "id": 26819, "score": 10, "comment": "", "image": null },
+        "faxina": { "id": 26820, "score": 10, "comment": "", "image": null },
+        "abastec": { "id": 26821, "score": 10, "comment": "", "image": null }
+      }
+    }
+  ],
+  "totalLimpezas": 29,
+  "gerenteName": "Neudis Gerente",
+  "date": "11/05/2026",
+  "shift": "Noite"
+}

@@ -1,0 +1,76 @@
+@media screen {
+  .print-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 40px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+}
+
+@media print {
+  body { background: white; }
+  .print-container { width: 100%; padding: 0; }
+  @page { margin: 1.5cm; }
+}
+
+.print-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.4;
+}
+
+.print-header {
+  border-bottom: 2px solid #000;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.print-identification {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.print-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.print-table th, .print-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+  font-size: 12px;
+}
+
+.print-table th { background-color: #f2f2f2; }
+
+.note-box {
+  height: 80px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 12px;
+}
+
+.signature-area {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 50px;
+}
+
+.sig-line {
+  border-top: 1px solid #000;
+  width: 200px;
+  text-align: center;
+  font-size: 11px;
+  padding-top: 5px;
+}
+
+.print-break {
+  page-break-inside: avoid;
+}
+
+.text-red { color: red; font-weight: bold; }
